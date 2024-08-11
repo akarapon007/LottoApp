@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class LoginPage extends StatelessWidget {
+class RegisterPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -17,7 +17,7 @@ class LoginPage extends StatelessWidget {
             width: double.infinity, // Make the container full width
             child: Center(
               child: const Text(
-                'Sign In',
+                'Sign Up',
                 style: TextStyle(
                   fontWeight: FontWeight.w800,
                   color: Colors.white, // Set text color to white
