@@ -15,8 +15,8 @@ class LoginPage extends StatelessWidget {
             color: const Color(0xFF453BC9), // Set the background color to #453BC9
             height: 100, // Adjust the height as needed
             width: double.infinity, // Make the container full width
-            child: Center(
-              child: const Text(
+            child: const Center(
+              child: Text(
                 'Sign In',
                 style: TextStyle(
                   fontWeight: FontWeight.w800,
