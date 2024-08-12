@@ -1,4 +1,6 @@
+import 'dart:convert'; // For encoding the request body
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http; // For making HTTP requests
 import 'package:lotto_app/pages/register.dart';
 
 class LoginPage extends StatefulWidget {
@@ -8,6 +10,59 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   bool _rememberMe = false;
+  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
+  Future<void> _login() async {
+    final String apiUrl = 'https://nodejs-wfjd.onrender.com/login'; // Replace with your actual API endpoint
+    final response = await http.post(
+      Uri.parse(apiUrl),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        'username': _usernameController.text,
+        'password': _passwordController.text,
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      // Handle successful response
+      // For example, parse response data and navigate to another page
+      final Map<String, dynamic> data = jsonDecode(response.body);
+      // Assuming you have a login success scenario
+      if (data['success']) {
+        // Navigate to home page or another page
+        Navigator.pushReplacementNamed(context, '/home'); // Adjust as needed
+      } else {
+        // Handle login error
+        _showErrorDialog('Invalid username or password');
+      }
+    } else {
+      // Handle API request error
+      _showErrorDialog('Failed to connect to the server');
+    }
+  }
+
+  void _showErrorDialog(String message) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Error'),
+          content: Text(message),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,9 +99,10 @@ class _LoginPageState extends State<LoginPage> {
                 children: [
                   // Username input field with icon
                   const SizedBox(height: 120.0),
-                  const TextField(
-                    decoration: InputDecoration(
-                      labelText: 'Username or Phone',
+                  TextField(
+                    controller: _usernameController,
+                    decoration: const InputDecoration(
+                      labelText: 'Username',
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(45.0)), // Rounded corners with 45-degree angle
                       ),
@@ -55,9 +111,10 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   const SizedBox(height: 20.0), // Space between input fields
                   // Password input field with icon
-                  const TextField(
+                  TextField(
+                    controller: _passwordController,
                     obscureText: true, // Obscure text for password
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       labelText: 'Password',
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(45.0)), // Rounded corners with 45-degree angle
@@ -101,9 +158,7 @@ class _LoginPageState extends State<LoginPage> {
                   const SizedBox(height: 100.0), // Space before the button
                   // Sign in button
                   ElevatedButton(
-                    onPressed: () {
-                      // Handle sign-in action
-                    },
+                    onPressed: _login,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFF453BC9), // Match button color
                       padding: const EdgeInsets.symmetric(
