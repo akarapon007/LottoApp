@@ -47,7 +47,7 @@ class FirstPage extends StatelessWidget {
                 onPressed: () {
                   Navigator.push(
                     context, 
-                    MaterialPageRoute(builder: (context) => RegisterPage())
+                    MaterialPageRoute(builder: (context) => RegisterPage() )
                   );
                 },
                 style: ElevatedButton.styleFrom(
