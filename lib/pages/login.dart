@@ -11,15 +11,15 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   bool _rememberMe = false;
-  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
 Future<void> _login() async {
-  final username = _usernameController.text;
+  final phone = _phoneController.text;
   final password = _passwordController.text;
 
-  if (username.isEmpty || password.isEmpty) {
-    _showErrorDialog('Please fill in both username and password.');
+  if (phone.isEmpty || password.isEmpty) {
+    _showErrorDialog('Please fill in both phone and password.');
     return;
   }
 
@@ -28,7 +28,7 @@ Future<void> _login() async {
       Uri.parse('https://nodejs-wfjd.onrender.com/login'),
       headers: {'Content-Type': 'application/json'},
       body: json.encode({
-        'username': username,
+        'phone': phone,
         'password': password,
       }),
     );
@@ -38,7 +38,7 @@ Future<void> _login() async {
 
       if (jsonData is List) {
         final user = jsonData.firstWhere(
-          (user) => user['username'] == username && user['password'] == password,
+          (user) => user['phone'] == phone && user['password'] == password,
           orElse: () => null,
         );
 
@@ -49,7 +49,7 @@ Future<void> _login() async {
             MaterialPageRoute(builder: (context) => HomePage()), // เปลี่ยนเป็น HomePage
           );
         } else {
-          _showErrorDialog('Login failed: Incorrect username or password.');
+          _showErrorDialog('Login failed: Incorrect phone or password.');
         }
       } else {
         _showErrorDialog('Unexpected data format.');
@@ -116,12 +116,12 @@ Future<void> _login() async {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  // Username input field with icon
+                  // phone input field with icon
                   const SizedBox(height: 120.0),
                   TextField(
-                    controller: _usernameController,
+                    controller: _phoneController,
                     decoration: const InputDecoration(
-                      labelText: 'Username',
+                      labelText: 'phone',
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(45.0)), // Rounded corners with 45-degree angle
                       ),

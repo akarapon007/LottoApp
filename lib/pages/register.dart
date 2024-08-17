@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:lotto_app/pages/login.dart';
@@ -16,28 +17,8 @@ class _RegisterPageState extends State<RegisterPage> {
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _confirmPasswordController = TextEditingController();
-
-  Future<bool> _isUsernameTaken(String username) async {
-    final String checkUrl = 'https://nodejs-wfjd.onrender.com/signup/checkusername';
-    final response = await http.post(
-      Uri.parse(checkUrl),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-      body: jsonEncode(<String, String>{
-        'username': username,
-      }),
-    );
-
-    if (response.statusCode == 200) {
-      final Map<String, dynamic> data = jsonDecode(response.body);
-      return data['exists'];
-    } else {
-      _showErrorDialog('Failed to connect to the server');
-      return false;
-    }
-  }
+  final TextEditingController _confirmPasswordController =
+      TextEditingController();
 
   Future<void> _register() async {
     if (_passwordController.text != _confirmPasswordController.text) {
@@ -47,13 +28,6 @@ class _RegisterPageState extends State<RegisterPage> {
 
     if (!_isAccepted) {
       _showErrorDialog('You must accept the terms and conditions');
-      return;
-    }
-
-    // Check if the username is already taken
-    final isUsernameTaken = await _isUsernameTaken(_usernameController.text);
-    if (isUsernameTaken) {
-      _showErrorDialog('Username is already taken');
       return;
     }
 
@@ -76,10 +50,11 @@ class _RegisterPageState extends State<RegisterPage> {
       if (data['success']) {
         _showSuccessDialog('Registration Successful');
       } else {
-        _showErrorDialog('Registration failed');
+        _showErrorDialog(data['message'] ?? 'Registration failed');
       }
     } else {
-      _showErrorDialog('Failed to connect to the server');
+      _showErrorDialog(
+          'Failed to connect to the server. Status code: ${response.statusCode}');
     }
   }
 
@@ -94,8 +69,8 @@ class _RegisterPageState extends State<RegisterPage> {
             TextButton(
               child: const Text('OK'),
               onPressed: () {
-                Navigator.of(context).pop(); // Close the dialog
-                Navigator.pushReplacement(
+                // Close the dialog
+                Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => LoginPage()),
                 );
@@ -162,20 +137,21 @@ class _RegisterPageState extends State<RegisterPage> {
                     child: GestureDetector(
                       onTap: () {
                         setState(() {
-                          _profileImage = AssetImage('assets/default_profile.png');
+                          _profileImage =
+                              AssetImage('assets/default_profile.png');
                         });
                       },
                       child: CircleAvatar(
                         radius: 50.0,
                         backgroundImage: _profileImage,
                         child: _profileImage == null
-                            ? const Icon(Icons.camera_alt, size: 40.0, color: Colors.white)
+                            ? const Icon(Icons.camera_alt,
+                                size: 40.0, color: Colors.white)
                             : null,
                       ),
                     ),
                   ),
                   const SizedBox(height: 16.0),
-
                   TextField(
                     controller: _usernameController,
                     decoration: const InputDecoration(
@@ -187,7 +163,6 @@ class _RegisterPageState extends State<RegisterPage> {
                     ),
                   ),
                   const SizedBox(height: 16.0),
-
                   TextField(
                     controller: _phoneController,
                     decoration: const InputDecoration(
@@ -199,7 +174,6 @@ class _RegisterPageState extends State<RegisterPage> {
                     ),
                   ),
                   const SizedBox(height: 16.0),
-
                   TextField(
                     controller: _emailController,
                     decoration: const InputDecoration(
@@ -211,7 +185,6 @@ class _RegisterPageState extends State<RegisterPage> {
                     ),
                   ),
                   const SizedBox(height: 16.0),
-
                   TextField(
                     controller: _passwordController,
                     obscureText: true,
@@ -224,7 +197,6 @@ class _RegisterPageState extends State<RegisterPage> {
                     ),
                   ),
                   const SizedBox(height: 16.0),
-
                   TextField(
                     controller: _confirmPasswordController,
                     obscureText: true,
@@ -237,7 +209,6 @@ class _RegisterPageState extends State<RegisterPage> {
                     ),
                   ),
                   const SizedBox(height: 16.0),
-
                   Row(
                     children: [
                       Checkbox(
@@ -257,7 +228,6 @@ class _RegisterPageState extends State<RegisterPage> {
                     ],
                   ),
                   const SizedBox(height: 24.0),
-
                   Center(
                     child: ElevatedButton(
                       onPressed: _register,
@@ -282,7 +252,6 @@ class _RegisterPageState extends State<RegisterPage> {
                     ),
                   ),
                   const SizedBox(height: 20.0),
-
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -294,7 +263,8 @@ class _RegisterPageState extends State<RegisterPage> {
                         onPressed: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => LoginPage()),
+                            MaterialPageRoute(
+                                builder: (context) => LoginPage()),
                           );
                         },
                         child: const Text(
