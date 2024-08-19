@@ -16,13 +16,11 @@ class HomePage extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Container(
-                    color: const Color(
-                        0xFF453BC9), // Set the background color to #453BC9
-                    height: 100, // Adjust the height as needed
-                    width: double.infinity, // Make the container full width
+                    color: const Color(0xFF453BC9),
+                    height: 100,
+                    width: double.infinity,
                     child: const Padding(
-                      padding: EdgeInsets.only(
-                          bottom: 60.0), // Add padding at the top
+                      padding: EdgeInsets.only(bottom: 60.0),
                       child: Center(
                         child: Text(
                           'Search for lucky numbers',
@@ -35,14 +33,11 @@ class HomePage extends StatelessWidget {
                       ),
                     ),
                   ),
-                  const SizedBox(
-                      height:
-                          150), // Adjust the height to provide space for the overlay
+                  const SizedBox(height: 150),
                   Container(
                     decoration: BoxDecoration(
-                      color: Color(0xFFD9D9D9), // Change color to #D9D9D9
-                      borderRadius: BorderRadius.circular(
-                          20), // Set the border radius here
+                      color: Color(0xFFD9D9D9),
+                      borderRadius: BorderRadius.circular(20),
                     ),
                     height: 350,
                     width: 300,
@@ -53,22 +48,17 @@ class HomePage extends StatelessWidget {
                           TextField(
                             decoration: InputDecoration(
                               hintText: 'Search...',
-                              suffixIcon: const Icon(
-                                  Icons.search), // Move the icon to the right
-                              filled: true, // Enable the fill color
-                              fillColor: Colors
-                                  .white, // Set the background color to white
-                              border:
-                                  InputBorder.none, // Remove the default border
+                              suffixIcon: const Icon(Icons.search),
+                              filled: true,
+                              fillColor: Colors.white,
+                              border: InputBorder.none,
                               focusedBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(10.0),
-                                borderSide: BorderSide
-                                    .none, // Remove the border when focused
+                                borderSide: BorderSide.none,
                               ),
                               enabledBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(10.0),
-                                borderSide: BorderSide
-                                    .none, // Remove the border when enabled
+                                borderSide: BorderSide.none,
                               ),
                             ),
                           ),
@@ -81,15 +71,12 @@ class HomePage extends StatelessWidget {
             ),
           ),
           Positioned(
-            top:
-                60, // Adjust this value to control how much the container overlaps the app bar
-            left: MediaQuery.of(context).size.width * 0.5 -
-                150, // Center the container horizontally
+            top: 60,
+            left: MediaQuery.of(context).size.width * 0.5 - 150,
             child: Container(
               decoration: BoxDecoration(
-                color: Color(0xFFD9D9D9), // Change color to #D9D9D9
-                borderRadius:
-                    BorderRadius.circular(20), // Set the border radius here
+                color: Color(0xFFD9D9D9),
+                borderRadius: BorderRadius.circular(20),
               ),
               height: 350,
               width: 300,
@@ -100,40 +87,35 @@ class HomePage extends StatelessWidget {
                     TextField(
                       decoration: InputDecoration(
                         hintText: 'Search...',
-                        suffixIcon:
-                            Icon(Icons.search), // Move the icon to the right
-                        filled: true, // Enable the fill color
-                        fillColor:
-                            Colors.white, // Set the background color to white
-                        border: InputBorder.none, // Remove the default border
+                        suffixIcon: Icon(Icons.search),
+                        filled: true,
+                        fillColor: Colors.white,
+                        border: InputBorder.none,
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10.0),
-                          borderSide:
-                              BorderSide.none, // Remove the border when focused
+                          borderSide: BorderSide.none,
                         ),
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(40.0),
-                          borderSide:
-                              BorderSide.none, // Remove the border when enabled
+                          borderSide: BorderSide.none,
                         ),
                       ),
                     ),
                     const SizedBox(height: 10),
                     const Align(
-                      alignment:
-                          Alignment.centerLeft, // Align the Text to the left
+                      alignment: Alignment.centerLeft,
                       child: Text(
                         'Lucky Number',
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
-                          color: const Color(0xFF453BC9),
+                          color: Color(0xFF453BC9),
                         ),
                       ),
                     ),
-                    const SizedBox(height: 10), // Add space between text and box
+                    const SizedBox(height: 10),
                     Container(
-                      color: Color(0xFFE0E0E0), // Color of the box
+                      color: Color(0xFFE0E0E0),
                       height: 150,
                       width: double.infinity,
                       child: const Center(
@@ -152,6 +134,29 @@ class HomePage extends StatelessWidget {
             ),
           ),
         ],
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.search),
+            label: 'Search',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'Profile',
+          ),
+        ],
+        selectedItemColor: Color(0xFF453BC9), // Set the color for selected item
+        unselectedItemColor: Colors.grey, // Set the color for unselected items
+        backgroundColor: Colors.white, // Set the background color of the bottom bar
+        onTap: (int index) {
+          // Handle item taps here
+          print("Selected tab: $index");
+        },
       ),
     );
   }
