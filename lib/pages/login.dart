@@ -121,11 +121,11 @@ Future<void> _login() async {
                   TextField(
                     controller: _phoneController,
                     decoration: const InputDecoration(
-                      labelText: 'phone',
+                      labelText: 'Phone',
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(45.0)), // Rounded corners with 45-degree angle
                       ),
-                      prefixIcon: Icon(Icons.person), // User icon
+                      prefixIcon: Icon(Icons.phone), // User icon
                     ),
                   ),
                   const SizedBox(height: 20.0), // Space between input fields

@@ -20,8 +20,8 @@ class HomePage extends StatelessWidget {
                         0xFF453BC9), // Set the background color to #453BC9
                     height: 100, // Adjust the height as needed
                     width: double.infinity, // Make the container full width
-                    child: Padding(
-                      padding: const EdgeInsets.only(
+                    child: const Padding(
+                      padding: EdgeInsets.only(
                           bottom: 60.0), // Add padding at the top
                       child: Center(
                         child: Text(
@@ -35,7 +35,7 @@ class HomePage extends StatelessWidget {
                       ),
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                       height:
                           150), // Adjust the height to provide space for the overlay
                   Container(
@@ -53,7 +53,7 @@ class HomePage extends StatelessWidget {
                           TextField(
                             decoration: InputDecoration(
                               hintText: 'Search...',
-                              suffixIcon: Icon(
+                              suffixIcon: const Icon(
                                   Icons.search), // Move the icon to the right
                               filled: true, // Enable the fill color
                               fillColor: Colors
@@ -118,8 +118,8 @@ class HomePage extends StatelessWidget {
                         ),
                       ),
                     ),
-                    SizedBox(height: 10),
-                    Align(
+                    const SizedBox(height: 10),
+                    const Align(
                       alignment:
                           Alignment.centerLeft, // Align the Text to the left
                       child: Text(
@@ -131,12 +131,12 @@ class HomePage extends StatelessWidget {
                         ),
                       ),
                     ),
-                    SizedBox(height: 10), // Add space between text and box
+                    const SizedBox(height: 10), // Add space between text and box
                     Container(
                       color: Color(0xFFE0E0E0), // Color of the box
                       height: 150,
                       width: double.infinity,
-                      child: Center(
+                      child: const Center(
                         child: Text(
                           'Lucky Number Here',
                           style: TextStyle(
