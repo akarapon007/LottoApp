@@ -117,18 +117,10 @@ class HomePage extends StatelessWidget {
                     ),
                     const SizedBox(height: 10),
                     Container(
-                      color: Color(0xFFE0E0E0),
+                      color: Color(0xFFffffff),
                       height: 150,
                       width: double.infinity,
-                      child: const Center(
-                        child: Text(
-                          'Lucky Number Here',
-                          style: TextStyle(
-                            color: Color(0xFF453BC9),
-                            fontSize: 16,
-                          ),
-                        ),
-                      ),
+                      
                     ),
                   ],
                 ),
