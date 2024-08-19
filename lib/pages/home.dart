@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'profile.dart'; // Import the ProfilePage
 
 class HomePage extends StatelessWidget {
   @override
@@ -7,6 +8,7 @@ class HomePage extends StatelessWidget {
       appBar: AppBar(
         title: const Text(''),
         backgroundColor: const Color(0xFF453BC9),
+        automaticallyImplyLeading: false, // Remove the back arrow if it appears
       ),
       body: Stack(
         children: [
@@ -142,8 +144,8 @@ class HomePage extends StatelessWidget {
             label: 'Home',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.search),
-            label: 'Search',
+            icon: Icon(Icons.wallet),
+            label: 'Wallet',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),
@@ -154,8 +156,15 @@ class HomePage extends StatelessWidget {
         unselectedItemColor: Colors.grey, // Set the color for unselected items
         backgroundColor: Colors.white, // Set the background color of the bottom bar
         onTap: (int index) {
-          // Handle item taps here
-          print("Selected tab: $index");
+          if (index == 2) { // "Profile" icon is at index 2
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => ProfilePage()),
+            );
+          } else {
+            // Handle other tabs
+            print("Selected tab: $index");
+          }
         },
       ),
     );
