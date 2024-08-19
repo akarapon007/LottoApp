@@ -14,54 +14,55 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
-Future<void> _login() async {
-  final phone = _phoneController.text;
-  final password = _passwordController.text;
+  Future<void> _login() async {
+    final phone = _phoneController.text;
+    final password = _passwordController.text;
 
-  if (phone.isEmpty || password.isEmpty) {
-    _showErrorDialog('Please fill in both phone and password.');
-    return;
-  }
+    if (phone.isEmpty || password.isEmpty) {
+      _showErrorDialog('Please fill in both phone and password.');
+      return;
+    }
 
-  try {
-    final response = await http.post(
-      Uri.parse('https://nodejs-wfjd.onrender.com/login'),
-      headers: {'Content-Type': 'application/json'},
-      body: json.encode({
-        'phone': phone,
-        'password': password,
-      }),
-    );
+    try {
+      final response = await http.post(
+        Uri.parse('https://nodejs-wfjd.onrender.com/login'),
+        headers: {'Content-Type': 'application/json'},
+        body: json.encode({
+          'phone': phone,
+          'password': password,
+        }),
+      );
 
-    if (response.statusCode == 200) {
-      final jsonData = json.decode(response.body);
+      if (response.statusCode == 200) {
+        final jsonData = json.decode(response.body);
 
-      if (jsonData is List) {
-        final user = jsonData.firstWhere(
-          (user) => user['phone'] == phone && user['password'] == password,
-          orElse: () => null,
-        );
-
-        if (user != null) {
-          print('Login successful: $user');
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => HomePage()), // เปลี่ยนเป็น HomePage
+        if (jsonData is List) {
+          final user = jsonData.firstWhere(
+            (user) => user['phone'] == phone && user['password'] == password,
+            orElse: () => null,
           );
+
+          if (user != null) {
+            print('Login successful: $user');
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => HomePage()), // เปลี่ยนเป็น HomePage
+            );
+          } else {
+            _showErrorDialog('Login failed: Incorrect phone or password.');
+          }
         } else {
-          _showErrorDialog('Login failed: Incorrect phone or password.');
+          _showErrorDialog('Unexpected data format.');
         }
       } else {
-        _showErrorDialog('Unexpected data format.');
+        _showErrorDialog(
+            'Failed to login. Status code: ${response.statusCode}');
       }
-    } else {
-      _showErrorDialog('Failed to login. Status code: ${response.statusCode}');
+    } catch (e) {
+      _showErrorDialog('An error occurred: $e');
     }
-  } catch (e) {
-    _showErrorDialog('An error occurred: $e');
   }
-}
-
 
   void _showErrorDialog(String message) {
     showDialog(
@@ -109,40 +110,53 @@ Future<void> _login() async {
                 ),
               ),
             ),
+            const SizedBox(height: 10.0),
             // Remaining part of the screen with input fields
             Container(
-              color: const Color.fromARGB(255, 255, 255, 255),
+              decoration: BoxDecoration(
+                color: Color(0xFFD9D9D9), // เปลี่ยนสีพื้นหลังเป็น #D9D9D9
+                borderRadius:
+                    BorderRadius.circular(20), // ตั้งค่ามุมโค้งเป็น 20 พิกเซล
+              ),
               padding: const EdgeInsets.all(20.0),
+              height: 450,
+              width: 350,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  // phone input field with icon
-                  const SizedBox(height: 120.0),
+                  const SizedBox(height: 50.0), // ลดขนาดจาก 120.0 เหลือ 20.0
                   TextField(
                     controller: _phoneController,
                     decoration: const InputDecoration(
                       labelText: 'Phone',
                       border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(45.0)), // Rounded corners with 45-degree angle
+                        borderRadius: BorderRadius.all(
+                            Radius.circular(45.0)), // มุมโค้ง 45 องศา
                       ),
-                      prefixIcon: Icon(Icons.phone), // User icon
+                      prefixIcon: Icon(Icons.phone), // ไอคอนโทรศัพท์
+                      fillColor: Colors.white, // ตั้งค่าสีพื้นหลัง
+                      filled: true, // เปิดใช้งานสีพื้นหลัง
                     ),
                   ),
-                  const SizedBox(height: 20.0), // Space between input fields
-                  // Password input field with icon
+                  const SizedBox(height: 20.0),
                   TextField(
                     controller: _passwordController,
-                    obscureText: true, // Obscure text for password
+                    obscureText: true, // ซ่อนข้อความสำหรับรหัสผ่าน
                     decoration: const InputDecoration(
                       labelText: 'Password',
                       border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(45.0)), // Rounded corners with 45-degree angle
+                        borderRadius: BorderRadius.all(
+                            Radius.circular(45.0)), // มุมโค้ง 45 องศา
                       ),
-                      prefixIcon: Icon(Icons.lock), // Lock icon
+                      prefixIcon: Icon(Icons.lock), // ไอคอนล็อก
+                      fillColor: Colors.white, // ตั้งค่าสีพื้นหลัง
+                      filled: true, // เปิดใช้งานสีพื้นหลัง
                     ),
                   ),
-                  const SizedBox(height: 10.0), // Space before the remember me checkbox
-                  // Remember me checkbox
+
+                  const SizedBox(
+                      height:
+                          10.0), // เว้นระยะห่างก่อนช่องทำเครื่องหมายจำฉันไว้
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -155,6 +169,13 @@ Future<void> _login() async {
                                 _rememberMe = value ?? false;
                               });
                             },
+                            checkColor: Colors.black, // สีของเครื่องหมายติ๊ก
+                            fillColor: MaterialStateProperty.all<Color>(
+                                Colors.white), // สีพื้นหลัง
+                            side: MaterialStateBorderSide.resolveWith(
+                              (states) =>
+                                  BorderSide(color: Colors.white), // สีของขอบ
+                            ),
                           ),
                           const Text(
                             'Remember Me',
@@ -162,7 +183,6 @@ Future<void> _login() async {
                           ),
                         ],
                       ),
-                      // Forgot Password link
                       TextButton(
                         onPressed: () {
                           // Handle forgot password action
@@ -174,18 +194,18 @@ Future<void> _login() async {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 100.0), // Space before the button
-                  // Sign in button
+                  const SizedBox(height: 20.0), // ลดขนาดจาก 100.0 เหลือ 20.0
                   ElevatedButton(
                     onPressed: _login,
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF453BC9), // Match button color
+                      backgroundColor: const Color(0xFF453BC9), // สีของปุ่ม
                       padding: const EdgeInsets.symmetric(
                         horizontal: 50.0,
                         vertical: 15.0,
                       ),
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(45.0), // Rounded button corners
+                        borderRadius:
+                            BorderRadius.circular(45.0), // มุมโค้งของปุ่ม
                       ),
                     ),
                     child: const Text(
@@ -197,8 +217,7 @@ Future<void> _login() async {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 20.0), // Space before the sign-up text
-                  // Sign up text with link
+                  const SizedBox(height: 10.0), // ลดขนาดจาก 20.0 เหลือ 10.0
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -210,7 +229,8 @@ Future<void> _login() async {
                         onPressed: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => RegisterPage()),
+                            MaterialPageRoute(
+                                builder: (context) => RegisterPage()),
                           );
                         },
                         child: const Text(
@@ -223,7 +243,7 @@ Future<void> _login() async {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 100.0),
+                  const SizedBox(height: 10.0), // ลดขนาดจาก 100.0 เหลือ 10.0
                 ],
               ),
             ),
