@@ -65,90 +65,36 @@ class HomePage extends StatelessWidget {
                               ),
                             ),
                           ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          Positioned(
-            top: 60,
-            left: MediaQuery.of(context).size.width * 0.5 - 150,
-            child: Container(
-              decoration: BoxDecoration(
-                color: Color(0xFFD9D9D9),
-                borderRadius: BorderRadius.circular(20),
-              ),
-              height: 350,
-              width: 300,
-              child: Stack(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(20.0),
-                    child: Column(
-                      children: [
-                        TextField(
-                          decoration: InputDecoration(
-                            hintText: 'Search...',
-                            suffixIcon: Icon(Icons.search),
-                            filled: true,
-                            fillColor: Colors.white,
-                            border: InputBorder.none,
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10.0),
-                              borderSide: BorderSide.none,
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(40.0),
-                              borderSide: BorderSide.none,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 10),
-                        const Align(
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                            'Lucky Number',
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              color: Color(0xFF453BC9),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 10),
-                        Expanded(
-                          child: Container(
-                            color: Color(0xFFFFFFFF),
-                            width: double.infinity,
-                            child: Stack(
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.only(top: 40.0),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                    children: List.generate(6, (index) {
-                                      return CircleAvatar(
-                                        radius: 18, // Size of the circle
-                                        backgroundColor: Color(0xFF453BC9),
-                                        child: Text(
-                                          '${index + 1}', // Replace with actual numbers
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 16, // Font size
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                      );
-                                    }),
+                          const SizedBox(height: 10),
+                          Expanded(
+                            child: Container(
+                              color: Color(0xFFFFFFFF),
+                              width: double.infinity,
+                              child: Column(
+                                children: [
+                                  Expanded(
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(top: 40.0),
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                        children: List.generate(6, (index) {
+                                          return CircleAvatar(
+                                            radius: 18, // Size of the circle
+                                            backgroundColor: Color(0xFF453BC9),
+                                            child: Text(
+                                              '${index + 1}', // Replace with actual numbers
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 16, // Font size
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          );
+                                        }),
+                                      ),
+                                    ),
                                   ),
-                                ),
-                                Positioned(
-                                  bottom: 20,
-                                  right: 20,
-                                  child: ElevatedButton(
+                                  ElevatedButton(
                                     onPressed: () {
                                       print("Buy button pressed");
                                     },
@@ -178,15 +124,127 @@ class HomePage extends StatelessWidget {
                                       ],
                                     ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 ],
+              ),
+            ),
+          ),
+          Positioned(
+            top: 60,
+            left: MediaQuery.of(context).size.width * 0.5 - 150,
+            child: Container(
+              decoration: BoxDecoration(
+                color: Color(0xFFD9D9D9),
+                borderRadius: BorderRadius.circular(20),
+              ),
+              height: 350,
+              width: 300,
+              child: Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Column(
+                  children: [
+                    TextField(
+                      decoration: InputDecoration(
+                        hintText: 'Search...',
+                        suffixIcon: Icon(Icons.search),
+                        filled: true,
+                        fillColor: Colors.white,
+                        border: InputBorder.none,
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                          borderSide: BorderSide.none,
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(40.0),
+                          borderSide: BorderSide.none,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    const Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        'Lucky Number',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFF453BC9),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    Expanded(
+                      child: Container(
+                        color: Color(0xFFFFFFFF),
+                        width: double.infinity,
+                        child: Column(
+                          children: [
+                            Expanded(
+                              child: Padding(
+                                padding: const EdgeInsets.only(bottom: 40.0),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                  children: List.generate(6, (index) {
+                                    return CircleAvatar(
+                                      radius: 18, // Size of the circle
+                                      backgroundColor: Color(0xFF453BC9),
+                                      child: Text(
+                                        '${index + 1}', // Replace with actual numbers
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 16, // Font size
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    );
+                                  }),
+                                ),
+                              ),
+                            ),
+                            ElevatedButton(
+                              onPressed: () {
+                                print("Buy button pressed");
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Color(0xFF453BC9), // Background color
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(40.0),
+                                ),
+                              ),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Icon(
+                                    Icons.add,
+                                    color: Colors.white,
+                                    size: 20,
+                                  ),
+                                  const SizedBox(width: 8),
+                                  Text(
+                                    'Buy',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 30),
+                  ],
+                ),
               ),
             ),
           ),
