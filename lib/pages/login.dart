@@ -119,7 +119,7 @@ class _LoginPageState extends State<LoginPage> {
                     BorderRadius.circular(20), // ตั้งค่ามุมโค้งเป็น 20 พิกเซล
               ),
               padding: const EdgeInsets.all(20.0),
-              height: 450,
+              height: 500,
               width: 350,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -183,18 +183,9 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                         ],
                       ),
-                      TextButton(
-                        onPressed: () {
-                          // Handle forgot password action
-                        },
-                        child: const Text(
-                          'Forgot Password?',
-                          style: TextStyle(color: Color(0xFF453BC9)),
-                        ),
-                      ),
                     ],
                   ),
-                  const SizedBox(height: 20.0), // ลดขนาดจาก 100.0 เหลือ 20.0
+                  const SizedBox(height: 60.0), // ลดขนาดจาก 100.0 เหลือ 20.0
                   ElevatedButton(
                     onPressed: _login,
                     style: ElevatedButton.styleFrom(
