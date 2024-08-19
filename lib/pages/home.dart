@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'profile.dart'; // Import the ProfilePage
-import 'wallet.dart'; // Import the WalletPage
+import 'package:lotto_app/pages/profile.dart';
+import 'package:lotto_app/pages/wallet.dart';
 
 class HomePage extends StatelessWidget {
   @override
