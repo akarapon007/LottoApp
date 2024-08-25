@@ -22,14 +22,14 @@ class _RegisterPageState extends State<RegisterPage> {
 
   Future<void> _register() async {
     // Check if any of the fields are empty
-  if (_usernameController.text.isEmpty ||
-      _phoneController.text.isEmpty ||
-      _emailController.text.isEmpty ||
-      _passwordController.text.isEmpty ||
-      _confirmPasswordController.text.isEmpty) {
-    _showErrorDialog('Please fill out all the fields');
-    return;
-  }
+    if (_usernameController.text.isEmpty ||
+        _phoneController.text.isEmpty ||
+        _emailController.text.isEmpty ||
+        _passwordController.text.isEmpty ||
+        _confirmPasswordController.text.isEmpty) {
+      _showErrorDialog('Please fill out all the fields');
+      return;
+    }
 
     if (_passwordController.text != _confirmPasswordController.text) {
       _showErrorDialog('Passwords do not match');
@@ -43,61 +43,58 @@ class _RegisterPageState extends State<RegisterPage> {
 
     final String apiUrl = 'https://nodejs-wfjd.onrender.com/signup';
     final response = await http.post(
-  Uri.parse(apiUrl),
-  headers: <String, String>{
-    'Content-Type': 'application/json; charset=UTF-8',
-  },
-  body: jsonEncode(<String, String>{
-    'username': _usernameController.text,
-    'phone': _phoneController.text,
-    'email': _emailController.text,
-    'password': _passwordController.text,
-  }),
-);
+      Uri.parse(apiUrl),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        'username': _usernameController.text,
+        'phone': _phoneController.text,
+        'email': _emailController.text,
+        'password': _passwordController.text,
+      }),
+    );
 
 // เพิ่มการพิมพ์ข้อมูล response เพื่อดีบัก
-print('Response status: ${response.statusCode}');
-print('Response body: ${response.body}');
+    print('Response status: ${response.statusCode}');
+    print('Response body: ${response.body}');
 
-if (response.statusCode == 200 || response.statusCode == 201) {
-  final Map<String, dynamic> data = jsonDecode(response.body);
-  if (data['success']) {
-    _showSuccessDialog('Registration Successful');
-  } else {
-    _showErrorDialog(data['message'] ?? 'Registration failed');
-  }
-} else {
-  _showErrorDialog(
-      'Failed to connect to the server. Status code: ${response.statusCode}');
-}
-
-
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      final Map<String, dynamic> data = jsonDecode(response.body);
+      if (data['success']) {
+        _showSuccessDialog('Registration Successful');
+      } else {
+        _showErrorDialog(data['message'] ?? 'Registration failed');
+      }
+    } else {
+      _showErrorDialog(
+          'Failed to connect to the server. Status code: ${response.statusCode}');
+    }
   }
 
   void _showSuccessDialog(String message) {
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        title: const Text('Success'),
-        content: Text(message),
-        actions: <Widget>[
-          TextButton(
-            child: const Text('OK'),
-            onPressed: () {
-              // ปิดการแจ้งเตือนและเปลี่ยนหน้าไปที่ LoginPage
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => LoginPage()),
-              );
-            },
-          ),
-        ],
-      );
-    },
-  );
-}
-
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Success'),
+          content: Text(message),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('OK'),
+              onPressed: () {
+                // ปิดการแจ้งเตือนและเปลี่ยนหน้าไปที่ LoginPage
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => LoginPage()),
+                );
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   void _showErrorDialog(String message) {
     showDialog(
@@ -131,7 +128,7 @@ if (response.statusCode == 200 || response.statusCode == 201) {
           children: [
             Container(
               color: const Color(0xFF453BC9),
-              height: 100,
+              height: 50,
               width: double.infinity,
               child: const Center(
                 child: Text(
@@ -144,9 +141,25 @@ if (response.statusCode == 200 || response.statusCode == 201) {
                 ),
               ),
             ),
+            const SizedBox(height: 10.0), // เพิ่มระยะห่างระหว่าง title และฟอร์ม
+
+            // Container สำหรับฟอร์มสมัครสมาชิก
             Container(
-              color: Colors.white,
+              decoration: BoxDecoration(
+                color: const Color(0xFFD9D9D9), // สีพื้นหลังของฟอร์ม
+                borderRadius: BorderRadius.circular(40.0),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.5),
+                    spreadRadius: 5,
+                    blurRadius: 7,
+                    offset: Offset(0, 3),
+                  ),
+                ],
+              ),
               padding: const EdgeInsets.all(20.0),
+              width: 370,
+              height: 700,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -159,7 +172,7 @@ if (response.statusCode == 200 || response.statusCode == 201) {
                         });
                       },
                       child: CircleAvatar(
-                        radius: 50.0,
+                        radius: 40.0,
                         backgroundImage: _profileImage,
                         child: _profileImage == null
                             ? const Icon(Icons.camera_alt,
@@ -171,70 +184,93 @@ if (response.statusCode == 200 || response.statusCode == 201) {
                   const SizedBox(height: 16.0),
                   TextField(
                     controller: _usernameController,
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
+                      filled: true,
+                      fillColor: Colors.white, // สีพื้นหลังของช่องข้อความ
                       labelText: 'Username',
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(45.0)),
                       ),
-                      prefixIcon: Icon(Icons.person),
+                      prefixIcon: const Icon(Icons.person),
                     ),
                   ),
                   const SizedBox(height: 16.0),
                   TextField(
                     controller: _phoneController,
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
+                      filled: true,
+                      fillColor: Colors.white, // สีพื้นหลังของช่องข้อความ
                       labelText: 'Phone',
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(45.0)),
                       ),
-                      prefixIcon: Icon(Icons.phone),
+                      prefixIcon: const Icon(Icons.phone),
                     ),
                   ),
                   const SizedBox(height: 16.0),
                   TextField(
                     controller: _emailController,
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
+                      filled: true,
+                      fillColor: Colors.white, // สีพื้นหลังของช่องข้อความ
                       labelText: 'Email',
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(45.0)),
                       ),
-                      prefixIcon: Icon(Icons.email),
+                      prefixIcon: const Icon(Icons.email),
                     ),
                   ),
                   const SizedBox(height: 16.0),
                   TextField(
                     controller: _passwordController,
                     obscureText: true,
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
+                      filled: true,
+                      fillColor: Colors.white, // สีพื้นหลังของช่องข้อความ
                       labelText: 'Password',
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(45.0)),
                       ),
-                      prefixIcon: Icon(Icons.lock),
+                      prefixIcon: const Icon(Icons.lock),
                     ),
                   ),
                   const SizedBox(height: 16.0),
                   TextField(
                     controller: _confirmPasswordController,
                     obscureText: true,
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
+                      filled: true,
+                      fillColor: Colors.white, // สีพื้นหลังของช่องข้อความ
                       labelText: 'Confirm Password',
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(45.0)),
                       ),
-                      prefixIcon: Icon(Icons.lock),
+                      prefixIcon: const Icon(Icons.lock),
                     ),
                   ),
                   const SizedBox(height: 16.0),
                   Row(
                     children: [
-                      Checkbox(
-                        value: _isAccepted,
-                        onChanged: (bool? value) {
-                          setState(() {
-                            _isAccepted = value ?? false;
-                          });
-                        },
+                      Theme(
+                        data: ThemeData(
+                          unselectedWidgetColor: Colors
+                              .white, // สีของกรอบ Checkbox เมื่อยังไม่ติ๊ก
+                        ),
+                        child: Checkbox(
+                          value: _isAccepted,
+                          onChanged: (bool? value) {
+                            setState(() {
+                              _isAccepted = value ?? false;
+                            });
+                          },
+                         checkColor: Colors.black, // สีของเครื่องหมายติ๊ก
+                            fillColor: MaterialStateProperty.all<Color>(
+                                Colors.white), // สีพื้นหลัง
+                            side: MaterialStateBorderSide.resolveWith(
+                              (states) =>
+                                  const BorderSide(color: Colors.white), // สีของขอบ
+                            ),
+                        ),
                       ),
                       const Expanded(
                         child: Text(
