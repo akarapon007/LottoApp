@@ -36,14 +36,13 @@ class HomePage extends StatelessWidget {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 150),
                   Container(
                     decoration: BoxDecoration(
                       color: Color(0xFFD9D9D9),
                       borderRadius: BorderRadius.circular(20),
                     ),
-                    height: 350,
-                    width: 300,
+                    height: 600,
+                    width: 380,
                     child: Padding(
                       padding: const EdgeInsets.all(20.0),
                       child: Column(
@@ -55,12 +54,8 @@ class HomePage extends StatelessWidget {
                               filled: true,
                               fillColor: Colors.white,
                               border: InputBorder.none,
-                              focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10.0),
-                                borderSide: BorderSide.none,
-                              ),
                               enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10.0),
+                                borderRadius: BorderRadius.circular(50.0),
                                 borderSide: BorderSide.none,
                               ),
                             ),
@@ -74,12 +69,13 @@ class HomePage extends StatelessWidget {
                                 children: [
                                   Expanded(
                                     child: Padding(
-                                      padding: const EdgeInsets.only(top: 40.0),
+                                      padding: const EdgeInsets.only(top:1.0),
                                       child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceEvenly,
                                         children: List.generate(6, (index) {
                                           return CircleAvatar(
-                                            radius: 18, // Size of the circle
+                                            radius: 20, // Size of the circle
                                             backgroundColor: Color(0xFF453BC9),
                                             child: Text(
                                               '${index + 1}', // Replace with actual numbers
@@ -99,9 +95,11 @@ class HomePage extends StatelessWidget {
                                       print("Buy button pressed");
                                     },
                                     style: ElevatedButton.styleFrom(
-                                      backgroundColor: Color(0xFF453BC9), // Background color
+                                      backgroundColor:
+                                          Color(0xFF453BC9), // Background color
                                       shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(40.0),
+                                        borderRadius:
+                                            BorderRadius.circular(40.0),
                                       ),
                                     ),
                                     child: Row(
@@ -136,118 +134,6 @@ class HomePage extends StatelessWidget {
               ),
             ),
           ),
-          Positioned(
-            top: 60,
-            left: MediaQuery.of(context).size.width * 0.5 - 150,
-            child: Container(
-              decoration: BoxDecoration(
-                color: Color(0xFFD9D9D9),
-                borderRadius: BorderRadius.circular(20),
-              ),
-              height: 350,
-              width: 300,
-              child: Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: Column(
-                  children: [
-                    TextField(
-                      decoration: InputDecoration(
-                        hintText: 'Search...',
-                        suffixIcon: Icon(Icons.search),
-                        filled: true,
-                        fillColor: Colors.white,
-                        border: InputBorder.none,
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10.0),
-                          borderSide: BorderSide.none,
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(40.0),
-                          borderSide: BorderSide.none,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    const Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        'Lucky Number',
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: Color(0xFF453BC9),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    Expanded(
-                      child: Container(
-                        color: Color(0xFFFFFFFF),
-                        width: double.infinity,
-                        child: Column(
-                          children: [
-                            Expanded(
-                              child: Padding(
-                                padding: const EdgeInsets.only(bottom: 40.0),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                  children: List.generate(6, (index) {
-                                    return CircleAvatar(
-                                      radius: 18, // Size of the circle
-                                      backgroundColor: Color(0xFF453BC9),
-                                      child: Text(
-                                        '${index + 1}', // Replace with actual numbers
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 16, // Font size
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    );
-                                  }),
-                                ),
-                              ),
-                            ),
-                            ElevatedButton(
-                              onPressed: () {
-                                print("Buy button pressed");
-                              },
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Color(0xFF453BC9), // Background color
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(40.0),
-                                ),
-                              ),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Icon(
-                                    Icons.add,
-                                    color: Colors.white,
-                                    size: 20,
-                                  ),
-                                  const SizedBox(width: 8),
-                                  Text(
-                                    'Buy',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 30),
-                  ],
-                ),
-              ),
-            ),
-          ),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
@@ -267,14 +153,17 @@ class HomePage extends StatelessWidget {
         ],
         selectedItemColor: Color(0xFF453BC9), // Set the color for selected item
         unselectedItemColor: Colors.grey, // Set the color for unselected items
-        backgroundColor: Colors.white, // Set the background color of the bottom bar
+        backgroundColor:
+            Colors.white, // Set the background color of the bottom bar
         onTap: (int index) {
-          if (index == 2) { // "Profile" icon is at index 2
+          if (index == 2) {
+            // "Profile" icon is at index 2
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => ProfilePage()),
             );
-          } else if (index == 1) { // "Wallet" icon is at index 1
+          } else if (index == 1) {
+            // "Wallet" icon is at index 1
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => WalletPage()),
