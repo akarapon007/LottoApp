@@ -3,6 +3,8 @@ import 'package:lotto_app/pages/profile.dart';
 import 'package:lotto_app/pages/wallet.dart';
 
 class HomePage extends StatelessWidget {
+    final int userId;
+  const HomePage({Key? key, required this.userId}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
