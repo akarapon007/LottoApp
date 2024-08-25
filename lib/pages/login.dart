@@ -1,85 +1,36 @@
-import 'dart:convert'; // For encoding the request body
+import 'dart:developer';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http; // For making HTTP requests
+import 'package:http/http.dart' as http;
+import 'package:lotto_app/config/config.dart';
+import 'package:lotto_app/models/request/user_login_post.dart';
+import 'package:lotto_app/models/response/user_idx_res.dart';
 import 'package:lotto_app/pages/home.dart';
 import 'package:lotto_app/pages/register.dart';
 
 class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
+
   @override
-  _LoginPageState createState() => _LoginPageState();
+  State<LoginPage> createState() => _LoginPageState();
 }
 
 class _LoginPageState extends State<LoginPage> {
+  String text = '';
+  String url = '';
   bool _rememberMe = false;
-  final TextEditingController _phoneController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
+  TextEditingController phoneCtl = TextEditingController();
+  TextEditingController passwordCtl = TextEditingController();
 
-  Future<void> _login() async {
-    final phone = _phoneController.text;
-    final password = _passwordController.text;
-
-    if (phone.isEmpty || password.isEmpty) {
-      _showErrorDialog('Please fill in both phone and password.');
-      return;
-    }
-
-    try {
-      final response = await http.post(
-        Uri.parse('https://nodejs-wfjd.onrender.com/login'),
-        headers: {'Content-Type': 'application/json'},
-        body: json.encode({
-          'phone': phone,
-          'password': password,
-        }),
-      );
-
-      if (response.statusCode == 200) {
-        final jsonData = json.decode(response.body);
-
-        if (jsonData is List) {
-          final user = jsonData.firstWhere(
-            (user) => user['phone'] == phone && user['password'] == password,
-            orElse: () => null,
-          );
-
-          if (user != null) {
-            print('Login successful: $user');
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => HomePage()), // เปลี่ยนเป็น HomePage
-            );
-          } else {
-            _showErrorDialog('Login failed: Incorrect phone or password.');
-          }
-        } else {
-          _showErrorDialog('Unexpected data format.');
-        }
-      } else {
-        _showErrorDialog(
-            'Failed to login. Status code: ${response.statusCode}');
-      }
-    } catch (e) {
-      _showErrorDialog('An error occurred: $e');
-    }
-  }
-
-  void _showErrorDialog(String message) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Error'),
-          content: Text(message),
-          actions: <Widget>[
-            TextButton(
-              child: const Text('OK'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
+  @override
+  void initState() {
+    super.initState();
+    // อ่านค่า Config
+    Configuration.getConfig().then(
+      (value) {
+        log(value['apiEndPoint']);
+        setState(() {
+          url = value['apiEndPoint'];
+        });
       },
     );
   }
@@ -114,7 +65,7 @@ class _LoginPageState extends State<LoginPage> {
             // Remaining part of the screen with input fields
             Container(
               decoration: BoxDecoration(
-                color: Color(0xFFD9D9D9), // เปลี่ยนสีพื้นหลังเป็น #D9D9D9
+                color: const Color(0xFFD9D9D9), // เปลี่ยนสีพื้นหลังเป็น #D9D9D9
                 borderRadius:
                     BorderRadius.circular(20), // ตั้งค่ามุมโค้งเป็น 20 พิกเซล
               ),
@@ -124,9 +75,9 @@ class _LoginPageState extends State<LoginPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  const SizedBox(height: 50.0), // ลดขนาดจาก 120.0 เหลือ 20.0
+                  const SizedBox(height: 50.0), // ลดขนาดจาก 120.0 เหลือ 50.0
                   TextField(
-                    controller: _phoneController,
+                    controller: phoneCtl,
                     decoration: const InputDecoration(
                       labelText: 'Phone',
                       border: OutlineInputBorder(
@@ -140,7 +91,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   const SizedBox(height: 20.0),
                   TextField(
-                    controller: _passwordController,
+                    controller: passwordCtl,
                     obscureText: true, // ซ่อนข้อความสำหรับรหัสผ่าน
                     decoration: const InputDecoration(
                       labelText: 'Password',
@@ -174,7 +125,7 @@ class _LoginPageState extends State<LoginPage> {
                                 Colors.white), // สีพื้นหลัง
                             side: MaterialStateBorderSide.resolveWith(
                               (states) =>
-                                  BorderSide(color: Colors.white), // สีของขอบ
+                                  const BorderSide(color: Colors.white), // สีของขอบ
                             ),
                           ),
                           const Text(
@@ -185,7 +136,7 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 60.0), // ลดขนาดจาก 100.0 เหลือ 20.0
+                  const SizedBox(height: 60.0), // ลดขนาดจาก 100.0 เหลือ 60.0
                   ElevatedButton(
                     onPressed: _login,
                     style: ElevatedButton.styleFrom(
@@ -241,6 +192,65 @@ class _LoginPageState extends State<LoginPage> {
           ],
         ),
       ),
+    );
+  }
+
+  Future<void> _login() async {
+    final phone = phoneCtl.text;
+    final password = passwordCtl.text;
+
+    if (phone.isEmpty || password.isEmpty) {
+      _showErrorDialog('Please fill in both phone and password.');
+      return;
+    }
+
+    try {
+      final model = UserLoginReq(phone: phone, password: password);
+
+      var response = await http.post(
+        Uri.parse("$url/login"),
+        headers: {"Content-Type": "application/json; charset=utf-8"},
+        body: userLoginReqToJson(model),
+      );
+
+      if (response.statusCode == 200) {
+        var cust = userIdxResFromJson(response.body);
+        log(cust.toString()); 
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => HomePage(
+              userId: cust.uid,
+            ),
+          ),
+        );
+      } else {
+        _showErrorDialog('Login failed. Please check your credentials.');
+      }
+
+    } catch (err) {
+      log(err.toString());
+      _showErrorDialog("An error occurred. Please try again.");
+    }
+  }
+
+  void _showErrorDialog(String message) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Error'),
+          content: Text(message),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 }

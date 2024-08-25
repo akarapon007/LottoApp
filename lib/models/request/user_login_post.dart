@@ -1,53 +1,29 @@
 // To parse this JSON data, do
 //
-//     final userLoginPost = userLoginPostFromJson(jsonString);
+//     final userLoginReq = userLoginReqFromJson(jsonString);
 
 import 'dart:convert';
 
-UserLoginPost userLoginPostFromJson(String str) => UserLoginPost.fromJson(json.decode(str));
+UserLoginReq userLoginReqFromJson(String str) => UserLoginReq.fromJson(json.decode(str));
 
-String userLoginPostToJson(UserLoginPost data) => json.encode(data.toJson());
+String userLoginReqToJson(UserLoginReq data) => json.encode(data.toJson());
 
-class UserLoginPost {
-    int uid;
-    String username;
-    String password;
-    String email;
+class UserLoginReq {
     String phone;
-    String img;
-    String type;
-    String registeredDate;
+    String password;
 
-    UserLoginPost({
-        required this.uid,
-        required this.username,
-        required this.password,
-        required this.email,
+    UserLoginReq({
         required this.phone,
-        required this.img,
-        required this.type,
-        required this.registeredDate,
+        required this.password,
     });
 
-    factory UserLoginPost.fromJson(Map<String, dynamic> json) => UserLoginPost(
-        uid: json["uid"],
-        username: json["username"],
-        password: json["password"],
-        email: json["email"],
+    factory UserLoginReq.fromJson(Map<String, dynamic> json) => UserLoginReq(
         phone: json["phone"],
-        img: json["img"],
-        type: json["type"],
-        registeredDate: json["registered_date"],
+        password: json["password"],
     );
 
     Map<String, dynamic> toJson() => {
-        "uid": uid,
-        "username": username,
-        "password": password,
-        "email": email,
         "phone": phone,
-        "img": img,
-        "type": type,
-        "registered_date": registeredDate,
+        "password": password,
     };
 }
