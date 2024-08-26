@@ -1,10 +1,24 @@
+import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:lotto_app/pages/profile.dart';
 import 'package:lotto_app/pages/wallet.dart';
 
-class HomePage extends StatelessWidget {
-    final int uid;
-  const HomePage({Key? key, required this.uid}) : super(key: key);
+class HomePage extends StatefulWidget {
+  final int uid; // Make uid final as it is required
+
+  HomePage({super.key, required this.uid});
+
+  @override
+  _HomePage createState() => _HomePage();
+}
+
+class _HomePage extends State<HomePage> {
+  @override
+  void initState() {
+    super.initState();
+    log(widget.uid.toString()); // Log uid
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -71,7 +85,7 @@ class HomePage extends StatelessWidget {
                                 children: [
                                   Expanded(
                                     child: Padding(
-                                      padding: const EdgeInsets.only(top:1.0),
+                                      padding: const EdgeInsets.only(top: 1.0),
                                       child: Row(
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceEvenly,
@@ -104,7 +118,7 @@ class HomePage extends StatelessWidget {
                                             BorderRadius.circular(40.0),
                                       ),
                                     ),
-                                    child:const Row(
+                                    child: const Row(
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
                                         Icon(
@@ -153,19 +167,20 @@ class HomePage extends StatelessWidget {
             label: 'Profile',
           ),
         ],
-        selectedItemColor: Color(0xFF453BC9), // Set the color for selected item
-        unselectedItemColor: Colors.grey, // Set the color for unselected items
-        backgroundColor:
-            Colors.white, // Set the background color of the bottom bar
+        selectedItemColor: Color(0xFF453BC9),
+        unselectedItemColor: Colors.grey, 
+        backgroundColor: Colors.white, 
         onTap: (int index) {
-          if (index == 2) {
-            // "Profile" icon is at index 2
+          if (index == 2) { // "Profile" icon is at index 2
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => ProfilePage()),
+              MaterialPageRoute(
+                builder: (context) => ProfilePage(
+                  uid: widget.uid, // Pass uid from HomePage
+                ),
+              ),
             );
-          } else if (index == 1) {
-            // "Wallet" icon is at index 1
+          } else if (index == 1) { // "Wallet" icon is at index 1
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => WalletPage()),

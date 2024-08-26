@@ -196,7 +196,6 @@ class _LoginPageState extends State<LoginPage> {
       ),
     );
   }
-
   void login() async {
     var model = UserLoginReq(
       phone: phoneCtl.text,
@@ -221,7 +220,7 @@ class _LoginPageState extends State<LoginPage> {
             if (users.isNotEmpty) {
                 UserLoginPostRes user = users[0];
 
-                if (users[0].type == "user") {
+                if (user.type == "user") {
                     Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
@@ -230,7 +229,7 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                       ),
                     );
-                } else if (users[0].type == "admin") {
+                } else if (user.type == "admin") {
                     log(user.username);
                     Navigator.pushReplacement(
                       context,
@@ -240,20 +239,52 @@ class _LoginPageState extends State<LoginPage> {
                     );
                 }
             } else {
-                setState(() {
-                  text = "No user data found";
-                });
+                showErrorDialog("No user data found");
             }
         } else {
-            setState(() {
-              text = "Phone or Password Incorrect";
-            });
+            showErrorDialog("Phone or Password Incorrect");
         }
     } catch (err) {
       log(err.toString());
-      setState(() {
-        text = "An error occurred. Please try again.";
-      });
+      showErrorDialog("Phone or Password Incorrect. Please try again.");
     }
-  }
+}
+
+  void showErrorDialog(String message) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Text('Error'),
+        content: Text(message),
+        actions: <Widget>[
+          TextButton(
+            child: Text('OK'),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+        ],
+      );
+    },
+  );
+}
+void showSuccessDialog(String message, VoidCallback onPressed) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Text('Success'),
+        content: Text(message),
+        actions: <Widget>[
+          TextButton(
+            child: Text('OK'),
+            onPressed: onPressed,
+          ),
+        ],
+      );
+    },
+  );
+}
+
 }
