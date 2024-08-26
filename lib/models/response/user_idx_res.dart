@@ -4,22 +4,30 @@
 
 import 'dart:convert';
 
-UserIdxRes userIdxResFromJson(String str) => UserIdxRes.fromJson(json.decode(str));
+List<UserIdxRes> userIdxResFromJson(String str) => List<UserIdxRes>.from(
+  json.decode(str).map((x) => UserIdxRes.fromJson(x)));
 
-String userIdxResToJson(UserIdxRes data) => json.encode(data.toJson());
+String userIdxResToJson(List<UserIdxRes> data) => 
+  json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
 class UserIdxRes {
     int uid;
     String username;
     String email;
     String phone;
-    String img;
+    String password;
+    int? balance;
+    String type;
+    String? img;
 
     UserIdxRes({
         required this.uid,
         required this.username,
         required this.email,
         required this.phone,
+        required this.password,
+        required this.balance,
+        required this.type,
         required this.img,
     });
 
@@ -28,6 +36,9 @@ class UserIdxRes {
         username: json["username"],
         email: json["email"],
         phone: json["phone"],
+        password: json["password"],
+        balance: json["balance"],
+        type: json["type"],
         img: json["img"],
     );
 
@@ -36,6 +47,9 @@ class UserIdxRes {
         "username": username,
         "email": email,
         "phone": phone,
+        "password": password,
+        "balance": balance,
+        "type": type,
         "img": img,
     };
 }

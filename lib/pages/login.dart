@@ -1,9 +1,11 @@
+import 'dart:convert';
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:lotto_app/config/config.dart';
 import 'package:lotto_app/models/request/user_login_post.dart';
 import 'package:lotto_app/models/response/userLoginPostRes.dart';
+import 'package:lotto_app/pages/admin.dart';
 import 'package:lotto_app/pages/home.dart';
 import 'package:lotto_app/pages/register.dart';
 
@@ -16,8 +18,6 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   String text = '';
-  int number = 0;
-  String phoneNO = '';
   String password = '';
   bool _rememberMe = false;
   TextEditingController phoneCtl = TextEditingController();
@@ -29,13 +29,10 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {
     super.initState();
-    // อ่านค่า Config
     Configuration.getConfig().then(
       (value) {
         log(value['apiEndPoint']);
-        setState(() {
-          url = value['apiEndPoint'];
-        });
+        url = value['apiEndPoint'];
       },
     );
   }
@@ -201,27 +198,61 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void login() async {
-   var model =
-       UserLoginReq(phone: phoneCtl.text, password: passwordCtl.text);
+    var model = UserLoginReq(
+      phone: phoneCtl.text,
+      password: passwordCtl.text,
+    );
 
     try {
-      var value = await http.post(Uri.parse("$url/login"),
+        var response = await http.post(
+          Uri.parse("https://nodejs-wfjd.onrender.com/login"),
           headers: {"Content-Type": "application/json; charset=utf-8"},
-          body: userLoginReqToJson(model));
-      var cust = userLoginPostResFromJson(value.body);
+          body: userLoginReqToJson(model),
+        );
 
-      log(cust.user.img);
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => HomePage(
-              userId: cust.user.uid,
-            ),
-          ));
+        log('Response status: ${response.statusCode}');
+        log('Response body: ${response.body}');
+
+        if (response.statusCode >= 200 && response.statusCode < 300) {
+            // แปลง JSON เป็นลิสต์ของ UserLoginPostRes
+            List<dynamic> jsonResponse = json.decode(response.body);
+            List<UserLoginPostRes> users = jsonResponse.map((data) => UserLoginPostRes.fromJson(data)).toList();
+
+            if (users.isNotEmpty) {
+                UserLoginPostRes user = users[0];
+
+                if (users[0].type == "user") {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => HomePage(
+                          uid: user.uid,
+                        ),
+                      ),
+                    );
+                } else if (users[0].type == "admin") {
+                    log(user.username);
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => Adminpage(),
+                      ),
+                    );
+                }
+            } else {
+                setState(() {
+                  text = "No user data found";
+                });
+            }
+        } else {
+            setState(() {
+              text = "Phone or Password Incorrect";
+            });
+        }
     } catch (err) {
       log(err.toString());
       setState(() {
-        text = "Phone no or Password Incorrect";
+        text = "An error occurred. Please try again.";
       });
     }
   }

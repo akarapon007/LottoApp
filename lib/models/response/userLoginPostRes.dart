@@ -4,54 +4,42 @@
 
 import 'dart:convert';
 
-UserLoginPostRes userLoginPostResFromJson(String str) => UserLoginPostRes.fromJson(json.decode(str));
+List<UserLoginPostRes> userLoginPostResFromJson(String str) => List<UserLoginPostRes>.from(
+  json.decode(str).map((x) => UserLoginPostRes.fromJson(x)));
 
-String userLoginPostResToJson(UserLoginPostRes data) => json.encode(data.toJson());
+
+String userLoginPostResToJson(List<UserLoginPostRes> data) => 
+  json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
 class UserLoginPostRes {
-  String message;
-  User user;
-
-  UserLoginPostRes({
-    required this.message,
-    required this.user,
-  });
-
-  factory UserLoginPostRes.fromJson(Map<String, dynamic> json) =>
-      UserLoginPostRes(
-        message: json["message"],
-        user: User.fromJson(json["user"]),
-      );
-
-  Map<String, dynamic> toJson() => {
-        "message": message,
-        "user": user.toJson(),
-      };
-}
-
-class User {
     int uid;
     String username;
     String email;
     String phone;
     String password;
-    String img;
+    int? balance;
+    String type;
+    String? img;
 
-    User({
+    UserLoginPostRes({
         required this.uid,
         required this.username,
         required this.email,
         required this.phone,
         required this.password,
+        required this.balance,
+        required this.type,
         required this.img,
     });
 
-    factory User.fromJson(Map<String, dynamic> json) => User(
+    factory UserLoginPostRes.fromJson(Map<String, dynamic> json) => UserLoginPostRes(
         uid: json["uid"],
         username: json["username"],
         email: json["email"],
         phone: json["phone"],
         password: json["password"],
+        balance: json["balance"],
+        type: json["type"],
         img: json["img"],
     );
 
@@ -61,6 +49,8 @@ class User {
         "email": email,
         "phone": phone,
         "password": password,
+        "balance": balance,
+        "type": type,
         "img": img,
     };
 }
