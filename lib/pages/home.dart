@@ -81,7 +81,7 @@ class HomePage extends StatelessWidget {
                                             backgroundColor: Color(0xFF453BC9),
                                             child: Text(
                                               '${index + 1}', // Replace with actual numbers
-                                              style: TextStyle(
+                                              style: const TextStyle(
                                                 color: Colors.white,
                                                 fontSize: 16, // Font size
                                                 fontWeight: FontWeight.bold,
@@ -104,7 +104,7 @@ class HomePage extends StatelessWidget {
                                             BorderRadius.circular(40.0),
                                       ),
                                     ),
-                                    child: Row(
+                                    child:const Row(
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
                                         Icon(
@@ -112,7 +112,7 @@ class HomePage extends StatelessWidget {
                                           color: Colors.white,
                                           size: 20,
                                         ),
-                                        const SizedBox(width: 8),
+                                        SizedBox(width: 8),
                                         Text(
                                           'Buy',
                                           style: TextStyle(
