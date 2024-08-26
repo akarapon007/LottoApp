@@ -11,7 +11,7 @@ class HomePage extends StatelessWidget {
       appBar: AppBar(
         title: const Text(''),
         backgroundColor: const Color(0xFF453BC9),
-        automaticallyImplyLeading: false, // Remove the back arrow if it appears
+        automaticallyImplyLeading: false,
       ),
       body: Stack(
         children: [

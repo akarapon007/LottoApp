@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:lotto_app/config/config.dart';
 import 'package:lotto_app/models/request/user_login_post.dart';
-import 'package:lotto_app/models/response/user_idx_res.dart';
+import 'package:lotto_app/models/response/userLoginPostRes.dart';
 import 'package:lotto_app/pages/home.dart';
 import 'package:lotto_app/pages/register.dart';
 
@@ -16,11 +16,16 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   String text = '';
-  String url = '';
+  int number = 0;
+  String phoneNO = '';
+  String password = '';
   bool _rememberMe = false;
   TextEditingController phoneCtl = TextEditingController();
   TextEditingController passwordCtl = TextEditingController();
 
+
+  String url = '';
+  
   @override
   void initState() {
     super.initState();
@@ -138,7 +143,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   const SizedBox(height: 60.0), // ลดขนาดจาก 100.0 เหลือ 60.0
                   ElevatedButton(
-                    onPressed: _login,
+                    onPressed: login,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFF453BC9), // สีของปุ่ม
                       padding: const EdgeInsets.symmetric(
@@ -195,62 +200,29 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Future<void> _login() async {
-    final phone = phoneCtl.text;
-    final password = passwordCtl.text;
-
-    if (phone.isEmpty || password.isEmpty) {
-      _showErrorDialog('Please fill in both phone and password.');
-      return;
-    }
+  void login() async {
+   var model =
+       UserLoginReq(phone: phoneCtl.text, password: passwordCtl.text);
 
     try {
-      final model = UserLoginReq(phone: phone, password: password);
+      var value = await http.post(Uri.parse("$url/login"),
+          headers: {"Content-Type": "application/json; charset=utf-8"},
+          body: userLoginReqToJson(model));
+      var cust = userLoginPostResFromJson(value.body);
 
-      var response = await http.post(
-        Uri.parse("$url/login"),
-        headers: {"Content-Type": "application/json; charset=utf-8"},
-        body: userLoginReqToJson(model),
-      );
-
-      if (response.statusCode == 200) {
-        var cust = userIdxResFromJson(response.body);
-        log(cust.toString()); 
-        Navigator.push(
+      log(cust.user.img);
+      Navigator.push(
           context,
           MaterialPageRoute(
             builder: (context) => HomePage(
-              userId: cust.uid,
+              userId: cust.user.uid,
             ),
-          ),
-        );
-      } else {
-        _showErrorDialog('Login failed. Please check your credentials.');
-      }
-
+          ));
     } catch (err) {
       log(err.toString());
-      _showErrorDialog("An error occurred. Please try again.");
+      setState(() {
+        text = "Phone no or Password Incorrect";
+      });
     }
-  }
-
-  void _showErrorDialog(String message) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Error'),
-          content: Text(message),
-          actions: <Widget>[
-            TextButton(
-              child: const Text('OK'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
   }
 }
