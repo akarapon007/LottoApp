@@ -21,7 +21,6 @@ class _RegisterPageState extends State<RegisterPage> {
       TextEditingController();
 
   Future<void> _register() async {
-    // Check if any of the fields are empty
     if (_usernameController.text.isEmpty ||
         _phoneController.text.isEmpty ||
         _emailController.text.isEmpty ||
@@ -55,7 +54,6 @@ class _RegisterPageState extends State<RegisterPage> {
       }),
     );
 
-// เพิ่มการพิมพ์ข้อมูล response เพื่อดีบัก
     print('Response status: ${response.statusCode}');
     print('Response body: ${response.body}');
 
@@ -83,7 +81,6 @@ class _RegisterPageState extends State<RegisterPage> {
             TextButton(
               child: const Text('OK'),
               onPressed: () {
-                // ปิดการแจ้งเตือนและเปลี่ยนหน้าไปที่ LoginPage
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => LoginPage()),
