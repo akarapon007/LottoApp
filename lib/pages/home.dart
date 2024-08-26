@@ -36,7 +36,7 @@ class _HomePage extends State<HomePage> {
                 children: [
                   Container(
                     color: const Color(0xFF453BC9),
-                    height: 100,
+                    height: 92,
                     width: double.infinity,
                     child: const Padding(
                       padding: EdgeInsets.only(bottom: 60.0),
@@ -77,7 +77,20 @@ class _HomePage extends State<HomePage> {
                             ),
                           ),
                           const SizedBox(height: 10),
-                          Expanded(
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              'Lucky Number',
+                              style: TextStyle(
+                                fontWeight: FontWeight.w900,
+                                color: const Color(0xFF453BC9),
+                                fontSize: 20,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 10),
+                          SizedBox(
+                            height: 145, // กำหนดความสูงตามที่ต้องการ
                             child: Container(
                               color: Color(0xFFFFFFFF),
                               width: double.infinity,
@@ -90,15 +103,24 @@ class _HomePage extends State<HomePage> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceEvenly,
                                         children: List.generate(6, (index) {
-                                          return CircleAvatar(
-                                            radius: 20, // Size of the circle
-                                            backgroundColor: Color(0xFF453BC9),
-                                            child: Text(
-                                              '${index + 1}', // Replace with actual numbers
-                                              style: const TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 16, // Font size
-                                                fontWeight: FontWeight.bold,
+                                          return Container(
+                                            height: 38, // ความสูงของวงรี
+                                            width: 48, // ความกว้างของวงรี
+                                            decoration: BoxDecoration(
+                                              color: Color(
+                                                  0xFF453BC9), // สีพื้นหลัง
+                                              borderRadius:
+                                                  BorderRadius.circular(
+                                                      20), // ทำให้มุมโค้งมน
+                                            ),
+                                            child: Center(
+                                              child: Text(
+                                                '${index + 1}', // แสดงตัวเลข
+                                                style: const TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 16, // ขนาดตัวอักษร
+                                                  fontWeight: FontWeight.bold,
+                                                ),
                                               ),
                                             ),
                                           );
@@ -106,37 +128,357 @@ class _HomePage extends State<HomePage> {
                                       ),
                                     ),
                                   ),
-                                  ElevatedButton(
-                                    onPressed: () {
-                                      print("Buy button pressed");
-                                    },
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor:
-                                          Color(0xFF453BC9), // Background color
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(40.0),
+                                  Row(
+                                    children: [
+                                      SizedBox(width: 0),
+                                      Image.network(
+                                        'https://www.pngall.com/wp-content/uploads/4/Gold-Coin-PNG-High-Quality-Image.png', // URL ของรูปภาพ
+                                        height: 80, // ขนาดความสูงของรูป
+                                        width: 100, // ขนาดความกว้างของรูป
                                       ),
-                                    ),
-                                    child: const Row(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        Icon(
-                                          Icons.add,
-                                          color: Colors.white,
-                                          size: 20,
-                                        ),
-                                        SizedBox(width: 8),
-                                        Text(
-                                          'Buy',
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.bold,
+                                      SizedBox(width: 50),
+                                      ElevatedButton(
+                                        onPressed: () {
+                                          print("Basket button pressed");
+                                        },
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: Color.fromARGB(255,
+                                              12, 250, 72), // Background color
+                                          minimumSize: Size(80,
+                                              36), // ขนาดปุ่ม (กว้าง 80, สูง 36)
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 10,
+                                              vertical:
+                                                  8), // ลดพื้นที่รอบๆ ปุ่ม
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(40.0),
                                           ),
                                         ),
-                                      ],
+                                        child: const Row(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            Icon(
+                                              Icons.add,
+                                              color: Colors.white,
+                                              size: 20,
+                                            ),
+                                            SizedBox(width: 8),
+                                            Text(
+                                              'Basket',
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 15,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      SizedBox(width: 8),
+                                      ElevatedButton(
+                                        onPressed: () {
+                                          print("Buy button pressed");
+                                        },
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: Color.fromARGB(255,
+                                              12, 250, 72), // Background color
+                                          minimumSize: Size(80,
+                                              36), // ขนาดปุ่ม (กว้าง 80, สูง 36)
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 10,
+                                              vertical:
+                                                  8), // ลดพื้นที่รอบๆ ปุ่ม
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(40.0),
+                                          ),
+                                        ),
+                                        child: const Row(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            Icon(
+                                              Icons.add,
+                                              color: Colors.white,
+                                              size: 20,
+                                            ),
+                                            SizedBox(width: 8),
+                                            Text(
+                                              'Buy',
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 15,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 10),
+                          SizedBox(
+                            height: 145, // กำหนดความสูงตามที่ต้องการ
+                            child: Container(
+                              color: Color(0xFFFFFFFF),
+                              width: double.infinity,
+                              child: Column(
+                                children: [
+                                  Expanded(
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(top: 1.0),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceEvenly,
+                                        children: List.generate(6, (index) {
+                                          return Container(
+                                            height: 38, // ความสูงของวงรี
+                                            width: 48, // ความกว้างของวงรี
+                                            decoration: BoxDecoration(
+                                              color: Color(
+                                                  0xFF453BC9), // สีพื้นหลัง
+                                              borderRadius:
+                                                  BorderRadius.circular(
+                                                      20), // ทำให้มุมโค้งมน
+                                            ),
+                                            child: Center(
+                                              child: Text(
+                                                '${index + 1}', // แสดงตัวเลข
+                                                style: const TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 16, // ขนาดตัวอักษร
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                            ),
+                                          );
+                                        }),
+                                      ),
                                     ),
+                                  ),
+                                  Row(
+                                    children: [
+                                      SizedBox(width: 0),
+                                      Image.network(
+                                        'https://www.pngall.com/wp-content/uploads/4/Gold-Coin-PNG-High-Quality-Image.png', // URL ของรูปภาพ
+                                        height: 80, // ขนาดความสูงของรูป
+                                        width: 100, // ขนาดความกว้างของรูป
+                                      ),
+                                      SizedBox(width: 50),
+                                      ElevatedButton(
+                                        onPressed: () {
+                                          print("Basket button pressed");
+                                        },
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: Color.fromARGB(255,
+                                              12, 250, 72), // Background color
+                                          minimumSize: Size(80,
+                                              36), // ขนาดปุ่ม (กว้าง 80, สูง 36)
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 10,
+                                              vertical:
+                                                  8), // ลดพื้นที่รอบๆ ปุ่ม
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(40.0),
+                                          ),
+                                        ),
+                                        child: const Row(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            Icon(
+                                              Icons.add,
+                                              color: Colors.white,
+                                              size: 20,
+                                            ),
+                                            SizedBox(width: 8),
+                                            Text(
+                                              'Basket',
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 15,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      SizedBox(width: 8),
+                                      ElevatedButton(
+                                        onPressed: () {
+                                          print("Buy button pressed");
+                                        },
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: Color.fromARGB(255,
+                                              12, 250, 72), // Background color
+                                          minimumSize: Size(80,
+                                              36), // ขนาดปุ่ม (กว้าง 80, สูง 36)
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 10,
+                                              vertical:
+                                                  8), // ลดพื้นที่รอบๆ ปุ่ม
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(40.0),
+                                          ),
+                                        ),
+                                        child: const Row(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            Icon(
+                                              Icons.add,
+                                              color: Colors.white,
+                                              size: 20,
+                                            ),
+                                            SizedBox(width: 8),
+                                            Text(
+                                              'Buy',
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 15,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 10),
+                          SizedBox(
+                            height: 145, // กำหนดความสูงตามที่ต้องการ
+                            child: Container(
+                              color: Color(0xFFFFFFFF),
+                              width: double.infinity,
+                              child: Column(
+                                children: [
+                                  Expanded(
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(top: 1.0),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceEvenly,
+                                        children: List.generate(6, (index) {
+                                          return Container(
+                                            height: 38, // ความสูงของวงรี
+                                            width: 48, // ความกว้างของวงรี
+                                            decoration: BoxDecoration(
+                                              color: Color(
+                                                  0xFF453BC9), // สีพื้นหลัง
+                                              borderRadius:
+                                                  BorderRadius.circular(
+                                                      20), // ทำให้มุมโค้งมน
+                                            ),
+                                            child: Center(
+                                              child: Text(
+                                                '${index + 1}', // แสดงตัวเลข
+                                                style: const TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 16, // ขนาดตัวอักษร
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                            ),
+                                          );
+                                        }),
+                                      ),
+                                    ),
+                                  ),
+                                  Row(
+                                    children: [
+                                      SizedBox(width: 0),
+                                      Image.network(
+                                        'https://www.pngall.com/wp-content/uploads/4/Gold-Coin-PNG-High-Quality-Image.png', // URL ของรูปภาพ
+                                        height: 80, // ขนาดความสูงของรูป
+                                        width: 100, // ขนาดความกว้างของรูป
+                                      ),
+                                      SizedBox(width: 50),
+                                      ElevatedButton(
+                                        onPressed: () {
+                                          print("Basket button pressed");
+                                        },
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: Color.fromARGB(255,
+                                              12, 250, 72), // Background color
+                                          minimumSize: Size(80,
+                                              36), // ขนาดปุ่ม (กว้าง 80, สูง 36)
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 10,
+                                              vertical:
+                                                  8), // ลดพื้นที่รอบๆ ปุ่ม
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(40.0),
+                                          ),
+                                        ),
+                                        child: const Row(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            Icon(
+                                              Icons.add,
+                                              color: Colors.white,
+                                              size: 20,
+                                            ),
+                                            SizedBox(width: 8),
+                                            Text(
+                                              'Basket',
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 15,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      SizedBox(width: 8),
+                                      ElevatedButton(
+                                        onPressed: () {
+                                          print("Buy button pressed");
+                                        },
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: Color.fromARGB(255,
+                                              12, 250, 72), // Background color
+                                          minimumSize: Size(80,
+                                              36), // ขนาดปุ่ม (กว้าง 80, สูง 36)
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 10,
+                                              vertical:
+                                                  8), // ลดพื้นที่รอบๆ ปุ่ม
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(40.0),
+                                          ),
+                                        ),
+                                        child: const Row(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            Icon(
+                                              Icons.add,
+                                              color: Colors.white,
+                                              size: 20,
+                                            ),
+                                            SizedBox(width: 8),
+                                            Text(
+                                              'Buy',
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 15,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ],
                               ),
@@ -168,10 +510,11 @@ class _HomePage extends State<HomePage> {
           ),
         ],
         selectedItemColor: Color(0xFF453BC9),
-        unselectedItemColor: Colors.grey, 
-        backgroundColor: Colors.white, 
+        unselectedItemColor: Colors.grey,
+        backgroundColor: Colors.white,
         onTap: (int index) {
-          if (index == 2) { // "Profile" icon is at index 2
+          if (index == 2) {
+            // "Profile" icon is at index 2
             Navigator.push(
               context,
               MaterialPageRoute(
@@ -180,7 +523,8 @@ class _HomePage extends State<HomePage> {
                 ),
               ),
             );
-          } else if (index == 1) { // "Wallet" icon is at index 1
+          } else if (index == 1) {
+            // "Wallet" icon is at index 1
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => WalletPage()),
