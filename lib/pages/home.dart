@@ -1,7 +1,9 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
+import 'package:lotto_app/config/config.dart';
 import 'package:lotto_app/pages/profile.dart';
 import 'package:lotto_app/pages/wallet.dart';
+import 'package:http/http.dart' as http;
 
 class HomePage extends StatefulWidget {
   int uid = 0; 
@@ -9,14 +11,18 @@ class HomePage extends StatefulWidget {
   HomePage({super.key, required this.uid});
 
   @override
-  _HomePage createState() => _HomePage();
+  State<HomePage> createState() => _HomePage();
 }
 
 class _HomePage extends State<HomePage> {
+  String url = '';
+
+    late Future<void> loadData;
   @override
   void initState() {
     super.initState();
     log(widget.uid.toString()); // Log uid
+    loadData = loadDataAstnc();
   }
 
   @override
@@ -537,4 +543,32 @@ class _HomePage extends State<HomePage> {
       ),
     );
   }
+  Future<void> loadDataAstnc() async {
+    var value = await Configuration.getConfig();
+    String url = value['apiEndPoint'];
+
+    var json = await http.get(Uri.parse('$url/lotto'));
+    // tripGetResponses = tripsGetResFromJson(json.body);
+  }
+
+  // void getTrips(String? zone) async {
+  //   // 1. Create http
+  //   var value = await Configuration.getConfig();
+  //   String url = value['apiEndPoint'];
+  //   http.get(Uri.parse('$url/trips')).then(
+  //     (value) {
+  //       tripGetResponses = tripsGetResFromJson(value.body);
+  //       List<TripsGetRes> filltertrips = [];
+  //       if (zone != null) {
+  //         for (var trip in tripGetResponses) {
+  //           if (trip.destinationZone == zone) {
+  //             filltertrips.add(trip);
+  //           }
+  //         }
+  //         tripGetResponses = filltertrips;
+  //       }
+  //       setState(() {});
+  //     },
+  //   );
+  // }
 }
