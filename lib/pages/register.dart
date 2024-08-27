@@ -181,68 +181,68 @@ class _RegisterPageState extends State<RegisterPage> {
                   const SizedBox(height: 16.0),
                   TextField(
                     controller: _usernameController,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       filled: true,
                       fillColor: Colors.white, // สีพื้นหลังของช่องข้อความ
                       labelText: 'Username',
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(45.0)),
                       ),
-                      prefixIcon: const Icon(Icons.person),
+                      prefixIcon: Icon(Icons.person),
                     ),
                   ),
                   const SizedBox(height: 16.0),
                   TextField(
                     controller: _phoneController,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       filled: true,
                       fillColor: Colors.white, // สีพื้นหลังของช่องข้อความ
                       labelText: 'Phone',
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(45.0)),
                       ),
-                      prefixIcon: const Icon(Icons.phone),
+                      prefixIcon: Icon(Icons.phone),
                     ),
                   ),
                   const SizedBox(height: 16.0),
                   TextField(
                     controller: _emailController,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       filled: true,
                       fillColor: Colors.white, // สีพื้นหลังของช่องข้อความ
                       labelText: 'Email',
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(45.0)),
                       ),
-                      prefixIcon: const Icon(Icons.email),
+                      prefixIcon: Icon(Icons.email),
                     ),
                   ),
                   const SizedBox(height: 16.0),
                   TextField(
                     controller: _passwordController,
                     obscureText: true,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       filled: true,
                       fillColor: Colors.white, // สีพื้นหลังของช่องข้อความ
                       labelText: 'Password',
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(45.0)),
                       ),
-                      prefixIcon: const Icon(Icons.lock),
+                      prefixIcon: Icon(Icons.lock),
                     ),
                   ),
                   const SizedBox(height: 16.0),
                   TextField(
                     controller: _confirmPasswordController,
                     obscureText: true,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       filled: true,
                       fillColor: Colors.white, // สีพื้นหลังของช่องข้อความ
                       labelText: 'Confirm Password',
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(45.0)),
                       ),
-                      prefixIcon: const Icon(Icons.lock),
+                      prefixIcon: Icon(Icons.lock),
                     ),
                   ),
                   const SizedBox(height: 16.0),

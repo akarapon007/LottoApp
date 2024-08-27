@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:lotto_app/pages/first.dart';
 
 class ProfilePage extends StatefulWidget {
-  final int uid;
+  int uid = 0;
   ProfilePage({super.key, required this.uid});
 
   @override
@@ -44,7 +45,6 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
               ),
             ),
-
             Container(
               decoration: BoxDecoration(
                 color: const Color(0xFFD9D9D9),
@@ -241,6 +241,46 @@ class _ProfilePageState extends State<ProfilePage> {
                             ],
                           ),
                         ),
+                      ),
+                    ),
+                    const SizedBox(height: 20), // เพิ่มระยะห่างระหว่าง container และปุ่ม
+                    ElevatedButton(
+                      onPressed: () {
+                        // Log out function
+                        print('User logged out');
+                        Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(builder: (context) => FirstPage()),
+                          (Route<dynamic> route) => false,
+                        ); // Navigate to FirstPage and remove previous routes
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.red, // Button color
+                        padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 20),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30), // Rounded corners
+                        ),
+                        shadowColor: Colors.black.withOpacity(0.5), // Drop shadow
+                        elevation: 10, // Elevation to make the button stand out
+                      ),
+                      child: const Row(
+                        mainAxisSize: MainAxisSize.min, // Adjust button size to content
+                        children: [
+                          Icon(
+                            Icons.logout,
+                            color: Colors.white,
+                            size: 24,
+                          ),
+                          SizedBox(width: 10),
+                          Text(
+                            'Log Out',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w700,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ],
                       ),
                     )
                   ],

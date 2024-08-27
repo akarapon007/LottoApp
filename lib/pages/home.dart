@@ -4,7 +4,7 @@ import 'package:lotto_app/pages/profile.dart';
 import 'package:lotto_app/pages/wallet.dart';
 
 class HomePage extends StatefulWidget {
-  final int uid; // Make uid final as it is required
+  int uid = 0; 
 
   HomePage({super.key, required this.uid});
 
@@ -77,13 +77,13 @@ class _HomePage extends State<HomePage> {
                             ),
                           ),
                           const SizedBox(height: 10),
-                          Align(
+                          const Align(
                             alignment: Alignment.centerLeft,
                             child: Text(
                               'Lucky Number',
                               style: TextStyle(
                                 fontWeight: FontWeight.w900,
-                                color: const Color(0xFF453BC9),
+                                color: Color(0xFF453BC9),
                                 fontSize: 20,
                               ),
                             ),
@@ -136,7 +136,7 @@ class _HomePage extends State<HomePage> {
                                         height: 80, // ขนาดความสูงของรูป
                                         width: 100, // ขนาดความกว้างของรูป
                                       ),
-                                      SizedBox(width: 50),
+                                      const SizedBox(width: 50),
                                       ElevatedButton(
                                         onPressed: () {
                                           print("Basket button pressed");
