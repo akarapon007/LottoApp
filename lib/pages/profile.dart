@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lotto_app/pages/first.dart';
+import 'package:lotto_app/pages/editprofile.dart';
 
 class ProfilePage extends StatefulWidget {
   int uid = 0;
@@ -129,6 +130,12 @@ class _ProfilePageState extends State<ProfilePage> {
                                   InkWell(
                                     onTap: () {
                                       // เพิ่มฟังก์ชันการทำงานเมื่อกดที่ข้อความนี้
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                EditProfilePage()),
+                                      );
                                       print('Edit tapped');
                                     },
                                     child: const Text(
@@ -243,7 +250,8 @@ class _ProfilePageState extends State<ProfilePage> {
                         ),
                       ),
                     ),
-                    const SizedBox(height: 20), // เพิ่มระยะห่างระหว่าง container และปุ่ม
+                    const SizedBox(
+                        height: 20), // เพิ่มระยะห่างระหว่าง container และปุ่ม
                     ElevatedButton(
                       onPressed: () {
                         // Log out function
@@ -256,15 +264,19 @@ class _ProfilePageState extends State<ProfilePage> {
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.red, // Button color
-                        padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 20),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 50, vertical: 20),
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30), // Rounded corners
+                          borderRadius:
+                              BorderRadius.circular(30), // Rounded corners
                         ),
-                        shadowColor: Colors.black.withOpacity(0.5), // Drop shadow
+                        shadowColor:
+                            Colors.black.withOpacity(0.5), // Drop shadow
                         elevation: 10, // Elevation to make the button stand out
                       ),
                       child: const Row(
-                        mainAxisSize: MainAxisSize.min, // Adjust button size to content
+                        mainAxisSize:
+                            MainAxisSize.min, // Adjust button size to content
                         children: [
                           Icon(
                             Icons.logout,
