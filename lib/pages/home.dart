@@ -520,23 +520,20 @@ class _HomePage extends State<HomePage> {
         backgroundColor: Colors.white,
         onTap: (int index) {
           if (index == 2) {
-            // "Profile" icon is at index 2
             Navigator.push(
               context,
               MaterialPageRoute(
                 builder: (context) => ProfilePage(
-                  uid: widget.uid, // Pass uid from HomePage
+                  uid: widget.uid,
                 ),
               ),
             );
           } else if (index == 1) {
-            // "Wallet" icon is at index 1
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => WalletPage()),
             );
           } else {
-            // Handle other tabs
             print("Selected tab: $index");
           }
         },
