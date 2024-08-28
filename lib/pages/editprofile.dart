@@ -3,6 +3,8 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 
 class EditProfilePage extends StatefulWidget {
+  int uid = 0;
+  EditProfilePage({super.key, required this.uid});
   @override
   _EditProfilePageState createState() => _EditProfilePageState();
 }
