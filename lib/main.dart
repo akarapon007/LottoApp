@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lotto_app/pages/first.dart';
+import 'package:lotto_app/pages/updatemoney.dart';
 
 void main() {
   runApp(const MyApp());
