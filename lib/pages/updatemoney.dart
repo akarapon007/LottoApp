@@ -13,11 +13,11 @@ class _UpdateMoneyPageState extends State<UpdateMoneyPage> {
         preferredSize: Size.fromHeight(80.0), // Set the height of the AppBar
         child: AppBar(
           backgroundColor: const Color(0xFF453BC9),
-          flexibleSpace: Center(
+          flexibleSpace: const Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Text(
+                Text(
                   'Update Money',
                   style: TextStyle(
                     fontSize: 18,
@@ -33,7 +33,7 @@ class _UpdateMoneyPageState extends State<UpdateMoneyPage> {
       ),
       body: Column(
         children: [
-          Divider(
+          const Divider(
             color: Color.fromARGB(255, 134, 134, 134), // Color of the first line
             thickness: 2, // Thickness of the first line
             height: 50, // Space below the first line
@@ -44,10 +44,10 @@ class _UpdateMoneyPageState extends State<UpdateMoneyPage> {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 16.0),
                 width: 150, // Set a fixed width to align with the right side
-                child: Column(
+                child: const Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
+                    Text(
                       'Recipient',
                       style: TextStyle(
                         fontSize: 18,
@@ -55,8 +55,8 @@ class _UpdateMoneyPageState extends State<UpdateMoneyPage> {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    const SizedBox(height: 8), // Space between text lines
-                    const Text(
+                    SizedBox(height: 8), // Space between text lines
+                    Text(
                       'Member ID',
                       style: TextStyle(
                         fontSize: 18,
@@ -70,18 +70,18 @@ class _UpdateMoneyPageState extends State<UpdateMoneyPage> {
               Container(
                 alignment: Alignment.centerRight, // Align text to the right
                 padding: const EdgeInsets.symmetric(horizontal: 16.0), // Add horizontal padding
-                child: Column(
+                child: const Column(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    const Text(
+                    Text(
                       'นาย พชร  วงคำเหลา',
                       style: TextStyle(
                         fontSize: 14,
                         color: Colors.black,
                       ),
                     ),
-                    const SizedBox(height: 8), // Space between text lines
-                    const Text(
+                    SizedBox(height: 8), // Space between text lines
+                    Text(
                       'KUY49',
                       style: TextStyle(
                         fontSize: 14,
@@ -93,7 +93,7 @@ class _UpdateMoneyPageState extends State<UpdateMoneyPage> {
               ),
             ],
           ),
-          Divider(
+          const Divider(
             color: Color.fromARGB(255, 134, 134, 134), // Color of the second line
             thickness: 2, // Thickness of the second line
             height: 50, // Space above the second line
@@ -111,8 +111,8 @@ class _UpdateMoneyPageState extends State<UpdateMoneyPage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8.0), // Add vertical padding to keep text from touching the border
+                const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 8.0), // Add vertical padding to keep text from touching the border
                   child: Text(
                     'Lottery Ticket Number.',
                     style: TextStyle(
@@ -123,7 +123,7 @@ class _UpdateMoneyPageState extends State<UpdateMoneyPage> {
                     textAlign: TextAlign.center, // Center the text horizontally
                   ),
                 ),
-                SizedBox(height: 16), // Space between the text and squares
+                const SizedBox(height: 16), // Space between the text and squares
                 Center(
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -146,7 +146,7 @@ class _UpdateMoneyPageState extends State<UpdateMoneyPage> {
               ],
             ),
           ),
-          Divider(
+          const Divider(
             color: Color.fromARGB(255, 134, 134, 134), // Color of the third line
             thickness: 2, // Thickness of the third line
             height: 50, // Space below the third line
@@ -157,10 +157,10 @@ class _UpdateMoneyPageState extends State<UpdateMoneyPage> {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 16.0),
                 width: 150, // Set a fixed width to align with the right side
-                child: Column(
+                child: const Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
+                    Text(
                       'Price money',
                       style: TextStyle(
                         fontSize: 18,
@@ -168,8 +168,8 @@ class _UpdateMoneyPageState extends State<UpdateMoneyPage> {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    const SizedBox(height: 8), // Space between text lines
-                    const Text(
+                    SizedBox(height: 8), // Space between text lines
+                    Text(
                       'Tax amount',
                       style: TextStyle(
                         fontSize: 18,
@@ -177,8 +177,8 @@ class _UpdateMoneyPageState extends State<UpdateMoneyPage> {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    const SizedBox(height: 8), // Space between text lines
-                    const Text(
+                    SizedBox(height: 8), // Space between text lines
+                    Text(
                       'Received',
                       style: TextStyle(
                         fontSize: 18,
@@ -192,26 +192,26 @@ class _UpdateMoneyPageState extends State<UpdateMoneyPage> {
               Container(
                 alignment: Alignment.centerRight, // Align text to the right
                 padding: const EdgeInsets.symmetric(horizontal: 16.0), // Add horizontal padding
-                child: Column(
+                child: const Column(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    const Text(
+                    Text(
                       '50  Baht',
                       style: TextStyle(
                         fontSize: 14,
                         color: Colors.black,
                       ),
                     ),
-                    const SizedBox(height: 8), // Space between text lines
-                    const Text(
+                    SizedBox(height: 8), // Space between text lines
+                    Text(
                       '50  Baht',
                       style: TextStyle(
                         fontSize: 14,
                         color: Colors.black,
                       ),
                     ),
-                    const SizedBox(height: 8), // Space between text lines
-                    const Text(
+                    SizedBox(height: 8), // Space between text lines
+                    Text(
                       '50  Baht',
                       style: TextStyle(
                         fontSize: 14,
@@ -223,7 +223,7 @@ class _UpdateMoneyPageState extends State<UpdateMoneyPage> {
               ),
             ],
           ),
-          Divider(
+          const Divider(
             color: Color.fromARGB(255, 134, 134, 134), // Color of the fourth line
             thickness: 2, // Thickness of the fourth line
             height: 50, // Space below the fourth line
@@ -236,8 +236,8 @@ class _UpdateMoneyPageState extends State<UpdateMoneyPage> {
                   // Handle the button press
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Color(0xFF453BC9), // Background color of the button
-                  padding: EdgeInsets.symmetric(horizontal: 32.0, vertical: 12.0), // Padding inside the button
+                  backgroundColor: const Color(0xFF453BC9), // Background color of the button
+                  padding: const EdgeInsets.symmetric(horizontal: 32.0, vertical: 12.0), // Padding inside the button
                 ),
                 child: const Text(
                   'Confirm Update',
