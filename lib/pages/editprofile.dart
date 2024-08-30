@@ -104,7 +104,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                         const SizedBox(
                             width:
                                 20), // เพิ่มระยะห่างระหว่างรูปโปรไฟล์กับข้อความ
-                        Expanded(
+                        const Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -167,34 +167,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                       ),
                     ),
                     const SizedBox(height: 16.0),
-
-                    TextField(
-                      controller: _passwordController,
-                      obscureText: true,
-                      decoration: const InputDecoration(
-                        filled: true,
-                        fillColor: Colors.white, // สีพื้นหลังของช่องข้อความ
-                        labelText: 'Japan',
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(45.0)),
-                        ),
-                        prefixIcon: Icon(Icons.public),
-                      ),
-                    ),
-                    const SizedBox(height: 16.0),
-                    TextField(
-                      controller: _confirmPasswordController,
-                      obscureText: true,
-                      decoration: const InputDecoration(
-                        filled: true,
-                        fillColor: Colors.white, // สีพื้นหลังของช่องข้อความ
-                        labelText: 'Shingeki',
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(45.0)),
-                        ),
-                        prefixIcon: Icon(Icons.pin_drop),
-                      ),
-                    ),
+                  
                   ],
                 ),
               ),
