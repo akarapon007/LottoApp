@@ -6,7 +6,7 @@ import 'package:lotto_app/pages/wallet.dart';
 import 'package:http/http.dart' as http;
 
 class Purchase extends StatefulWidget {
-  final int uid;
+  int uid = 0;
 
   Purchase({super.key, required this.uid});
 
