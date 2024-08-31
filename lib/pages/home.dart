@@ -80,11 +80,6 @@ class _HomePage extends State<HomePage> {
                   ),
 
                   Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    height: 600,
-                    width: 380,
                     child: Padding(
                       padding: const EdgeInsets.all(20.0),
                       child: Column(
@@ -94,8 +89,8 @@ class _HomePage extends State<HomePage> {
                               hintText: 'Search...',
                               suffixIcon: const Icon(Icons.search),
                               filled: true,
-                              fillColor: const Color.fromARGB(255, 230, 230, 230),
-                              
+                              fillColor:
+                                  const Color.fromARGB(255, 230, 230, 230),
                               border: InputBorder.none,
                               enabledBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(50.0),
@@ -103,556 +98,222 @@ class _HomePage extends State<HomePage> {
                               ),
                             ),
                           ),
-                          const SizedBox(height: 10),
-                          const Align(
+                          Align(
                             alignment: Alignment.centerLeft,
-                            child: Text(
-                              'Lucky Number',
-                              style: TextStyle(
-                                fontWeight: FontWeight.w900,
-                                color: Color(0xFF453BC9),
-                                fontSize: 20,
-                              ),
-                            ),
-                          ),
-                          const SizedBox(height: 10),
-                          SizedBox(
-                            height: 145, // กำหนดความสูงตามที่ต้องการ
-                            child: Stack(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(20.0),
-                                    border: Border.all(
-                                      color: Colors.black, // สีของกรอบ
-                                      width: 1.5, // ความกว้างของกรอบ
-                                    ),
-                                    color: const Color(
-                                        0xFFFFFFFF), // สีพื้นหลังของ Container
-                                  ),
-                                  child: Column(
-                                    children: [
-                                      // กรอบสีที่มุมซ้ายบน
-                                      Padding(
-                                        padding: const EdgeInsets.only(
-                                            left: 0,
-                                            top:
-                                                0), // ขยับตำแหน่งให้ชิดขอบบนซ้าย
-                                        child: Align(
-                                            alignment: Alignment
-                                                .topLeft, // จัดตำแหน่งกรอบไปที่มุมซ้ายบน
-                                            child: Container(
-                                              padding: const EdgeInsets.all(
-                                                  4.0), // ลด padding ให้ข้อความและวงกลม
-                                              width: MediaQuery.of(context)
-                                                      .size
-                                                      .width /
-                                                  4, // ตั้งความกว้างให้หนึ่งในสี่ของหน้าจอ
-                                              decoration: BoxDecoration(
-                                                color: const Color(
-                                                    0xFF453BC9), // สีพื้นหลังของกรอบ
-                                                borderRadius: BorderRadius.circular(
-                                                    30.0), // ปรับความโค้งของกรอบให้เล็กลง
-                                              ),
-                                              child: Row(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.center,
-                                                children: [
-                                                  // วงกลมสีขาวด้านซ้าย
-                                                  Container(
-                                                    width:
-                                                        20, // ขนาดของวงกลมลดลง
-                                                    height:
-                                                        20, // ขนาดของวงกลมลดลง
-                                                    decoration:
-                                                        const BoxDecoration(
-                                                      color: Colors
-                                                          .white, // สีของวงกลม
-                                                      shape: BoxShape
-                                                          .circle, // รูปทรงวงกลม
-                                                    ),
-                                                  ),
-                                                  const SizedBox(
-                                                      width:
-                                                          6), // ช่องว่างระหว่างวงกลมกับข้อความลดลง
-                                                  // ข้อความ lotto
-                                                  const Text(
-                                                    'lotto', // ข้อความ
-                                                    style: TextStyle(
-                                                      color: Colors
-                                                          .white, // สีของข้อความ
-                                                      fontSize:
-                                                          14, // ขนาดตัวอักษรลดลง
-                                                      fontWeight: FontWeight
-                                                          .w500, // น้ำหนักตัวอักษรลดลง
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            )),
-                                      ),
-                                      Expanded(
-                                        child: Padding(
-                                          padding: const EdgeInsets.only(
-                                              bottom: 25, left: 5),
-                                          child: Row(
-                                            mainAxisAlignment: MainAxisAlignment
-                                                .start, // จัดเรียงให้เริ่มจากด้านซ้าย
-                                            children: List.generate(6, (index) {
-                                              return Padding(
-                                                padding: const EdgeInsets
-                                                    .symmetric(
-                                                    horizontal:
-                                                        3.0), // กำหนดช่องว่างระหว่างแต่ละ Container
-                                                child: Container(
-                                                  height: 38, // ความสูงของวงรี
-                                                  width: 38, // ความกว้างของวงรี
-                                                  decoration: BoxDecoration(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            10), // ทำให้มุมโค้งมน
-                                                    border: Border.all(
-                                                      color: Colors
-                                                          .black, // สีของกรอบ
-                                                      width:
-                                                          1.5, // ความกว้างของกรอบ
-                                                    ),
-                                                  ),
-                                                  child: Center(
-                                                    child: Text(
-                                                      '${index + 1}', // แสดงตัวเลข
-                                                      style: const TextStyle(
-                                                        color: Color.fromARGB(
-                                                            255, 0, 0, 0),
-                                                        fontSize:
-                                                            16, // ขนาดตัวอักษร
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                              );
-                                            }),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
+                                const Text(
+                                  'Lucky Number',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w900,
+                                    color: Color(0xFF453BC9),
+                                    fontSize: 20,
                                   ),
                                 ),
-                                // ข้อความ "50 Baht" ที่มุมบนขวา
-                                Positioned(
-                                  top: 10, // ขยับขึ้นจากขอบบน
-                                  right: 10,
-                                  child: Container(
-                                    padding: const EdgeInsets.all(8.0),
-                                    decoration: const BoxDecoration(
-                                      color:
-                                          Colors.transparent, // พื้นหลังโปร่งใส
-                                    ),
-                                    child: const Text(
-                                      '50 Baht', // ข้อความ
-                                      style: TextStyle(
-                                        color: Colors.black, // สีของข้อความ
-                                        fontSize: 16, // ขนาดตัวอักษร
-                                        fontWeight:
-                                            FontWeight.bold, // น้ำหนักตัวอักษร
-                                      ),
-                                    ),
-                                  ),
+                                IconButton(
+                                  icon: const Icon(Icons.refresh,
+                                      color: Color(0xFF453BC9)),
+                                  onPressed: () {
+                                    // โค้ดที่เรียกใช้เมื่อกดปุ่มรีเฟรช
+                                    print('Refresh button pressed');
+                                  },
                                 ),
-                                // ปุ่ม "Buy"
-                                Positioned(
-                                  bottom: 42, // ขยับขึ้นจากขอบล่างให้ใกล้ขึ้น
-                                  right: 10,
-                                  child: ElevatedButton(
-                                    onPressed: () {
-                                      // เพิ่มฟังก์ชันเมื่อกดปุ่ม "Buy"
-                                      print('Buy button pressed');
-                                    },
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: const Color.fromARGB(
-                                          255, 3, 209, 72), // สีพื้นหลัง
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 12.0,
-                                          vertical: 6.0), // กำหนดขนาด padding
-                                      minimumSize: const Size(
-                                          49, 30), // กำหนดขนาดขั้นต่ำของปุ่ม
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(
-                                            8.0), // ความโค้งของมุม
-                                      ),
-                                    ),
-                                    child: const Text(
-                                      'Buy',
-                                      style: TextStyle(
-                                        color: Colors.white, // สีของข้อความ
-                                        fontSize: 14, // ขนาดตัวอักษรเล็กลง
-                                      ),
-                                    ),
-                                  ),
-                                )
                               ],
                             ),
                           ),
-                          const SizedBox(height: 10),
                           SizedBox(
-                            height: 145, // กำหนดความสูงตามที่ต้องการ
-                            child: Stack(
-                              children: [
-                                Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(20.0),
-                                    border: Border.all(
-                                      color: Colors.black, // สีของกรอบ
-                                      width: 1.5, // ความกว้างของกรอบ
-                                    ),
-                                    color: const Color(
-                                        0xFFFFFFFF), // สีพื้นหลังของ Container
-                                  ),
-                                  child: Column(
-                                    children: [
-                                      // กรอบสีที่มุมซ้ายบน
-                                      Padding(
-                                        padding: const EdgeInsets.only(
-                                            left: 0,
-                                            top:
-                                                0), // ขยับตำแหน่งให้ชิดขอบบนซ้าย
-                                        child: Align(
-                                            alignment: Alignment
-                                                .topLeft, // จัดตำแหน่งกรอบไปที่มุมซ้ายบน
-                                            child: Container(
-                                              padding: const EdgeInsets.all(
-                                                  4.0), // ลด padding ให้ข้อความและวงกลม
-                                              width: MediaQuery.of(context)
-                                                      .size
-                                                      .width /
-                                                  4, // ตั้งความกว้างให้หนึ่งในสี่ของหน้าจอ
-                                              decoration: BoxDecoration(
-                                                color: const Color(
-                                                    0xFF453BC9), // สีพื้นหลังของกรอบ
-                                                borderRadius: BorderRadius.circular(
-                                                    30.0), // ปรับความโค้งของกรอบให้เล็กลง
-                                              ),
-                                              child: Row(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.center,
-                                                children: [
-                                                  // วงกลมสีขาวด้านซ้าย
-                                                  Container(
+                            height: 650, // กำหนดความสูงของ ListView
+                            child: ListView.builder(
+                              itemCount: 4, // จำนวนของ SizedBox ที่ต้องการแสดง
+                              itemBuilder: (context, index) {
+                                return Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical:
+                                          10.0), // กำหนด padding ระหว่างแต่ละ SizedBox
+                                  child: SizedBox(
+                                    height: 116, // กำหนดความสูงตามที่ต้องการ
+                                    child: Stack(
+                                      children: [
+                                        Container(
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(20.0),
+                                            border: Border.all(
+                                              color: Colors.black, // สีของกรอบ
+                                              width: 1.5, // ความกว้างของกรอบ
+                                            ),
+                                            color: const Color(
+                                                0xFFFFFFFF), // สีพื้นหลังของ Container
+                                          ),
+                                          child: Column(
+                                            children: [
+                                              // กรอบสีที่มุมซ้ายบน
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                    left: 0, top: 0),
+                                                child: Align(
+                                                  alignment: Alignment.topLeft,
+                                                  child: Container(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            4.0),
                                                     width:
-                                                        20, // ขนาดของวงกลมลดลง
-                                                    height:
-                                                        20, // ขนาดของวงกลมลดลง
-                                                    decoration:
-                                                        const BoxDecoration(
-                                                      color: Colors
-                                                          .white, // สีของวงกลม
-                                                      shape: BoxShape
-                                                          .circle, // รูปทรงวงกลม
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .width /
+                                                            4,
+                                                    decoration: BoxDecoration(
+                                                      color: const Color(
+                                                          0xFF453BC9),
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              30.0),
                                                     ),
-                                                  ),
-                                                  const SizedBox(
-                                                      width:
-                                                          6), // ช่องว่างระหว่างวงกลมกับข้อความลดลง
-                                                  // ข้อความ lotto
-                                                  const Text(
-                                                    'lotto', // ข้อความ
-                                                    style: TextStyle(
-                                                      color: Colors
-                                                          .white, // สีของข้อความ
-                                                      fontSize:
-                                                          14, // ขนาดตัวอักษรลดลง
-                                                      fontWeight: FontWeight
-                                                          .w500, // น้ำหนักตัวอักษรลดลง
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            )),
-                                      ),
-                                      Expanded(
-                                        child: Padding(
-                                          padding: const EdgeInsets.only(
-                                              bottom: 25, left: 5),
-                                          child: Row(
-                                            mainAxisAlignment: MainAxisAlignment
-                                                .start, // จัดเรียงให้เริ่มจากด้านซ้าย
-                                            children: List.generate(6, (index) {
-                                              return Padding(
-                                                padding: const EdgeInsets
-                                                    .symmetric(
-                                                    horizontal:
-                                                        3.0), // กำหนดช่องว่างระหว่างแต่ละ Container
-                                                child: Container(
-                                                  height: 38, // ความสูงของวงรี
-                                                  width: 38, // ความกว้างของวงรี
-                                                  decoration: BoxDecoration(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            10), // ทำให้มุมโค้งมน
-                                                    border: Border.all(
-                                                      color: Colors
-                                                          .black, // สีของกรอบ
-                                                      width:
-                                                          1.5, // ความกว้างของกรอบ
-                                                    ),
-                                                  ),
-                                                  child: Center(
-                                                    child: Text(
-                                                      '${index + 1}', // แสดงตัวเลข
-                                                      style: const TextStyle(
-                                                        color: Color.fromARGB(
-                                                            255, 0, 0, 0),
-                                                        fontSize:
-                                                            16, // ขนาดตัวอักษร
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                      ),
+                                                    child: Row(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .center,
+                                                      children: [
+                                                        Container(
+                                                          width: 20,
+                                                          height: 20,
+                                                          decoration:
+                                                              const BoxDecoration(
+                                                            color: Colors.white,
+                                                            shape:
+                                                                BoxShape.circle,
+                                                          ),
+                                                        ),
+                                                        const SizedBox(
+                                                            width: 6),
+                                                        const Text(
+                                                          'lotto',
+                                                          style: TextStyle(
+                                                            color: Colors.white,
+                                                            fontSize: 14,
+                                                            fontWeight:
+                                                                FontWeight.w500,
+                                                          ),
+                                                        ),
+                                                      ],
                                                     ),
                                                   ),
                                                 ),
-                                              );
-                                            }),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                // ข้อความ "50 Baht" ที่มุมบนขวา
-                                Positioned(
-                                  top: 10, // ขยับขึ้นจากขอบบน
-                                  right: 10,
-                                  child: Container(
-                                    padding: const EdgeInsets.all(8.0),
-                                    decoration: const BoxDecoration(
-                                      color:
-                                          Colors.transparent, // พื้นหลังโปร่งใส
-                                    ),
-                                    child: const Text(
-                                      '50 Baht', // ข้อความ
-                                      style: TextStyle(
-                                        color: Colors.black, // สีของข้อความ
-                                        fontSize: 16, // ขนาดตัวอักษร
-                                        fontWeight:
-                                            FontWeight.bold, // น้ำหนักตัวอักษร
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                // ปุ่ม "Buy"
-                                Positioned(
-                                  bottom: 42, // ขยับขึ้นจากขอบล่างให้ใกล้ขึ้น
-                                  right: 10,
-                                  child: ElevatedButton(
-                                    onPressed: () {
-                                      // เพิ่มฟังก์ชันเมื่อกดปุ่ม "Buy"
-                                      print('Buy button pressed');
-                                    },
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: const Color.fromARGB(
-                                          255, 3, 209, 72), // สีพื้นหลัง
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 12.0,
-                                          vertical: 6.0), // กำหนดขนาด padding
-                                      minimumSize: const Size(
-                                          49, 30), // กำหนดขนาดขั้นต่ำของปุ่ม
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(
-                                            8.0), // ความโค้งของมุม
-                                      ),
-                                    ),
-                                    child: const Text(
-                                      'Buy',
-                                      style: TextStyle(
-                                        color: Colors.white, // สีของข้อความ
-                                        fontSize: 14, // ขนาดตัวอักษรเล็กลง
-                                      ),
-                                    ),
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
-                          const SizedBox(height: 10),
-                          SizedBox(
-                            height: 145, // กำหนดความสูงตามที่ต้องการ
-                            child: Stack(
-                              children: [
-                                Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(20.0),
-                                    border: Border.all(
-                                      color: Colors.black, // สีของกรอบ
-                                      width: 1.5, // ความกว้างของกรอบ
-                                    ),
-                                    color: const Color.fromARGB(255, 255, 255,
-                                        255), // สีพื้นหลังของ Container
-                                  ),
-                                  child: Column(
-                                    children: [
-                                      // กรอบสีที่มุมซ้ายบน
-                                      Padding(
-                                        padding: const EdgeInsets.only(
-                                            left: 0,
-                                            top:
-                                                0), // ขยับตำแหน่งให้ชิดขอบบนซ้าย
-                                        child: Align(
-                                            alignment: Alignment
-                                                .topLeft, // จัดตำแหน่งกรอบไปที่มุมซ้ายบน
-                                            child: Container(
-                                              padding: const EdgeInsets.all(
-                                                  4.0), // ลด padding ให้ข้อความและวงกลม
-                                              width: MediaQuery.of(context)
-                                                      .size
-                                                      .width /
-                                                  4, // ตั้งความกว้างให้หนึ่งในสี่ของหน้าจอ
-                                              decoration: BoxDecoration(
-                                                color: const Color(
-                                                    0xFF453BC9), // สีพื้นหลังของกรอบ
-                                                borderRadius: BorderRadius.circular(
-                                                    30.0), // ปรับความโค้งของกรอบให้เล็กลง
                                               ),
-                                              child: Row(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.center,
-                                                children: [
-                                                  // วงกลมสีขาวด้านซ้าย
-                                                  Container(
-                                                    width:
-                                                        20, // ขนาดของวงกลมลดลง
-                                                    height:
-                                                        20, // ขนาดของวงกลมลดลง
-                                                    decoration:
-                                                        const BoxDecoration(
-                                                      color: Colors
-                                                          .white, // สีของวงกลม
-                                                      shape: BoxShape
-                                                          .circle, // รูปทรงวงกลม
-                                                    ),
-                                                  ),
-                                                  const SizedBox(
-                                                      width:
-                                                          6), // ช่องว่างระหว่างวงกลมกับข้อความลดลง
-                                                  // ข้อความ lotto
-                                                  const Text(
-                                                    'lotto', // ข้อความ
-                                                    style: TextStyle(
-                                                      color: Colors
-                                                          .white, // สีของข้อความ
-                                                      fontSize:
-                                                          14, // ขนาดตัวอักษรลดลง
-                                                      fontWeight: FontWeight
-                                                          .w500, // น้ำหนักตัวอักษรลดลง
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            )),
-                                      ),
-                                      Expanded(
-                                        child: Padding(
-                                          padding: const EdgeInsets.only(
-                                              bottom: 25, left: 5),
-                                          child: Row(
-                                            mainAxisAlignment: MainAxisAlignment
-                                                .start, // จัดเรียงให้เริ่มจากด้านซ้าย
-                                            children: List.generate(6, (index) {
-                                              return Padding(
-                                                padding: const EdgeInsets
-                                                    .symmetric(
-                                                    horizontal:
-                                                        3.0), // กำหนดช่องว่างระหว่างแต่ละ Container
-                                                child: Container(
-                                                  height: 38, // ความสูงของวงรี
-                                                  width: 38, // ความกว้างของวงรี
-                                                  decoration: BoxDecoration(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            10), // ทำให้มุมโค้งมน
-                                                    border: Border.all(
-                                                      color: Colors
-                                                          .black, // สีของกรอบ
-                                                      width:
-                                                          1.5, // ความกว้างของกรอบ
-                                                    ),
-                                                  ),
-                                                  child: Center(
-                                                    child: Text(
-                                                      '${index + 1}', // แสดงตัวเลข
-                                                      style: const TextStyle(
-                                                        color: Color.fromARGB(
-                                                            255, 0, 0, 0),
-                                                        fontSize:
-                                                            16, // ขนาดตัวอักษร
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                      ),
-                                                    ),
+                                              Expanded(
+                                                child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          bottom: 10, left: 5),
+                                                  child: Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.start,
+                                                    children:
+                                                        List.generate(6, (i) {
+                                                      return Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .symmetric(
+                                                                horizontal:
+                                                                    3.0),
+                                                        child: Container(
+                                                          height: 38,
+                                                          width: 38,
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        10),
+                                                            border: Border.all(
+                                                              color:
+                                                                  Colors.black,
+                                                              width: 1.5,
+                                                            ),
+                                                          ),
+                                                          child: Center(
+                                                            child: Text(
+                                                              '${i + 1}',
+                                                              style:
+                                                                  const TextStyle(
+                                                                color: Color
+                                                                    .fromARGB(
+                                                                        255,
+                                                                        0,
+                                                                        0,
+                                                                        0),
+                                                                fontSize: 16,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      );
+                                                    }),
                                                   ),
                                                 ),
-                                              );
-                                            }),
+                                              ),
+                                            ],
                                           ),
                                         ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                // ข้อความ "50 Baht" ที่มุมบนขวา
-                                Positioned(
-                                  top: 10, // ขยับขึ้นจากขอบบน
-                                  right: 10,
-                                  child: Container(
-                                    padding: const EdgeInsets.all(8.0),
-                                    decoration: const BoxDecoration(
-                                      color:
-                                          Colors.transparent, // พื้นหลังโปร่งใส
-                                    ),
-                                    child: const Text(
-                                      '50 Baht', // ข้อความ
-                                      style: TextStyle(
-                                        color: Colors.black, // สีของข้อความ
-                                        fontSize: 16, // ขนาดตัวอักษร
-                                        fontWeight:
-                                            FontWeight.bold, // น้ำหนักตัวอักษร
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                // ปุ่ม "Buy"
-                                Positioned(
-                                  bottom: 42, // ขยับขึ้นจากขอบล่างให้ใกล้ขึ้น
-                                  right: 10,
-                                  child: ElevatedButton(
-                                    onPressed: () {
-                                      // เพิ่มฟังก์ชันเมื่อกดปุ่ม "Buy"
-                                      print('Buy button pressed');
-                                    },
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: const Color.fromARGB(
-                                          255, 3, 209, 72), // สีพื้นหลัง
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 12.0,
-                                          vertical: 6.0), // กำหนดขนาด padding
-                                      minimumSize: const Size(
-                                          49, 30), // กำหนดขนาดขั้นต่ำของปุ่ม
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(
-                                            8.0), // ความโค้งของมุม
-                                      ),
-                                    ),
-                                    child: const Text(
-                                      'Buy',
-                                      style: TextStyle(
-                                        color: Colors.white, // สีของข้อความ
-                                        fontSize: 14, // ขนาดตัวอักษรเล็กลง
-                                      ),
+                                        // ข้อความ "50 Baht" ที่มุมบนขวา
+                                        Positioned(
+                                          bottom: 80,
+                                          right: 10,
+                                          child: Container(
+                                            padding: const EdgeInsets.all(8.0),
+                                            decoration: const BoxDecoration(
+                                              color: Colors.transparent,
+                                            ),
+                                            child: const Text(
+                                              '50 Baht',
+                                              style: TextStyle(
+                                                color: Colors.black,
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        // ปุ่ม "Buy"
+                                        Positioned(
+                                          bottom: 27,
+                                          right: 10,
+                                          child: ElevatedButton(
+                                            onPressed: () {
+                                              print('Buy button pressed');
+                                            },
+                                            style: ElevatedButton.styleFrom(
+                                              backgroundColor:
+                                                  const Color.fromARGB(
+                                                      255, 3, 209, 72),
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 12.0,
+                                                      vertical: 6.0),
+                                              minimumSize: const Size(69, 30),
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(8.0),
+                                              ),
+                                            ),
+                                            child: const Text(
+                                              'Buy',
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 14,
+                                              ),
+                                            ),
+                                          ),
+                                        )
+                                      ],
                                     ),
                                   ),
-                                )
-                              ],
+                                );
+                              },
                             ),
                           ),
                         ],
@@ -660,25 +321,6 @@ class _HomePage extends State<HomePage> {
                     ),
                   ),
                   const SizedBox(height: 10), // Space between buttons
-
-                  // Sign Up button
-                  ElevatedButton(
-                    onPressed: () {},
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor:  const Color(
-                                                    0xFF453BC9),
-                      fixedSize: Size(250, 50), // Set button width and height
-                    ),
-                    child: const Text(
-                      'Purchase',
-                      style: TextStyle(
-                        fontWeight:
-                            FontWeight.w800, // Set font weight to extra bold
-                        fontSize: 24, // Set the font size
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
                 ],
               ),
             ),
