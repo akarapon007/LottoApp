@@ -18,9 +18,6 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   void initState() {
     super.initState();
-    _profileImage = const NetworkImage(
-      'https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/c7bced49-73a3-43c1-b3ce-fe419a596a72/dg62wjw-dc323fd3-124f-4893-b86b-88c7b07c9399.png',
-    ); // Default image
   }
 
   @override
@@ -39,7 +36,6 @@ class _ProfilePageState extends State<ProfilePage> {
             return const Center(child: Text('Error loading profile'));
           } else {
             final user = snapshot.data!;
-            final imageUrl = user['img'] ?? 'https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/c7bced49-73a3-43c1-b3ce-fe419a596a72/dg62wjw-dc323fd3-124f-4893-b86b-88c7b07c9399.png';
             return SingleChildScrollView(
               child: Column(
                 children: [
@@ -70,19 +66,6 @@ class _ProfilePageState extends State<ProfilePage> {
                         children: [
                           Row(
                             children: [
-                              GestureDetector(
-                                onTap: () {
-                                  // Handle image tap if needed
-                                },
-                                child: CircleAvatar(
-                                radius: 40.0,
-                                backgroundImage: NetworkImage(imageUrl),
-                                child: imageUrl.isEmpty
-                                    ? const Icon(Icons.camera_alt,
-                                        size: 40.0, color: Colors.white)
-                                    : null,
-                              ),
-                              ),
                               const SizedBox(width: 20),
                               Expanded(
                                 child: Column(

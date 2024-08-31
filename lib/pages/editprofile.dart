@@ -1,16 +1,18 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:lotto_app/config/config.dart';
 
 class EditProfilePage extends StatefulWidget {
-  int uid = 0;
+  final int uid;
   EditProfilePage({super.key, required this.uid});
+
   @override
   _EditProfilePageState createState() => _EditProfilePageState();
 }
 
 class _EditProfilePageState extends State<EditProfilePage> {
-  late ImageProvider _profileImage;
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
@@ -36,168 +38,215 @@ class _EditProfilePageState extends State<EditProfilePage> {
   @override
   void initState() {
     super.initState();
-    _profileImage = NetworkImage(
-        'https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/c7bced49-73a3-43c1-b3ce-fe419a596a72/dg62wjw-dc323fd3-124f-4893-b86b-88c7b07c9399.png/v1/fill/w_746,h_1071/eren_jaeger_attack_on_titan_shingeki_render_png_by_marcopolo157_dg62wjw-pre.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9NTc3NiIsInBhdGgiOiJcL2ZcL2M3YmNlZDQ5LTczYTMtNDNjMS1iM2NlLWZlNDE5YTU5NmE3MlwvZGc2Mndqdy1kYzMyM2ZkMy0xMjRmLTQ4OTMtYjg2Yi04OGM3YjA3YzkzOTkucG5nIiwid2lkdGgiOiI8PTQwMjMifV1dLCJhdWQiOlsidXJuOnNlcnZpY2U6aW1hZ2Uub3BlcmF0aW9ucyJdfQ.LYwM0e4pQMZyh5P83VgJ1LTp3_O_7W-lqXEoUTIkbHo'); // กำหนดค่าเริ่มต้นเป็น URL ของรูปภาพ
   }
 
-  void _register() {
-    // ฟังก์ชันสำหรับการสมัคร
-    print("Register button pressed");
+  void _updateProfile() {
+    // ฟังก์ชันสำหรับการอัปเดตโปรไฟล์
+    print("Update Profile button pressed");
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(''),
+        title: const Text('Edit Profile'),
         backgroundColor: const Color(0xFF453BC9),
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            // Top section with background color
-            Container(
-              color: const Color(0xFF453BC9),
-              height: 50,
-              width: double.infinity,
-              child: const Center(
-                child: Text(
-                  'Edit Profile',
-                  style: TextStyle(
-                    fontWeight: FontWeight.w800,
-                    color: Colors.white,
-                    fontSize: 24,
-                  ),
-                ),
-              ),
-            ),
-            Container(
-              decoration: BoxDecoration(
-                color: const Color(0xFFD9D9D9),
-                borderRadius: BorderRadius.circular(20),
-              ),
-              width: 380,
-              height: 530,
-              child: Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: Column(
-                  children: [
-                    // ใช้ Row เพื่อวางรูปโปรไฟล์และข้อความ
-                    Row(
-                      children: [
-                        GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              _profileImage = const NetworkImage(
-                                  'https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/c7bced49-73a3-43c1-b3ce-fe419a596a72/dg62wjw-dc323fd3-124f-4893-b86b-88c7b07c9399.png/v1/fill/w_746,h_1071/eren_jaeger_attack_on_titan_shingeki_render_png_by_marcopolo157_dg62wjw-pre.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9NTc3NiIsInBhdGgiOiJcL2ZcL2M3YmNlZDQ5LTczYTMtNDNjMS1iM2NlLWZlNDE5YTU5NmE3MlwvZGc2Mndqdy1kYzMyM2ZkMy0xMjRmLTQ4OTMtYjg2Yi04OGM3YjA3YzkzOTkucG5nIiwid2lkdGgiOiI8PTQwMjMifV1dLCJhdWQiOlsidXJuOnNlcnZpY2U6aW1hZ2Uub3BlcmF0aW9ucyJdfQ.LYwM0e4pQMZyh5P83VgJ1LTp3_O_7W-lqXEoUTIkbHo'); // เปลี่ยน URL เป็น URL ของรูปภาพที่ต้องการ
-                            });
-                          },
-                          child: CircleAvatar(
-                            radius: 40.0,
-                            backgroundImage: _profileImage,
-                            child: _profileImage is NetworkImage
-                                ? null
-                                : const Icon(Icons.camera_alt,
-                                    size: 40.0, color: Colors.white),
-                          ),
+      body: FutureBuilder<Map<String, dynamic>>(
+        future: fetchUserProfile(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return const Center(child: Text('Error loading profile'));
+          } else {
+            final user = snapshot.data!;
+            return SingleChildScrollView(
+              child: Column(
+                children: [
+                  Container(
+                    color: const Color(0xFF453BC9),
+                    height: 50,
+                    width: double.infinity,
+                    child: const Center(
+                      child: Text(
+                        'Edit Profile',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w800,
+                          color: Colors.white,
+                          fontSize: 24,
                         ),
-                        const SizedBox(
-                            width:
-                                20), // เพิ่มระยะห่างระหว่างรูปโปรไฟล์กับข้อความ
-                        const Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Eren Yeager', // ชื่อผู้ใช้หรือข้อความที่ต้องการแสดง
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 18,
-                                ),
+                      ),
+                    ),
+                  ),
+                  Container(
+                    decoration: _boxDecoration,
+                    width: 380,
+                    height: 530,
+                    child: Padding(
+                      padding: const EdgeInsets.all(20.0),
+                      child: Column(
+                        children: [
+                          const SizedBox(height: 16.0),
+                          TextField(
+                            controller: _usernameController,
+                            decoration: InputDecoration(
+                              filled: true,
+                              fillColor: Colors.white,
+                              hintText: user['username'] ?? 'Username',
+                              border: const OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(45.0)),
                               ),
-                              Text(
-                                'Eren@gmail.com', // ข้อความเพิ่มเติมหรือคำบรรยาย
-                                style: TextStyle(
-                                  color: Color.fromARGB(255, 133, 133, 133),
-                                  fontSize: 16,
-                                ),
-                              ),
-                            ],
+                              prefixIcon: const Icon(Icons.person),
+                            ),
                           ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 16.0),
-                    TextField(
-                      controller: _usernameController,
-                      decoration: const InputDecoration(
-                        filled: true,
-                        fillColor: Colors.white, // สีพื้นหลังของช่องข้อความ
-                        labelText: 'Eren Yeager',
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(45.0)),
-                        ),
-                        prefixIcon: Icon(Icons.person),
+                          const SizedBox(height: 16.0),
+                          TextField(
+                            controller: _emailController,
+                            decoration: InputDecoration(
+                              filled: true,
+                              fillColor: Colors.white,
+                              hintText: user['email'] ?? 'Email',
+                              border: const OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(45.0)),
+                              ),
+                              prefixIcon: const Icon(Icons.email),
+                            ),
+                          ),
+                          const SizedBox(height: 16.0),
+                          TextField(
+                            controller: _phoneController,
+                            decoration: InputDecoration(
+                              filled: true,
+                              fillColor: Colors.white,
+                              hintText: user['phone'] ?? 'Phone',
+                              border: const OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(45.0)),
+                              ),
+                              prefixIcon: const Icon(Icons.phone),
+                            ),
+                          ),
+                          const SizedBox(height: 16.0),
+                          // Add more TextFields or widgets as needed
+                        ],
                       ),
                     ),
-                    const SizedBox(height: 16.0),
-                    TextField(
-                      controller: _emailController,
-                      decoration: const InputDecoration(
-                        filled: true,
-                        fillColor: Colors.white, // สีพื้นหลังของช่องข้อความ
-                        labelText: 'Eren@gmail.com',
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(45.0)),
-                        ),
-                        prefixIcon: Icon(Icons.email),
-                      ),
-                    ),
-                    const SizedBox(height: 16.0),
-                    TextField(
-                      controller: _phoneController,
-                      decoration: const InputDecoration(
-                        filled: true,
-                        fillColor: Colors.white, // สีพื้นหลังของช่องข้อความ
-                        labelText: '+123 456 7890',
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(45.0)),
-                        ),
-                        prefixIcon: Icon(Icons.phone),
-                      ),
-                    ),
-                    const SizedBox(height: 16.0),
-                  
-                  ],
-                ),
-              ),
-            ),
-            const SizedBox(height: 16.0),
-
-            Container(
-              width: 200.0, // ความกว้างของปุ่ม
-              height: 50.0, // ความสูงของปุ่ม
-              child: ElevatedButton(
-                onPressed: _register, // ฟังก์ชันที่เรียกเมื่อปุ่มถูกกด
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF453BC9), // สีพื้นหลังของปุ่ม
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30.0), // รูปทรงของปุ่ม
                   ),
-                ),
-                child: const Text(
-                  'Update Profile',
-                  style: TextStyle(
-                    color: Colors.white, // สีข้อความ
-                    fontSize: 16.0, // ขนาดข้อความ
-                    fontWeight: FontWeight.bold, // น้ำหนักข้อความ
+                  const SizedBox(height: 16.0),
+                  SizedBox(
+                    width: 200.0,
+                    height: 50.0,
+                    child: ElevatedButton(
+                      onPressed: saveData, // Corrected onPressed to call saveData
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFF453BC9),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30.0),
+                        ),
+                      ),
+                      child: const Text(
+                        'Update Profile', // Button label text
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 16.0,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
                   ),
-                ),
+                ],
               ),
-            ),
-          ],
-        ),
+            );
+          }
+        },
       ),
     );
   }
+  Future<Map<String, dynamic>> fetchUserProfile() async {
+  final response = await http.get(
+    Uri.parse('https://nodejs-wfjd.onrender.com/users/${widget.uid}'),
+  );
+
+  if (response.statusCode == 200) {
+    // Decode the response as a list
+    final List<dynamic> userList = json.decode(response.body);
+
+    // Check if the list is not empty
+    if (userList.isNotEmpty) {
+      // Return the first user object in the list
+      return userList[0];
+    } else {
+      // Handle the case where the list is empty
+      throw Exception('User not found');
+    }
+  } else {
+    print('Failed to load profile, status code: ${response.statusCode}');
+    print('Response body: ${response.body}');
+    throw Exception('Failed to load user profile');
+  }
+}
+  void saveData() async {
+  var value = await Configuration.getConfig();
+  var url = value['apiEndPoint'];
+
+  var json = {
+    "fullname": _usernameController.text,
+    "phone": _phoneController.text,
+    "email": _emailController.text
+  };
+
+  try {
+    var res = await http.put(
+      Uri.parse('https://nodejs-wfjd.onrender.com/users/${widget.uid}'),
+      headers: {"Content-Type": "application/json; charset=utf-8"},
+      body: jsonEncode(json),
+    );
+
+    log('Status code: ${res.statusCode}');
+    log('Response body: ${res.body}');
+
+    if (res.statusCode == 200) {
+      var result = jsonDecode(res.body);
+
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('Success'),
+          content: const Text('Data recorded successfully'),
+          actions: [
+            FilledButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text('Close'),
+            ),
+          ],
+        ),
+      );
+      log(result['message']);
+    } else {
+      throw Exception('Failed to update profile');
+    }
+  } catch (err) {
+    log('Error updating profile: $err');
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Error'),
+        content: const Text('Failed to update profile. Please try again.'),
+        actions: [
+          FilledButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: const Text('Close'),
+          ),
+        ],
+      ),
+    );
+  }
+}
 }
