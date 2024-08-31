@@ -11,7 +11,6 @@ class RegisterPage extends StatefulWidget {
 
 class _RegisterPageState extends State<RegisterPage> {
   bool _isAccepted = false;
-  ImageProvider? _profileImage;
 
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
@@ -160,24 +159,6 @@ class _RegisterPageState extends State<RegisterPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Center(
-                    child: GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          _profileImage =
-                              AssetImage('assets/default_profile.png');
-                        });
-                      },
-                      child: CircleAvatar(
-                        radius: 40.0,
-                        backgroundImage: _profileImage,
-                        child: _profileImage == null
-                            ? const Icon(Icons.camera_alt,
-                                size: 40.0, color: Colors.white)
-                            : null,
-                      ),
-                    ),
-                  ),
                   const SizedBox(height: 16.0),
                   TextField(
                     controller: _usernameController,
