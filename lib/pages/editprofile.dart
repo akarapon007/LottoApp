@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:lotto_app/config/config.dart';
 
 class EditProfilePage extends StatefulWidget {
-  final int uid;
+  int uid = 0;
   EditProfilePage({super.key, required this.uid});
 
   @override
@@ -21,7 +21,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
       TextEditingController();
   bool _isAccepted = false;
 
-  // BoxDecoration ที่ใช้ใน Container
   final BoxDecoration _boxDecoration = BoxDecoration(
     color: const Color(0xFFD9D9D9),
     borderRadius: BorderRadius.circular(40.0),
@@ -39,12 +38,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
   void initState() {
     super.initState();
   }
-
-  void _updateProfile() {
-    // ฟังก์ชันสำหรับการอัปเดตโปรไฟล์
-    print("Update Profile button pressed");
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -130,7 +123,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
                             ),
                           ),
                           const SizedBox(height: 16.0),
-                          // Add more TextFields or widgets as needed
                         ],
                       ),
                     ),
@@ -171,15 +163,17 @@ class _EditProfilePageState extends State<EditProfilePage> {
   );
 
   if (response.statusCode == 200) {
-    // Decode the response as a list
     final List<dynamic> userList = json.decode(response.body);
 
-    // Check if the list is not empty
     if (userList.isNotEmpty) {
-      // Return the first user object in the list
-      return userList[0];
+      final user = userList[0];
+
+      _usernameController.text = user['username'] ?? '';
+      _emailController.text = user['email'] ?? '';
+      _phoneController.text = user['phone'] ?? '';
+
+      return user;
     } else {
-      // Handle the case where the list is empty
       throw Exception('User not found');
     }
   } else {
@@ -188,6 +182,27 @@ class _EditProfilePageState extends State<EditProfilePage> {
     throw Exception('Failed to load user profile');
   }
 }
+
+//   Future<Map<String, dynamic>> fetchUserProfile() async {
+//   final response = await http.get(
+//     Uri.parse('https://nodejs-wfjd.onrender.com/users/${widget.uid}'),
+//   );
+
+//   if (response.statusCode == 200) {
+//     final List<dynamic> userList = json.decode(response.body);
+
+//     if (userList.isNotEmpty) {
+//       return userList[0];
+//     } else {
+//       throw Exception('User not found');
+//     }
+//   } else {
+//     print('Failed to load profile, status code: ${response.statusCode}');
+//     print('Response body: ${response.body}');
+//     throw Exception('Failed to load user profile');
+//   }
+// }
+
   void saveData() async {
   var value = await Configuration.getConfig();
   var url = value['apiEndPoint'];
@@ -249,4 +264,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
     );
   }
 }
+  void _updateProfile() {
+    print("Update Profile button pressed");
+  }
 }
