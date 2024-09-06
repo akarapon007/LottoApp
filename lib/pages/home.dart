@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:lotto_app/config/config.dart';
+import 'package:lotto_app/models/response/lottoGetRes.dart';
 import 'package:lotto_app/pages/profile.dart';
 import 'package:lotto_app/pages/wallet.dart';
 import 'package:lotto_app/pages/updatemoney.dart';
@@ -23,7 +24,7 @@ class _HomePage extends State<HomePage> {
   void initState() {
     super.initState();
     log(widget.uid.toString()); // Log uid
-    loadData = loadDataAstnc();
+    loadData = loadDataAsync();
   }
 
   @override
@@ -368,12 +369,16 @@ class _HomePage extends State<HomePage> {
     );
   }
 
-  Future<void> loadDataAstnc() async {
+  Future<List<LottoGetRes>> loadDataAsync() async {
     var value = await Configuration.getConfig();
     String url = value['apiEndPoint'];
 
-    var json = await http.get(Uri.parse('$url/lotto'));
-    // tripGetResponses = tripsGetResFromJson(json.body);
+    var response = await http.get(Uri.parse('$url/lotto'));
+    if (response.statusCode == 200) {
+      return lottoGetResFromJson(response.body);
+    } else {
+      throw Exception('Failed to load lotto data');
+    }
   }
 
   // void getTrips(String? zone) async {

@@ -18,7 +18,6 @@ class UserIdxRes {
     String password;
     int? balance;
     String type;
-    String? img;
 
     UserIdxRes({
         required this.uid,
@@ -28,7 +27,6 @@ class UserIdxRes {
         required this.password,
         required this.balance,
         required this.type,
-        required this.img,
     });
 
     factory UserIdxRes.fromJson(Map<String, dynamic> json) => UserIdxRes(
@@ -39,7 +37,6 @@ class UserIdxRes {
         password: json["password"],
         balance: json["balance"],
         type: json["type"],
-        img: json["img"],
     );
 
     Map<String, dynamic> toJson() => {
@@ -50,6 +47,5 @@ class UserIdxRes {
         "password": password,
         "balance": balance,
         "type": type,
-        "img": img,
     };
 }
