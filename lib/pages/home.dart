@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:lotto_app/config/config.dart';
 import 'package:lotto_app/models/response/lottoGetRes.dart';
+import 'package:lotto_app/pages/mylotto.dart';
 import 'package:lotto_app/pages/profile.dart';
 import 'package:lotto_app/pages/wallet.dart';
 import 'package:lotto_app/pages/updatemoney.dart';
@@ -329,6 +330,7 @@ class _HomePage extends State<HomePage> {
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
@@ -341,6 +343,10 @@ class _HomePage extends State<HomePage> {
           BottomNavigationBarItem(
             icon: Icon(Icons.person),
             label: 'Profile',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.shopping_bag),
+            label: 'My Bag',
           ),
         ],
         selectedItemColor: const Color(0xFF453BC9),
@@ -360,6 +366,11 @@ class _HomePage extends State<HomePage> {
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => WalletPage()),
+            );
+          } else if(index == 3){
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => Mylotto()),
             );
           } else {
             print("Selected tab: $index");
