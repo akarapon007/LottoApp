@@ -11,25 +11,25 @@ class _MylottoState extends State<Mylotto> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor:
+            const Color.fromARGB(255, 22, 13, 141), // Purple background
+        title: const Text(
+          'My Lotto',
+          style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold), // Set title color to white
+        ),
+        centerTitle: true,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back,
+              color: Colors.white), // Set back icon color to white
+          onPressed: () {
+            Navigator.pop(context); // Action to go back
+          },
+        ),
+      ),
       body: Column(
         children: [
-          // Purple background at the top
-          Container(
-            color: const Color.fromARGB(255, 22, 13, 141),
-            height: 150,
-            width: double.infinity,
-            child: const Center(
-              child: Text(
-                'MyLotto',
-                style: TextStyle(
-                  fontWeight: FontWeight.w800,
-                  color: Colors.white,
-                  fontSize: 24,
-                ),
-              ),
-            ),
-          ),
-          // ListView below the purple header
+          // ListView below the AppBar
           Expanded(
             child: ListView.builder(
               padding: const EdgeInsets.symmetric(vertical: 10.0),
@@ -59,13 +59,15 @@ class _MylottoState extends State<Mylotto> {
                                   alignment: Alignment.topLeft,
                                   child: Container(
                                     padding: const EdgeInsets.all(4.0),
-                                    width: MediaQuery.of(context).size.width / 4,
+                                    width:
+                                        MediaQuery.of(context).size.width / 4,
                                     decoration: BoxDecoration(
                                       color: const Color(0xFF453BC9),
                                       borderRadius: BorderRadius.circular(30.0),
                                     ),
                                     child: Row(
-                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
                                       children: [
                                         Container(
                                           width: 20,
@@ -91,17 +93,20 @@ class _MylottoState extends State<Mylotto> {
                               ),
                               Expanded(
                                 child: Padding(
-                                  padding: const EdgeInsets.only(bottom: 10, left: 5),
+                                  padding: const EdgeInsets.only(
+                                      bottom: 10, left: 5),
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: List.generate(6, (i) {
                                       return Padding(
-                                        padding: const EdgeInsets.symmetric(horizontal: 3.0),
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 3.0),
                                         child: Container(
                                           height: 38,
                                           width: 38,
                                           decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(10),
+                                            borderRadius:
+                                                BorderRadius.circular(10),
                                             border: Border.all(
                                               color: Colors.black,
                                               width: 1.5,
@@ -155,7 +160,8 @@ class _MylottoState extends State<Mylotto> {
                             },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: const Color(0xFF453BC9),
-                              padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 6.0),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 12.0, vertical: 6.0),
                               minimumSize: const Size(69, 30),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(8.0),
@@ -186,7 +192,8 @@ class _MylottoState extends State<Mylotto> {
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFF453BC9),
-                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+                padding: const EdgeInsets.symmetric(
+                    horizontal: 16.0, vertical: 12.0),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(30.0), // Oval-like shape
                 ),
@@ -199,27 +206,6 @@ class _MylottoState extends State<Mylotto> {
                 ),
               ),
             ),
-          ),
-        ],
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.wallet),
-            label: 'Wallet',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Profile',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.shopping_bag),
-            label: 'My Bag',
           ),
         ],
       ),
