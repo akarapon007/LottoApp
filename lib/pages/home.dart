@@ -372,7 +372,7 @@ class _HomePage extends State<HomePage> {
               context,
               MaterialPageRoute(
                 builder: (context) => WalletPage(
-                  
+                  uid: widget.uid,
                 ),
               ),
             );

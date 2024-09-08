@@ -196,59 +196,59 @@ class _LoginPageState extends State<LoginPage> {
       ),
     );
   }
-  void login() async {
-    var model = UserLoginReq(
-      identifier: identifierCtl.text,
-      password: passwordCtl.text,
+void login() async {
+  var model = UserLoginReq(
+    identifier: identifierCtl.text,
+    password: passwordCtl.text,
+  );
+
+  try {
+    var response = await http.post(
+      Uri.parse("https://nodejs-wfjd.onrender.com/login"),
+      headers: {"Content-Type": "application/json; charset=utf-8"},
+      body: json.encode(model.toJson()),
     );
 
-    try {
-        var response = await http.post(
-          Uri.parse("https://nodejs-wfjd.onrender.com/login"),
-          headers: {"Content-Type": "application/json; charset=utf-8"},
-          body: userLoginReqToJson(model),
-        );
+    log('Response status: ${response.statusCode}');
+    log('Response body: ${response.body}');
 
-        log('Response status: ${response.statusCode}');
-        log('Response body: ${response.body}');
+    if (response.statusCode >= 200 && response.statusCode < 300) {
+      var jsonResponse = json.decode(response.body);
+      UserLoginPostRes users = UserLoginPostRes.fromJson(jsonResponse);
 
-        if (response.statusCode >= 200 && response.statusCode < 300) {
-            // แปลง JSON เป็นลิสต์ของ UserLoginPostRes
-            List<dynamic> jsonResponse = json.decode(response.body);
-            List<UserLoginPostRes> users = jsonResponse.map((data) => UserLoginPostRes.fromJson(data)).toList();
+      if (users.success) {
+        var user = users.user;
 
-            if (users.isNotEmpty) {
-                UserLoginPostRes user = users[0];
-
-                if (user.type == "user") {
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => HomePage(
-                          uid: user.uid,
-                        ),
-                      ),
-                    );
-                } else if (user.type == "admin") {
-                    log(user.username);
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => Adminpage(),
-                      ),
-                    );
-                }
-            } else {
-                showErrorDialog("No user data found");
-            }
-        } else {
-            showErrorDialog("Phone or Password Incorrect");
+        if (user.type == "user") {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => HomePage(
+                uid: user.uid,
+              ),
+            ),
+          );
+        } else if (user.type == "admin") {
+          log(user.username);
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => Adminpage(),
+            ),
+          );
         }
-    } catch (err) {
-      log(err.toString());
-      showErrorDialog("Phone or Password Incorrect. Please try again.");
+      } else {
+        showErrorDialog("No user data found");
+      }
+    } else {
+      showErrorDialog("Phone or Password Incorrect");
     }
+  } catch (err) {
+    log(err.toString());
+    showErrorDialog("Phone or Password Incorrect. Please try again.");
+  }
 }
+
 
   void showErrorDialog(String message) {
   showDialog(

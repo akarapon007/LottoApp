@@ -199,7 +199,7 @@ class _MylottoState extends State<Mylotto> {
                 ),
               ),
               child: const Text(
-                'Update Money',
+                'Check Lottery',
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 16,

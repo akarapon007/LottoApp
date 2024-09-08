@@ -325,7 +325,7 @@ class _Purchase extends State<Purchase> {
       case 1:
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => WalletPage()),
+          MaterialPageRoute(builder: (context) => WalletPage(uid: widget.uid,)),
         );
         break;
       case 2:

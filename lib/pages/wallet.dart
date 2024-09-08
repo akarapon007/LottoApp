@@ -1,6 +1,17 @@
 import 'package:flutter/material.dart';
 
-class WalletPage extends StatelessWidget {
+class WalletPage extends StatefulWidget {
+  int uid = 0;
+  WalletPage({super.key, required this.uid});
+
+  @override
+  _WalletPageState createState() => _WalletPageState();
+}
+class _WalletPageState extends State<WalletPage> {
+  @override
+  void initState() {
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
