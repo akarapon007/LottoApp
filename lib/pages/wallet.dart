@@ -1,6 +1,6 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:lotto_app/pages/mylotto.dart';
-import 'package:lotto_app/pages/profile.dart';
+import 'package:http/http.dart' as http;
 
 class WalletPage extends StatefulWidget {
   int uid = 0;
@@ -10,11 +10,14 @@ class WalletPage extends StatefulWidget {
   _WalletPageState createState() => _WalletPageState();
 }
 class _WalletPageState extends State<WalletPage> {
+  late Future<Map<String, dynamic>> userData;
+
   @override
   void initState() {
     super.initState();
+    userData = fetchUserData();
   }
-  @override
+ @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -43,254 +46,98 @@ class _WalletPageState extends State<WalletPage> {
         backgroundColor: const Color(0xFF453BC9),
         toolbarHeight: 70.0,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            Container(
-              padding: const EdgeInsets.all(20.0),
-              margin: const EdgeInsets.only(bottom: 10.0),
-              decoration: BoxDecoration(
-                color: Color.fromARGB(255, 186, 186, 186),
-                borderRadius: BorderRadius.circular(20),
-              ),
-              height: 200,
-              width: 350,
+      body: FutureBuilder<Map<String, dynamic>>(
+        future: userData,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          } else if (snapshot.hasData) {
+            final user = snapshot.data!;
+            return Padding(
+              padding: const EdgeInsets.all(16.0),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    'account balance: 5,146 Baht',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Color.fromARGB(255, 0, 0, 0),
+                  Container(
+                    padding: const EdgeInsets.all(20.0),
+                    margin: const EdgeInsets.only(bottom: 10.0),
+                    decoration: BoxDecoration(
+                      color: Color.fromARGB(255, 186, 186, 186),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    height: 200,
+                    width: 350,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'account balance: ${user['balance'].toString()} Baht',
+                          style: const TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Color.fromARGB(255, 0, 0, 0),
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                        Align(
+                          alignment: Alignment.centerRight,
+                          child: Image.network(
+                            'https://static.vecteezy.com/system/resources/thumbnails/019/051/628/small_2x/gold-coin-money-symbol-icon-png.png',
+                            width: 120,
+                            height: 100,
+                            errorBuilder: (context, error, stackTrace) {
+                              return const Icon(
+                                Icons.error,
+                              );
+                            },
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                  const SizedBox(height: 10),
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: Image.network(
-                      'https://static.vecteezy.com/system/resources/thumbnails/019/051/628/small_2x/gold-coin-money-symbol-icon-png.png',
-                      width: 150,
-                      height: 120,
-                      errorBuilder: (context, error, stackTrace) {
-                        return const Icon(
-                          Icons.error,
+                  const SizedBox(height: 20),
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: 4,
+                      itemBuilder: (context, index) {
+                        return Padding(
+                          padding: const EdgeInsets.only(bottom: 16.0),
                         );
                       },
                     ),
                   ),
                 ],
               ),
-            ),
-            const SizedBox(height: 20),
-            
-            // ลิสต์ 4 กล่อง Lotto
-            Expanded(
-              child: ListView.builder(
-                itemCount: 4, // จำนวนกล่องที่ต้องการ
-                itemBuilder: (context, index) {
-                  return Padding(
-                    padding: const EdgeInsets.only(bottom: 16.0),
-                    child: LottoCard(), // สร้างกล่อง lotto แต่ละอัน
-                  );
-                },
-              ),
-            ),
-          ],
-        ),
+            );
+          } else {
+            return Center(child: Text('No data available'));
+          }
+        },
       ),
-      // bottomNavigationBar: BottomNavigationBar(
-      //   type: BottomNavigationBarType.fixed,
-      //   items: const <BottomNavigationBarItem>[
-      //     BottomNavigationBarItem(
-      //       icon: Icon(Icons.home),
-      //       label: 'Home',
-      //     ),
-      //     BottomNavigationBarItem(
-      //       icon: Icon(Icons.wallet),
-      //       label: 'Wallet',
-      //     ),
-      //     BottomNavigationBarItem(
-      //       icon: Icon(Icons.person),
-      //       label: 'Profile',
-      //     ),
-      //     BottomNavigationBarItem(
-      //       icon: Icon(Icons.shopping_bag),
-      //       label: 'My Bag',
-      //     ),
-      //   ],
-      //   selectedItemColor: const Color(0xFF453BC9),
-      //   unselectedItemColor: Colors.grey,
-      //   backgroundColor: Colors.white,
-      //   onTap: (int index) {
-      //     if(index == 3) {
-      //       Navigator.push(
-      //         context,
-      //         MaterialPageRoute(
-      //           builder: (context) => Mylotto(
-      //             uid: widget.uid,
-      //           ),
-      //         ),
-      //       );
-      //     }
-      //     else if (index == 2) {
-      //       Navigator.push(
-      //         context,
-      //         MaterialPageRoute(
-      //           builder: (context) => ProfilePage(
-      //             uid: widget.uid,
-      //           ),
-      //         ),
-      //       );
-      //     } else if (index == 1) {
-      //       Navigator.push(
-      //         context,
-      //         MaterialPageRoute(
-      //           builder: (context) => WalletPage(
-      //             uid: widget.uid,
-      //           ),
-      //         ),
-      //       );
-      //     } else {
-      //       print("Selected tab: $index");
-      //     }
-      //   },
-      // ),
     );
+  }
+  Future<Map<String, dynamic>> fetchUserData() async {
+  final response = await http.get(
+    Uri.parse('https://nodejs-wfjd.onrender.com/users/${widget.uid}'),
+  );
+
+  if (response.statusCode == 200) {
+    // Decode the response as a list
+    final List<dynamic> userList = json.decode(response.body);
+
+    // Check if the list is not empty
+    if (userList.isNotEmpty) {
+      // Return the first user object in the list
+      return userList[0];
+    } else {
+      // Handle the case where the list is empty
+      throw Exception('User not found');
+    }
+  } else {
+    print('Failed to load profile, status code: ${response.statusCode}');
+    print('Response body: ${response.body}');
+    throw Exception('Failed to load user profile');
   }
 }
-
-class LottoCard extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 116,
-      child: Stack(
-        children: [
-          Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20.0),
-              border: Border.all(
-                color: Colors.black, // สีของกรอบ
-                width: 1.5, // ความกว้างของกรอบ
-              ),
-              color: const Color(0xFFFFFFFF), // สีพื้นหลัง
-            ),
-            child: Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 0, top: 0),
-                  child: Align(
-                    alignment: Alignment.topLeft,
-                    child: Container(
-                      padding: const EdgeInsets.all(4.0),
-                      width: MediaQuery.of(context).size.width / 4,
-                      decoration: BoxDecoration(
-                        color: const Color(0xFF453BC9),
-                        borderRadius: BorderRadius.circular(30.0),
-                      ),
-                      child: Row(
-                        children: [
-                          Container(
-                            width: 20,
-                            height: 20,
-                            decoration: const BoxDecoration(
-                              color: Colors.white,
-                              shape: BoxShape.circle,
-                            ),
-                          ),
-                          const SizedBox(width: 6),
-                          const Text(
-                            'lotto',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 14,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.only(bottom: 10, left: 5),
-                    child: Row(
-                      children: List.generate(6, (i) { // วนลูป 6 กรอบ
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 3.0),
-                          child: Container(
-                            height: 38,
-                            width: 38,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              border: Border.all(
-                                color: Colors.black,
-                                width: 1.5,
-                              ),
-                            ),
-                            child: Center(
-                              child: Text(
-                                '${i + 1}', // ตัวเลขจำลอง
-                                style: const TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          ),
-                        );
-                      }),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Positioned(
-            bottom: 80,
-            right: 10,
-            child: Container(
-              padding: const EdgeInsets.all(8.0),
-              child: const Text(
-                '50 Baht', // ข้อมูลราคา
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-          ),
-          Positioned(
-            bottom: 27,
-            right: 10,
-            child: ElevatedButton(
-              onPressed: () {
-                print('Buy button pressed');
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color.fromARGB(255, 51, 3, 192),
-                padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 6.0),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
-              ),
-              child: const Text(
-                'Check',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 14,
-                ),
-              ),
-            ),
-          )
-        ],
-      ),
-    );
-  }
 }
