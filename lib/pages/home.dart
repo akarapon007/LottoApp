@@ -125,10 +125,12 @@ class _HomePage extends State<HomePage> {
                         return Center(child: Text('Error: ${snapshot.error}'));
                       } else if (snapshot.hasData) {
                         // เมื่อดึงข้อมูลเสร็จสิ้น
-                        var lottoList = snapshot.data!;
+                        var lottoList = snapshot.data!.take(10).toList();
                         return SizedBox(
-                          height: 650, // กำหนดความสูงของ ListView
+                          // กำหนดความสูงของ ListView
                           child: ListView.builder(
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
                             itemCount: lottoList.length, // จำนวนของรายการ
                             itemBuilder: (context, index) {
                               var lotto = lottoList[index]; // ข้อมูลแต่ละรายการ
