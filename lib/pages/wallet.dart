@@ -16,7 +16,7 @@ class WalletPage extends StatelessWidget {
                 color: Color.fromARGB(255, 255, 255, 255),
               ),
             ),
-            const SizedBox(height: 4.0),
+            SizedBox(height: 4.0),
             Text(
               "Let's take a look at your spending overview!",
               style: TextStyle(
@@ -28,35 +28,23 @@ class WalletPage extends StatelessWidget {
           ],
         ),
         backgroundColor: const Color(0xFF453BC9),
-        toolbarHeight: 70.0, 
-        bottom: PreferredSize(
-          preferredSize: Size.fromHeight(20.0), 
-          child: Container(
-            color: const Color(0xFF453BC9), 
-            padding:
-                const EdgeInsets.symmetric(vertical: 0.0), 
-          ),
-        ),
+        toolbarHeight: 70.0,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-
             Container(
               padding: const EdgeInsets.all(20.0),
-              margin:
-                  const EdgeInsets.only(bottom: 10.0),
+              margin: const EdgeInsets.only(bottom: 10.0),
               decoration: BoxDecoration(
-                color: Color(0xFFD9D9D9), 
-                borderRadius:
-                    BorderRadius.circular(20), 
+                color: Color.fromARGB(255, 186, 186, 186),
+                borderRadius: BorderRadius.circular(20),
               ),
               height: 200,
               width: 350,
               child: Column(
-                crossAxisAlignment:
-                    CrossAxisAlignment.start, 
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Text(
                     'account balance: 5,146 Baht',
@@ -66,18 +54,17 @@ class WalletPage extends StatelessWidget {
                       color: Color.fromARGB(255, 0, 0, 0),
                     ),
                   ),
-                  const SizedBox(
-                      height: 10),
+                  const SizedBox(height: 10),
                   Align(
-                    alignment: Alignment.centerRight, 
+                    alignment: Alignment.centerRight,
                     child: Image.network(
                       'https://static.vecteezy.com/system/resources/thumbnails/019/051/628/small_2x/gold-coin-money-symbol-icon-png.png',
-                      width: 150, 
-                      height: 120, 
+                      width: 150,
+                      height: 120,
                       errorBuilder: (context, error, stackTrace) {
                         return const Icon(
                           Icons.error,
-                        ); 
+                        );
                       },
                     ),
                   ),
@@ -85,105 +72,135 @@ class WalletPage extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 20),
-            Expanded(
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Colors.white, 
-                  borderRadius:
-                      BorderRadius.circular(10), 
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.5), 
-                      spreadRadius: 2,
-                      blurRadius: 5,
-                      offset: Offset(0, 3), 
+            
+            // กล่องตัวเลข 4 กรอบ
+            Container(
+              height: 116,
+              child: Stack(
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20.0),
+                      border: Border.all(
+                        color: Colors.black, // สีของกรอบ
+                        width: 1.5, // ความกว้างของกรอบ
+                      ),
+                      color: const Color(0xFFFFFFFF), // สีพื้นหลัง
                     ),
-                  ],
-                ),
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const Text(
-                            'Transaction history', 
-                            style: TextStyle(
-                              color: Color(0xFF453BC9),
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          TextButton(
-                            onPressed: () {
-                              print('View all');
-                            },
-                            child: const Text(
-                              'View all', 
-                              style: TextStyle(
-                                color: Color(0xFF453BC9),
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(left: 0, top: 0),
+                          child: Align(
+                            alignment: Alignment.topLeft,
+                            child: Container(
+                              padding: const EdgeInsets.all(4.0),
+                              width: MediaQuery.of(context).size.width / 4,
+                              decoration: BoxDecoration(
+                                color: const Color(0xFF453BC9),
+                                borderRadius: BorderRadius.circular(30.0),
+                              ),
+                              child: Row(
+                                children: [
+                                  Container(
+                                    width: 20,
+                                    height: 20,
+                                    decoration: const BoxDecoration(
+                                      color: Colors.white,
+                                      shape: BoxShape.circle,
+                                    ),
+                                  ),
+                                  const SizedBox(width: 6),
+                                  const Text(
+                                    'lotto',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                           ),
-                        ],
-                      ),
-                    ),
-                    Expanded(
-                      child: ListView.separated(
-                        padding: const EdgeInsets.only(
-                            top:
-                                10), 
-                        itemCount: 5,
-                        separatorBuilder: (context, index) => Divider(
-                          color: Colors.grey[300], 
-                          thickness: 1,
                         ),
-                        itemBuilder: (context, index) {
-                          return ListTile(
-                            contentPadding: const EdgeInsets.all(16.0),
-                            leading: ClipRRect(
-                              borderRadius: BorderRadius.circular(
-                                  8.0), 
-                              child: Image.network(
-                                'https://upload.wikimedia.org/wikipedia/th/2/29/%E0%B8%98%E0%B8%99%E0%B8%B2%E0%B8%84%E0%B8%B2%E0%B8%A3%E0%B8%81%E0%B8%A3%E0%B8%B8%E0%B8%87%E0%B9%84%E0%B8%97%E0%B8%A2.png', // URL ของรูปภาพที่คุณต้องการใช้
-                                width: 50, 
-                                height: 60, 
-                                fit: BoxFit
-                                    .cover, 
-                                errorBuilder: (context, error, stackTrace) {
-                                  return const Icon(
-                                    Icons.error,
-                                  );
-                                },
-                              ),
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.only(bottom: 10, left: 5),
+                            child: Row(
+                              children: List.generate(4, (i) { // วนแค่ 4 กรอบ
+                                return Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 3.0),
+                                  child: Container(
+                                    height: 38,
+                                    width: 38,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      border: Border.all(
+                                        color: Colors.black,
+                                        width: 1.5,
+                                      ),
+                                    ),
+                                    child: Center(
+                                      child: Text(
+                                        '${i + 1}', // ตัวเลขจำลอง
+                                        style: const TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              }),
                             ),
-                            title: const Text(
-                              'Top up via bank account',
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            subtitle: const Text('August 8, 2024, 01:26 AM.'),
-                            trailing: Text(
-                              '\$${(index + 1) * 10}', // Example amount
-                              style: const TextStyle(
-                                fontSize: 18,
-                                color: Color(0xFF453BC9),
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          );
-                        },
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Positioned(
+                    bottom: 80,
+                    right: 10,
+                    child: Container(
+                      padding: const EdgeInsets.all(8.0),
+                      child: const Text(
+                        '50 Baht', // ข้อมูลราคา
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                  Positioned(
+                    bottom: 27,
+                    right: 10,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        print('Buy button pressed');
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color.fromARGB(255, 3, 209, 72),
+                        padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 6.0),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                      ),
+                      child: const Text(
+                        'Buy',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 14,
+                        ),
+                      ),
+                    ),
+                  )
+                ],
               ),
-            )
+            ),
           ],
         ),
       ),
