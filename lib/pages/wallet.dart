@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:lotto_app/pages/mylotto.dart';
+import 'package:lotto_app/pages/profile.dart';
 
 class WalletPage extends StatefulWidget {
   int uid = 0;
@@ -99,29 +101,63 @@ class _WalletPageState extends State<WalletPage> {
           ],
         ),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.wallet),
-            label: 'Wallet',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Profile',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.shopping_bag),
-            label: 'My Bag',
-          ),
-        ],
-        selectedItemColor: Colors.blue, // สีของไอเท็มที่เลือก
-        unselectedItemColor: Colors.grey, // สีของไอเท็มที่ไม่ถูกเลือก
-      ),
+      // bottomNavigationBar: BottomNavigationBar(
+      //   type: BottomNavigationBarType.fixed,
+      //   items: const <BottomNavigationBarItem>[
+      //     BottomNavigationBarItem(
+      //       icon: Icon(Icons.home),
+      //       label: 'Home',
+      //     ),
+      //     BottomNavigationBarItem(
+      //       icon: Icon(Icons.wallet),
+      //       label: 'Wallet',
+      //     ),
+      //     BottomNavigationBarItem(
+      //       icon: Icon(Icons.person),
+      //       label: 'Profile',
+      //     ),
+      //     BottomNavigationBarItem(
+      //       icon: Icon(Icons.shopping_bag),
+      //       label: 'My Bag',
+      //     ),
+      //   ],
+      //   selectedItemColor: const Color(0xFF453BC9),
+      //   unselectedItemColor: Colors.grey,
+      //   backgroundColor: Colors.white,
+      //   onTap: (int index) {
+      //     if(index == 3) {
+      //       Navigator.push(
+      //         context,
+      //         MaterialPageRoute(
+      //           builder: (context) => Mylotto(
+      //             uid: widget.uid,
+      //           ),
+      //         ),
+      //       );
+      //     }
+      //     else if (index == 2) {
+      //       Navigator.push(
+      //         context,
+      //         MaterialPageRoute(
+      //           builder: (context) => ProfilePage(
+      //             uid: widget.uid,
+      //           ),
+      //         ),
+      //       );
+      //     } else if (index == 1) {
+      //       Navigator.push(
+      //         context,
+      //         MaterialPageRoute(
+      //           builder: (context) => WalletPage(
+      //             uid: widget.uid,
+      //           ),
+      //         ),
+      //       );
+      //     } else {
+      //       print("Selected tab: $index");
+      //     }
+      //   },
+      // ),
     );
   }
 }

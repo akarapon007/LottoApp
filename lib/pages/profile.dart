@@ -69,7 +69,7 @@ class _ProfilePageState extends State<ProfilePage> {
                               const SizedBox(width: 20),
                               Expanded(
                                 child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
                                     Text(
                                       user['username'] ?? 'Unknown',
@@ -82,6 +82,13 @@ class _ProfilePageState extends State<ProfilePage> {
                                       user['email'] ?? 'Unknown',
                                       style: const TextStyle(
                                         color: Color.fromARGB(255, 133, 133, 133),
+                                        fontSize: 16,
+                                      ),
+                                    ),
+                                    Text(
+                                      user['balance'].toString() ?? 'Unknown',
+                                      style: const TextStyle(
+                                        color: Color.fromARGB(255, 0, 0, 0),
                                         fontSize: 16,
                                       ),
                                     ),

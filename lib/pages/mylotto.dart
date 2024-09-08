@@ -1,13 +1,18 @@
 import 'package:flutter/material.dart';
 
 class Mylotto extends StatefulWidget {
-  const Mylotto({super.key});
+  int uid = 0;
+  Mylotto({super.key, required this.uid});
 
   @override
   State<Mylotto> createState() => _MylottoState();
 }
 
 class _MylottoState extends State<Mylotto> {
+  @override
+  void initState() {
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(

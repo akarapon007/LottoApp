@@ -314,7 +314,7 @@ class _HomePage extends State<HomePage> {
                           ),
                         );
                       } else {
-                        return Center(child: Text('No data available'));
+                        return const Center(child: Text('No data available'));
                       }
                     },
                   ),
@@ -353,7 +353,7 @@ class _HomePage extends State<HomePage> {
               context,
               MaterialPageRoute(
                 builder: (context) => Mylotto(
-                  
+                  uid: widget.uid,
                 ),
               ),
             );
