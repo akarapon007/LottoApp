@@ -88,6 +88,29 @@ class WalletPage extends StatelessWidget {
           ],
         ),
       ),
+      bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.wallet),
+            label: 'Wallet',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'Profile',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.shopping_bag),
+            label: 'My Bag',
+          ),
+        ],
+        selectedItemColor: Colors.blue, // สีของไอเท็มที่เลือก
+        unselectedItemColor: Colors.grey, // สีของไอเท็มที่ไม่ถูกเลือก
+      ),
     );
   }
 }
@@ -149,7 +172,7 @@ class LottoCard extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.only(bottom: 10, left: 5),
                     child: Row(
-                      children: List.generate(4, (i) { // วนแค่ 4 กรอบ
+                      children: List.generate(6, (i) { // วนลูป 6 กรอบ
                         return Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 3.0),
                           child: Container(
