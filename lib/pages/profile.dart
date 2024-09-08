@@ -13,19 +13,74 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+  late Future<Map<String, dynamic>> _userProfile;
 
   @override
   void initState() {
     super.initState();
+    _userProfile = fetchUserProfile();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(''),
-        backgroundColor: const Color(0xFF453BC9),
-      ),
+          title: Container(
+            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+            decoration: BoxDecoration(
+              color: Colors.white, // สีพื้นหลัง
+              borderRadius: BorderRadius.circular(10), // มุมโค้ง
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.2), // เงา
+                  spreadRadius: 2,
+                  blurRadius: 4,
+                  offset: Offset(0, 2), // เงา
+                ),
+              ],
+            ),
+            child: FutureBuilder<Map<String, dynamic>>(
+              future: fetchUserProfile(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Text(
+                    'Loading...',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w900,
+                      fontSize: 20,
+                    ),
+                  );
+                } else if (snapshot.hasError) {
+                  return const Text(
+                    'Error',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w900,
+                      fontSize: 20,
+                    ),
+                  );
+                } else if (snapshot.hasData) {
+                  final user = snapshot.data!;
+                  return Text(
+                    'Balance: ${user['balance'] ?? 'Unknown'} Baht',
+                    style: const TextStyle(
+                      fontWeight: FontWeight.w900,
+                      fontSize: 20,
+                    ),
+                  );
+                } else {
+                  return const Text(
+                    'No data',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w900,
+                      fontSize: 20,
+                    ),
+                  );
+                }
+              },
+            ),
+          ),
+          backgroundColor: const Color(0xFF453BC9),
+        ),
       body: FutureBuilder<Map<String, dynamic>>(
         future: fetchUserProfile(),
         builder: (context, snapshot) {
@@ -53,6 +108,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       ),
                     ),
                   ),
+                  const SizedBox(height: 25.0),
                   Container(
                     decoration: BoxDecoration(
                       color: const Color(0xFFD9D9D9),
@@ -242,26 +298,26 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
    Future<Map<String, dynamic>> fetchUserProfile() async {
-  final response = await http.get(
-    Uri.parse('https://nodejs-wfjd.onrender.com/users/${widget.uid}'),
-  );
+    final response = await http.get(
+      Uri.parse('https://nodejs-wfjd.onrender.com/users/${widget.uid}'),
+    );
 
-  if (response.statusCode == 200) {
-    // Decode the response as a list
-    final List<dynamic> userList = json.decode(response.body);
+    if (response.statusCode == 200) {
+      // Decode the response as a list
+      final List<dynamic> userList = json.decode(response.body);
 
-    // Check if the list is not empty
-    if (userList.isNotEmpty) {
-      // Return the first user object in the list
-      return userList[0];
+      // Check if the list is not empty
+      if (userList.isNotEmpty) {
+        // Return the first user object in the list
+        return userList[0];
+      } else {
+        // Handle the case where the list is empty
+        throw Exception('User not found');
+      }
     } else {
-      // Handle the case where the list is empty
-      throw Exception('User not found');
+      print('Failed to load profile, status code: ${response.statusCode}');
+      print('Response body: ${response.body}');
+      throw Exception('Failed to load user profile');
     }
-  } else {
-    print('Failed to load profile, status code: ${response.statusCode}');
-    print('Response body: ${response.body}');
-    throw Exception('Failed to load user profile');
   }
-}
 }

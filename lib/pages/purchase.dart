@@ -2,7 +2,6 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:lotto_app/config/config.dart';
 import 'package:lotto_app/pages/profile.dart';
-import 'package:lotto_app/pages/wallet.dart';
 import 'package:http/http.dart' as http;
 
 class Purchase extends StatefulWidget {
@@ -323,12 +322,6 @@ class _Purchase extends State<Purchase> {
         print("Selected Home tab");
         break;
       case 1:
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => WalletPage(uid: widget.uid,)),
-        );
-        break;
-      case 2:
         Navigator.push(
           context,
           MaterialPageRoute(

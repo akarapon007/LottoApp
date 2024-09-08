@@ -1,11 +1,10 @@
+import 'dart:convert';
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:lotto_app/config/config.dart';
 import 'package:lotto_app/models/response/lottoGetRes.dart';
 import 'package:lotto_app/pages/mylotto.dart';
 import 'package:lotto_app/pages/profile.dart';
-import 'package:lotto_app/pages/wallet.dart';
-import 'package:lotto_app/pages/updatemoney.dart';
 import 'package:http/http.dart' as http;
 
 class HomePage extends StatefulWidget {
@@ -20,22 +19,77 @@ class HomePage extends StatefulWidget {
 class _HomePage extends State<HomePage> {
   String url = '';
   late Future<List<LottoGetRes>> loadData;
+  late Future<Map<String, dynamic>> _userProfile;
 
   @override
   void initState() {
     super.initState();
     log(widget.uid.toString()); // Log uid
     loadData = loadDataAsync();
+    _userProfile = fetchUserProfile();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(''),
-        backgroundColor: const Color(0xFF453BC9),
-        automaticallyImplyLeading: false,
-      ),
+        appBar: AppBar(
+          title: Container(
+            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+            decoration: BoxDecoration(
+              color: Colors.white, // สีพื้นหลัง
+              borderRadius: BorderRadius.circular(10), // มุมโค้ง
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.2), // เงา
+                  spreadRadius: 2,
+                  blurRadius: 4,
+                  offset: Offset(0, 2), // เงา
+                ),
+              ],
+            ),
+            child: FutureBuilder<Map<String, dynamic>>(
+              future: fetchUserProfile(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Text(
+                    'Loading...',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w900,
+                      fontSize: 20,
+                    ),
+                  );
+                } else if (snapshot.hasError) {
+                  return const Text(
+                    'Error',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w900,
+                      fontSize: 20,
+                    ),
+                  );
+                } else if (snapshot.hasData) {
+                  final user = snapshot.data!;
+                  return Text(
+                    'Balance: ${user['balance'] ?? 'Unknown'} Baht',
+                    style: const TextStyle(
+                      fontWeight: FontWeight.w900,
+                      fontSize: 20,
+                    ),
+                  );
+                } else {
+                  return const Text(
+                    'No data',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w900,
+                      fontSize: 20,
+                    ),
+                  );
+                }
+              },
+            ),
+          ),
+          backgroundColor: const Color(0xFF453BC9),
+          automaticallyImplyLeading: false,
+        ),
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -325,10 +379,6 @@ class _HomePage extends State<HomePage> {
             label: 'Home',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.wallet),
-            label: 'Wallet',
-          ),
-          BottomNavigationBarItem(
             icon: Icon(Icons.person),
             label: 'Profile',
           ),
@@ -341,17 +391,7 @@ class _HomePage extends State<HomePage> {
         unselectedItemColor: Colors.grey,
         backgroundColor: Colors.white,
         onTap: (int index) {
-          if(index == 3) {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => Mylotto(
-                  uid: widget.uid,
-                ),
-              ),
-            );
-          }
-          else if (index == 2) {
+          if (index == 1) {
             Navigator.push(
               context,
               MaterialPageRoute(
@@ -360,11 +400,11 @@ class _HomePage extends State<HomePage> {
                 ),
               ),
             );
-          } else if (index == 1) {
+          } else if (index == 2) {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => WalletPage(
+                builder: (context) => Mylotto(
                   uid: widget.uid,
                 ),
               ),
@@ -388,7 +428,29 @@ class _HomePage extends State<HomePage> {
       throw Exception('Failed to load lotto data');
     }
   }
+   Future<Map<String, dynamic>> fetchUserProfile() async {
+    final response = await http.get(
+      Uri.parse('https://nodejs-wfjd.onrender.com/users/${widget.uid}'),
+    );
 
+    if (response.statusCode == 200) {
+      // Decode the response as a list
+      final List<dynamic> userList = json.decode(response.body);
+
+      // Check if the list is not empty
+      if (userList.isNotEmpty) {
+        // Return the first user object in the list
+        return userList[0];
+      } else {
+        // Handle the case where the list is empty
+        throw Exception('User not found');
+      }
+    } else {
+      print('Failed to load profile, status code: ${response.statusCode}');
+      print('Response body: ${response.body}');
+      throw Exception('Failed to load user profile');
+    }
+  }
   // void getTrips(String? zone) async {
   //   // 1. Create http
   //   var value = await Configuration.getConfig();
