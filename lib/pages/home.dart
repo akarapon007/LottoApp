@@ -91,12 +91,12 @@ class _HomePage extends State<HomePage> {
                       ),
                     ),
                   ),
-                  Align(
+                  const Align(
                     alignment: Alignment.centerLeft,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Text(
+                        Text(
                           'Lucky Number',
                           style: TextStyle(
                             fontWeight: FontWeight.w900,
@@ -104,14 +104,7 @@ class _HomePage extends State<HomePage> {
                             fontSize: 20,
                           ),
                         ),
-                        IconButton(
-                          icon: const Icon(Icons.refresh,
-                              color: Color(0xFF453BC9)),
-                          onPressed: () {
-                            // โค้ดที่เรียกใช้เมื่อกดปุ่มรีเฟรช
-                            print('Refresh button pressed');
-                          },
-                        ),
+                     
                       ],
                     ),
                   ),
@@ -120,13 +113,13 @@ class _HomePage extends State<HomePage> {
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         // ขณะกำลังดึงข้อมูล
-                        return Center(child: CircularProgressIndicator());
+                        return const Center(child: CircularProgressIndicator());
                       } else if (snapshot.hasError) {
                         // หากมีข้อผิดพลาด
                         return Center(child: Text('Error: ${snapshot.error}'));
                       } else if (snapshot.hasData) {
                         // เมื่อดึงข้อมูลเสร็จสิ้น
-                        var lottoList = snapshot.data!.take(10).toList();
+                        var lottoList = snapshot.data!;
                         return SizedBox(
                           // กำหนดความสูงของ ListView
                           child: ListView.builder(
