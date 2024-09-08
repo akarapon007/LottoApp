@@ -16,8 +16,8 @@ class _RegisterPageState extends State<RegisterPage> {
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _confirmPasswordController =
-      TextEditingController();
+  final TextEditingController _confirmPasswordController =TextEditingController();
+  final TextEditingController _balanceController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -102,6 +102,19 @@ class _RegisterPageState extends State<RegisterPage> {
                         borderRadius: BorderRadius.all(Radius.circular(45.0)),
                       ),
                       prefixIcon: Icon(Icons.email),
+                    ),
+                  ),
+                  const SizedBox(height: 16.0),
+                  TextField(
+                    controller: _balanceController,
+                    decoration: const InputDecoration(
+                      filled: true,
+                      fillColor: Colors.white, // สีพื้นหลังของช่องข้อความ
+                      labelText: 'Add Your Money',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(45.0)),
+                      ),
+                      prefixIcon: Icon(Icons.attach_money),
                     ),
                   ),
                   const SizedBox(height: 16.0),
@@ -226,6 +239,7 @@ class _RegisterPageState extends State<RegisterPage> {
     if (_usernameController.text.isEmpty ||
         _phoneController.text.isEmpty ||
         _emailController.text.isEmpty ||
+        _balanceController.text.isEmpty ||
         _passwordController.text.isEmpty ||
         _confirmPasswordController.text.isEmpty) {
       _showErrorDialog('Please fill out all the fields');
@@ -252,6 +266,7 @@ class _RegisterPageState extends State<RegisterPage> {
         'username': _usernameController.text,
         'phone': _phoneController.text,
         'email': _emailController.text,
+        'balance': _balanceController.text,
         'password': _passwordController.text,
       }),
     );
