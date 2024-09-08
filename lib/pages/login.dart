@@ -20,7 +20,7 @@ class _LoginPageState extends State<LoginPage> {
   String text = '';
   String password = '';
   bool _rememberMe = false;
-  TextEditingController phoneCtl = TextEditingController();
+  TextEditingController identifierCtl = TextEditingController();
   TextEditingController passwordCtl = TextEditingController();
 
 
@@ -79,9 +79,9 @@ class _LoginPageState extends State<LoginPage> {
                 children: [
                   const SizedBox(height: 50.0), // ลดขนาดจาก 120.0 เหลือ 50.0
                   TextField(
-                    controller: phoneCtl,
+                    controller: identifierCtl,
                     decoration: const InputDecoration(
-                      labelText: 'Phone',
+                      labelText: 'Phone and Email',
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.all(
                             Radius.circular(45.0)), // มุมโค้ง 45 องศา
@@ -198,7 +198,7 @@ class _LoginPageState extends State<LoginPage> {
   }
   void login() async {
     var model = UserLoginReq(
-      phone: phoneCtl.text,
+      identifier: identifierCtl.text,
       password: passwordCtl.text,
     );
 

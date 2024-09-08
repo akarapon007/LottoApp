@@ -9,21 +9,21 @@ UserLoginReq userLoginReqFromJson(String str) => UserLoginReq.fromJson(json.deco
 String userLoginReqToJson(UserLoginReq data) => json.encode(data.toJson());
 
 class UserLoginReq {
-    String phone;
+    String identifier;
     String password;
 
     UserLoginReq({
-        required this.phone,
+        required this.identifier,
         required this.password,
     });
 
     factory UserLoginReq.fromJson(Map<String, dynamic> json) => UserLoginReq(
-        phone: json["phone"],
+        identifier: json["identifier"],
         password: json["password"],
     );
 
     Map<String, dynamic> toJson() => {
-        "phone": phone,
+        "identifier": identifier,
         "password": password,
     };
 }
