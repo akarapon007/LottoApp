@@ -73,136 +73,153 @@ class WalletPage extends StatelessWidget {
             ),
             const SizedBox(height: 20),
             
-            // กล่องตัวเลข 4 กรอบ
-            Container(
-              height: 116,
-              child: Stack(
-                children: [
-                  Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20.0),
-                      border: Border.all(
-                        color: Colors.black, // สีของกรอบ
-                        width: 1.5, // ความกว้างของกรอบ
-                      ),
-                      color: const Color(0xFFFFFFFF), // สีพื้นหลัง
-                    ),
-                    child: Column(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(left: 0, top: 0),
-                          child: Align(
-                            alignment: Alignment.topLeft,
-                            child: Container(
-                              padding: const EdgeInsets.all(4.0),
-                              width: MediaQuery.of(context).size.width / 4,
-                              decoration: BoxDecoration(
-                                color: const Color(0xFF453BC9),
-                                borderRadius: BorderRadius.circular(30.0),
-                              ),
-                              child: Row(
-                                children: [
-                                  Container(
-                                    width: 20,
-                                    height: 20,
-                                    decoration: const BoxDecoration(
-                                      color: Colors.white,
-                                      shape: BoxShape.circle,
-                                    ),
-                                  ),
-                                  const SizedBox(width: 6),
-                                  const Text(
-                                    'lotto',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.only(bottom: 10, left: 5),
-                            child: Row(
-                              children: List.generate(4, (i) { // วนแค่ 4 กรอบ
-                                return Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 3.0),
-                                  child: Container(
-                                    height: 38,
-                                    width: 38,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(10),
-                                      border: Border.all(
-                                        color: Colors.black,
-                                        width: 1.5,
-                                      ),
-                                    ),
-                                    child: Center(
-                                      child: Text(
-                                        '${i + 1}', // ตัวเลขจำลอง
-                                        style: const TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                );
-                              }),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Positioned(
-                    bottom: 80,
-                    right: 10,
-                    child: Container(
-                      padding: const EdgeInsets.all(8.0),
-                      child: const Text(
-                        '50 Baht', // ข้อมูลราคา
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    bottom: 27,
-                    right: 10,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        print('Buy button pressed');
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color.fromARGB(255, 3, 209, 72),
-                        padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 6.0),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8.0),
-                        ),
-                      ),
-                      child: const Text(
-                        'Buy',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 14,
-                        ),
-                      ),
-                    ),
-                  )
-                ],
+            // ลิสต์ 4 กล่อง Lotto
+            Expanded(
+              child: ListView.builder(
+                itemCount: 4, // จำนวนกล่องที่ต้องการ
+                itemBuilder: (context, index) {
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: 16.0),
+                    child: LottoCard(), // สร้างกล่อง lotto แต่ละอัน
+                  );
+                },
               ),
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class LottoCard extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 116,
+      child: Stack(
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20.0),
+              border: Border.all(
+                color: Colors.black, // สีของกรอบ
+                width: 1.5, // ความกว้างของกรอบ
+              ),
+              color: const Color(0xFFFFFFFF), // สีพื้นหลัง
+            ),
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(left: 0, top: 0),
+                  child: Align(
+                    alignment: Alignment.topLeft,
+                    child: Container(
+                      padding: const EdgeInsets.all(4.0),
+                      width: MediaQuery.of(context).size.width / 4,
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF453BC9),
+                        borderRadius: BorderRadius.circular(30.0),
+                      ),
+                      child: Row(
+                        children: [
+                          Container(
+                            width: 20,
+                            height: 20,
+                            decoration: const BoxDecoration(
+                              color: Colors.white,
+                              shape: BoxShape.circle,
+                            ),
+                          ),
+                          const SizedBox(width: 6),
+                          const Text(
+                            'lotto',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.only(bottom: 10, left: 5),
+                    child: Row(
+                      children: List.generate(4, (i) { // วนแค่ 4 กรอบ
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 3.0),
+                          child: Container(
+                            height: 38,
+                            width: 38,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              border: Border.all(
+                                color: Colors.black,
+                                width: 1.5,
+                              ),
+                            ),
+                            child: Center(
+                              child: Text(
+                                '${i + 1}', // ตัวเลขจำลอง
+                                style: const TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ),
+                        );
+                      }),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Positioned(
+            bottom: 80,
+            right: 10,
+            child: Container(
+              padding: const EdgeInsets.all(8.0),
+              child: const Text(
+                '50 Baht', // ข้อมูลราคา
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ),
+          Positioned(
+            bottom: 27,
+            right: 10,
+            child: ElevatedButton(
+              onPressed: () {
+                print('Buy button pressed');
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color.fromARGB(255, 51, 3, 192),
+                padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 6.0),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
+              ),
+              child: const Text(
+                'Check',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 14,
+                ),
+              ),
+            ),
+          )
+        ],
       ),
     );
   }
