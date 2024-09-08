@@ -44,7 +44,7 @@ class _WalletPageState extends State<WalletPage> {
           ],
         ),
         backgroundColor: const Color(0xFF453BC9),
-        toolbarHeight: 70.0,
+        toolbarHeight: 120.0,
       ),
       body: FutureBuilder<Map<String, dynamic>>(
         future: userData,

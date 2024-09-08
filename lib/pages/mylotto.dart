@@ -18,7 +18,7 @@ class _MylottoState extends State<Mylotto> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor:
-            const Color.fromARGB(255, 22, 13, 141), // Purple background
+            const Color(0xFF453BC9),
         title: const Text(
           'My Lotto',
           style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold), // Set title color to white
@@ -31,6 +31,7 @@ class _MylottoState extends State<Mylotto> {
             Navigator.pop(context); // Action to go back
           },
         ),
+        toolbarHeight: 120.0,
       ),
       body: Column(
         children: [
