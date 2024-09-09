@@ -323,36 +323,30 @@ class _HomePage extends State<HomePage> {
                                         ),
                                       ),
                                       // ปุ่ม "Buy"
-                                      Positioned(
-                                        bottom: 27,
-                                        right: 10,
-                                        child: ElevatedButton(
-                                          onPressed: () {
-                                            print(
-                                                'Buy button pressed for ${lotto.uid}');
-                                          },
-                                          style: ElevatedButton.styleFrom(
-                                            backgroundColor:
-                                                const Color.fromARGB(
-                                                    255, 3, 209, 72),
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 12.0,
-                                                vertical: 6.0),
-                                            minimumSize: const Size(69, 30),
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(8.0),
+                                        Positioned(
+                                          bottom: 27,
+                                          right: 10,
+                                          child: ElevatedButton(
+                                            onPressed: () {
+                                              _showConfirmationDialog(lotto.lottery_id);
+                                            },
+                                            style: ElevatedButton.styleFrom(
+                                              backgroundColor: const Color.fromARGB(255, 3, 209, 72),
+                                              padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 6.0),
+                                              minimumSize: const Size(69, 30),
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.circular(8.0),
+                                              ),
+                                            ),
+                                            child: const Text(
+                                              'Buy',
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 14,
+                                              ),
                                             ),
                                           ),
-                                          child: const Text(
-                                            'Buy',
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 14,
-                                            ),
-                                          ),
-                                        ),
-                                      )
+                                        )
                                     ],
                                   ),
                                 ),
@@ -384,7 +378,7 @@ class _HomePage extends State<HomePage> {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.shopping_bag),
-            label: 'My Bag',
+            label: 'My Lotto',
           ),
         ],
         selectedItemColor: const Color(0xFF453BC9),
@@ -416,7 +410,45 @@ class _HomePage extends State<HomePage> {
       ),
     );
   }
+Future<void> _buyLotto(int lotteryId) async {
+  final url = 'https://nodejs-wfjd.onrender.com/lotto/userbuylotto';
+  final response = await http.put(
+    Uri.parse(url),
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: json.encode({
+      'uid': widget.uid,
+      'lottery_id': lotteryId,
+    }),
+  );
 
+  print('Response status: ${response.statusCode}');
+  print('Response body: ${response.body}');
+
+  if (response.statusCode == 200) {
+    final data = json.decode(response.body);
+    final message = data['message'];
+    final newBalance = data['newBalance'];
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Purchase successful! New balance: $newBalance Baht')),
+    );
+
+    setState(() {
+      loadData = loadDataAsync(); // Refresh the lottery data
+      _userProfile = fetchUserProfile(); // Refresh the user profile data
+    });
+  } else {
+    // Extract and log the error message from the response body
+    final errorData = json.decode(response.body);
+    final errorMessage = errorData['message'] ?? 'An unknown error occurred';
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Failed to purchase lottery ticket: $errorMessage')),
+    );
+  }
+}
   Future<List<LottoGetRes>> loadDataAsync() async {
     var value = await Configuration.getConfig();
     String url = value['apiEndPoint'];
@@ -434,15 +466,10 @@ class _HomePage extends State<HomePage> {
     );
 
     if (response.statusCode == 200) {
-      // Decode the response as a list
       final List<dynamic> userList = json.decode(response.body);
-
-      // Check if the list is not empty
       if (userList.isNotEmpty) {
-        // Return the first user object in the list
         return userList[0];
       } else {
-        // Handle the case where the list is empty
         throw Exception('User not found');
       }
     } else {
@@ -451,24 +478,31 @@ class _HomePage extends State<HomePage> {
       throw Exception('Failed to load user profile');
     }
   }
-  // void getTrips(String? zone) async {
-  //   // 1. Create http
-  //   var value = await Configuration.getConfig();
-  //   String url = value['apiEndPoint'];
-  //   http.get(Uri.parse('$url/trips')).then(
-  //     (value) {
-  //       tripGetResponses = tripsGetResFromJson(value.body);
-  //       List<TripsGetRes> filltertrips = [];
-  //       if (zone != null) {
-  //         for (var trip in tripGetResponses) {
-  //           if (trip.destinationZone == zone) {
-  //             filltertrips.add(trip);
-  //           }
-  //         }
-  //         tripGetResponses = filltertrips;
-  //       }
-  //       setState(() {});
-  //     },
-  //   );
-  // }
+  void _showConfirmationDialog(int lotteryId) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: const Text('Confirm Purchase'),
+        content: const Text('Do you want to buy this lottery ticket?'),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop(); // Close the dialog
+            },
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop(); // Close the dialog
+              _buyLotto(lotteryId); // Proceed with the purchase and refresh the page
+            },
+            child: const Text('Buy'),
+          ),
+        ],
+      );
+    },
+  );
+}
+
 }
