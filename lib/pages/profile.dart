@@ -143,6 +143,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                     Text(
                                       user['balance'].toString() ?? 'Unknown',
                                       style: const TextStyle(
+                                        fontWeight: FontWeight.w800,
                                         color: Color.fromARGB(255, 0, 0, 0),
                                         fontSize: 16,
                                       ),

@@ -18,8 +18,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _confirmPasswordController =
-      TextEditingController();
+  final TextEditingController _confirmPasswordController = TextEditingController();
+  final TextEditingController _balanceController = TextEditingController();
   bool _isAccepted = false;
 
   final BoxDecoration _boxDecoration = BoxDecoration(
@@ -74,6 +74,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                       ),
                     ),
                   ),
+                  const SizedBox(height: 20),
                   Container(
                     decoration: _boxDecoration,
                     width: 380,
@@ -126,6 +127,20 @@ class _EditProfilePageState extends State<EditProfilePage> {
                           ),
                           const SizedBox(height: 16.0),
                           TextField(
+                            controller: _balanceController,
+                            decoration: InputDecoration(
+                              filled: true,
+                              fillColor: Colors.white,
+                              hintText: user['balance'].toString() ?? 'Add Money',
+                              border: const OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(45.0)),
+                              ),
+                              prefixIcon: const Icon(Icons.phone),
+                            ),
+                          ),
+                          const SizedBox(height: 16.0),
+                          TextField(
                             controller: _passwordController,
                             decoration: InputDecoration(
                               filled: true,
@@ -139,7 +154,20 @@ class _EditProfilePageState extends State<EditProfilePage> {
                             ),
                           ),
                           const SizedBox(height: 16.0),
-                          
+                          TextField(
+                            controller: _confirmPasswordController,
+                            decoration: InputDecoration(
+                              filled: true,
+                              fillColor: Colors.white,
+                              hintText: user['password'] ?? 'Confirm password',
+                              border: const OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(45.0)),
+                              ),
+                              prefixIcon: const Icon(Icons.lock),
+                            ),
+                          ),
+                          const SizedBox(height: 16.0),
                         ],
                       ),
                     ),
@@ -231,6 +259,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
       "fullname": _usernameController.text,
       "phone": _phoneController.text,
       "email": _emailController.text,
+      "balance": _balanceController.text,
       "password" : _passwordController.text,
       
     };

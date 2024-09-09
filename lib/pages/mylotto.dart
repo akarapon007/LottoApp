@@ -22,41 +22,6 @@ class _MylottoState extends State<Mylotto> {
     fetchLottoData();
   }
 
-  Future<void> fetchLottoData() async {
-  setState(() {
-    isLoading = true;  // เริ่มต้นสถานะการโหลดข้อมูล
-  });
-
-  try {
-    // ดึงค่า URL ของ API จาก Configuration
-    var config = await Configuration.getConfig();
-    String url = config['apiEndPoint'];
-
-    // เรียก API เพื่อดึงข้อมูลลอตเตอรี่ของผู้ใช้
-    var jsonlotto = await http.get(Uri.parse('$url/lotto/userbuylotto/${widget.uid}')); // ใช้ '/' เพื่อแยก path กับ uid
-
-    // ตรวจสอบสถานะการตอบกลับจาก API
-    if (jsonlotto.statusCode == 200) {
-      // แปลง JSON ที่ได้เป็น list ของ LottoGetRes
-      var lottoData = lottoGetResFromJson(jsonlotto.body);
-
-      setState(() {
-        this.lottoGetResUser = lottoData;  // อัพเดตข้อมูลลอตเตอรี่ที่ดึงมา
-        isLoading = false;  // หยุดการโหลดข้อมูล
-      });
-    } else {
-      setState(() {
-        isLoading = false;  // หยุดการโหลดข้อมูลในกรณีที่เกิดข้อผิดพลาด
-      });
-      print('Failed to load lotto data: ${jsonlotto.statusCode}');
-    }
-  } catch (e) {
-    setState(() {
-      isLoading = false;  // หยุดการโหลดหากเกิดข้อผิดพลาด
-    });
-    print('Error fetching lotto data: $e');
-  }
-}
   @override
 Widget build(BuildContext context) {
   return Scaffold(
@@ -78,11 +43,11 @@ Widget build(BuildContext context) {
     body: isLoading
         ? Center(child: CircularProgressIndicator()) // วงกลมโหลดข้อมูล
         : lottoGetResUser.isEmpty  // ตรวจสอบว่ารายการ lottoData ว่างหรือไม่
-            ? Center(
+            ? const Center(
                 child: Text(
-                  'ไม่มีลอตเตอรี่ที่คุณซื้อ',
+                  'No lottery tickets purchased',
                   style: TextStyle(
-                    color: const Color(0xFF453BC9),
+                    color: Color(0xFF453BC9),
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                   ),
@@ -263,6 +228,37 @@ Widget build(BuildContext context) {
               ),
   );
 }
+  Future<void> fetchLottoData() async {
+  setState(() {
+    isLoading = true;  
+  });
+
+  try {
+    var config = await Configuration.getConfig();
+    var jsonlotto = await http.get(Uri.parse('https://nodejs-wfjd.onrender.com/lotto/lottouser/${widget.uid}'));
+    
+    if (jsonlotto.statusCode == 200 || jsonlotto.statusCode == 201) {
+      var lottoData = lottoGetResFromJson(jsonlotto.body);
+      setState(() {
+        this.lottoGetResUser = lottoData;  
+        isLoading = false; 
+      });
+    } else {
+      setState(() {
+        isLoading = false; 
+      });
+      print('Failed to load lotto data: ${jsonlotto.statusCode}');
+    }
+  } catch (e) {
+    setState(() {
+      isLoading = false;  
+    });
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Error fetching lotto data: $e')),
+    );
+  }
+}
+
 }
 
   
