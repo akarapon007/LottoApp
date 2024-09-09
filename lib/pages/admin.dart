@@ -1,5 +1,9 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
-import 'dart:math';
+import 'package:http/http.dart' as http;
+import 'package:lotto_app/config/config.dart';
+import 'package:lotto_app/models/response/lottoGetRes.dart';
 
 class Adminpage extends StatefulWidget {
   @override
@@ -8,6 +12,12 @@ class Adminpage extends StatefulWidget {
 
 class _AdminpageState extends State<Adminpage> {
   List<int> randomNumbers = List.generate(6, (index) => index + 1);
+  late Future<List<LottoGetRes>> loadData;
+  @override
+  void initState() {
+    super.initState();
+    loadData = loadDataAsync();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,33 +52,6 @@ class _AdminpageState extends State<Adminpage> {
                     padding: const EdgeInsets.only(top: 10.0),
                     child: Column(
                       children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: List.generate(6, (index) {
-                            return Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 10.0),
-                              child: Container(
-                                width: 40,
-                                height: 50,
-                                decoration: BoxDecoration(
-                                  color:
-                                      const Color.fromARGB(255, 255, 255, 255),
-                                  borderRadius: BorderRadius.circular(30),
-                                ),
-                                alignment: Alignment.center,
-                                child: Text(
-                                  '${randomNumbers[index]}',
-                                  style: const TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ),
-                            );
-                          }).toList(),
-                        ),
                         const SizedBox(height: 20),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 20.0),
@@ -83,6 +66,9 @@ class _AdminpageState extends State<Adminpage> {
                                           .pop(); // Close dialog
                                     },
                                     onRefresh: () {
+                                      setState(() {
+                                        loadData = loadDataAsync();
+                                      });
                                       // _handleRefresh();
                                     },
                                   );
@@ -116,73 +102,96 @@ class _AdminpageState extends State<Adminpage> {
               ),
             ),
             const SizedBox(height: 20),
-            SizedBox(
-              height: 520,
-              width: 380,
-              child: Container(
-                decoration: BoxDecoration(
-                  color: const Color.fromARGB(255, 243, 241, 241),
-                  borderRadius: BorderRadius.circular(10),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.5),
-                      spreadRadius: 2,
-                      blurRadius: 5,
-                      offset: const Offset(0, 3),
-                    ),
-                  ],
-                ),
-                child: Column(
-                  children: [
-                    Expanded(
-                      child: ListView.separated(
-                        padding: const EdgeInsets.only(top: 10),
-                        itemCount: 5,
-                        separatorBuilder: (context, index) => Divider(
-                          color: Colors.grey[300],
-                          thickness: 1,
-                        ),
-                        itemBuilder: (context, index) {
-                          return ListTile(
-                            contentPadding: const EdgeInsets.all(16.0),
-                            leading: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Text(
-                                  'รางวัลที่ ${index + 1}',
-                                  style: const TextStyle(
-                                    fontSize: 16,
-                                    color: Color.fromARGB(255, 110, 110, 110),
-                                    fontWeight: FontWeight.bold,
+            FutureBuilder<List<LottoGetRes>>(
+              future: loadData,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  // ขณะกำลังดึงข้อมูล
+                  return Center(child: CircularProgressIndicator());
+                } else if (snapshot.hasError) {
+                  // หากมีข้อผิดพลาด
+                  return Center(child: Text('Error: ${snapshot.error}'));
+                } else if (snapshot.hasData) {
+                  // เมื่อดึงข้อมูลเสร็จสิ้น
+                  var lottoList = snapshot.data!;
+                  return SizedBox(
+                    height: 520,
+                    width: 380,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: const Color.fromARGB(255, 243, 241, 241),
+                        borderRadius: BorderRadius.circular(10),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.5),
+                            spreadRadius: 2,
+                            blurRadius: 5,
+                            offset: const Offset(0, 3),
+                          ),
+                        ],
+                      ),
+                      child: Column(
+                        children: [
+                          Expanded(
+                            child: ListView.separated(
+                              padding: const EdgeInsets.only(top: 10),
+                              itemCount: lottoList.isEmpty
+                                  ? 5
+                                  : lottoList
+                                      .length, // กำหนดเป็น 5 ถ้า length เป็น 0
+                              separatorBuilder: (context, index) => Divider(
+                                color: Colors.grey[300],
+                                thickness: 1,
+                              ),
+                              itemBuilder: (context, index) {
+                                return ListTile(
+                                  contentPadding: const EdgeInsets.all(16.0),
+                                  leading: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Text(
+                                        'รางวัลที่ ${lottoList.isNotEmpty ? lottoList[index].prize ?? '?' : (index + 1)}', // แสดงเลข 1-5 แทน ? ถ้าไม่มีข้อมูล
+                                        style: const TextStyle(
+                                          fontSize: 16,
+                                          color: Color.fromARGB(
+                                              255, 110, 110, 110),
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                          width:
+                                              80), // เพิ่มช่องว่างระหว่าง Text
+                                      Text(
+                                        '${lottoList.isNotEmpty ? lottoList[index].number ?? '?' : '??????'}', // ใช้ ?? '?' ถ้า number เป็น null
+                                        style: const TextStyle(
+                                          fontSize: 18,
+                                          color: Color.fromARGB(
+                                              255, 110, 110, 110),
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                          width:
+                                              80), // เพิ่มช่องว่างระหว่าง Text และรูปภาพ
+                                      Image.network(
+                                        'https://e7.pngegg.com/pngimages/679/296/png-clipart-award-badge-number-1-first-best-perfect-good-gold-ribbon-bow.png',
+                                        width: 40,
+                                        height: 40, // ปรับขนาดให้เหมาะสม
+                                      ),
+                                    ],
                                   ),
-                                ),
-                                const SizedBox(
-                                    width: 80), // เพิ่มช่องว่างระหว่าง Text
-                                const Text(
-                                  '123112',
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    color: Color.fromARGB(255, 110, 110, 110),
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                const SizedBox(
-                                    width:
-                                        80), // เพิ่มช่องว่างระหว่าง Text และรูปภาพ
-                                Image.network(
-                                  'https://e7.pngegg.com/pngimages/679/296/png-clipart-award-badge-number-1-first-best-perfect-good-gold-ribbon-bow.png',
-                                  width: 40,
-                                  height: 40, // ปรับขนาดให้เหมาะสม
-                                ),
-                              ],
+                                );
+                              },
                             ),
-                          );
-                        },
+                          ),
+                        ],
                       ),
                     ),
-                  ],
-                ),
-              ),
+                  );
+                } else {
+                  return Center(child: Text('No data available'));
+                }
+              },
             ),
             const SizedBox(height: 10),
             Padding(
@@ -198,6 +207,9 @@ class _AdminpageState extends State<Adminpage> {
                         },
                         onRefresh: () {
                           // _handleRefresh();
+                          setState(() {
+                            loadData = loadDataAsync();
+                          });
                         },
                       );
                     },
@@ -225,6 +237,19 @@ class _AdminpageState extends State<Adminpage> {
         ),
       ),
     );
+  }
+
+  Future<List<LottoGetRes>> loadDataAsync() async {
+    var value = await Configuration.getConfig();
+    String url = value['apiEndPoint'];
+
+    var response = await http
+        .get(Uri.parse('https://nodejs-wfjd.onrender.com/lotto/seprize'));
+    if (response.statusCode == 200) {
+      return lottoGetResFromJson(response.body);
+    } else {
+      throw Exception('Failed to load lotto data');
+    }
   }
 }
 
@@ -356,7 +381,8 @@ class _RandomButtonState extends State<RandomButton> {
                     onPressed: () {
                       // You might want to add a check function here
                       // check(context, _selectedCheckbox, widget.onRefresh);
-                      widget.onRefresh();
+
+                      check(context, _selectedCheckbox, widget.onRefresh);
                       Navigator.of(context).pop();
                     },
                   ),
@@ -368,6 +394,200 @@ class _RandomButtonState extends State<RandomButton> {
         ),
       ),
     );
+  }
+
+  void check(BuildContext context, int se, VoidCallback onRefresh) async {
+    // แสดง Dialog ขณะกำลังดำเนินการ
+    log(se.toString());
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => AlertDialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20.0),
+        ),
+        titlePadding: EdgeInsets.zero,
+        title: Container(
+          padding: const EdgeInsets.all(12.0),
+          decoration: const BoxDecoration(
+            color: Colors.purple,
+            borderRadius: BorderRadius.vertical(top: Radius.circular(20.0)),
+          ),
+          child: const Text(
+            'กำลังดำเนินการ',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+              fontSize: 18,
+            ),
+          ),
+        ),
+        content: const Text(
+          'กรุณารอสักครู่...',
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontSize: 16,
+          ),
+        ),
+      ),
+    );
+
+    try {
+      // รับค่า Configuration
+      var value = await Configuration.getConfig();
+      String url = value['apiEndPoint'];
+
+      // เลือกเส้นที่เหมาะสมตามค่า se
+      String endpoint;
+      if (se == 1) {
+        endpoint = '/admin/ranprizeuser'; // เส้นที่ 1
+      } else if (se == 0) {
+        endpoint = '/admin/ranprizeall'; // เส้นที่ 2
+      } else {
+        throw Exception('Invalid value for se: $se');
+      }
+
+      // ส่งคำขอไปยัง API
+      var response = await http.get(Uri.parse('$url$endpoint'));
+      log('Response status: ${response.statusCode}');
+      log('Response body: ${response.body}');
+      // ตรวจสอบสถานะการตอบสนอง
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        // สุ่มสำเร็จ
+        Navigator.pop(context); // ปิด Dialog
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (context) => AlertDialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20.0),
+            ),
+            titlePadding: EdgeInsets.zero,
+            title: Container(
+              padding: const EdgeInsets.all(12.0),
+              decoration: const BoxDecoration(
+                color: Colors.green,
+                borderRadius: BorderRadius.vertical(top: Radius.circular(20.0)),
+              ),
+              child: const Text(
+                'สำเร็จ',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                  fontSize: 18,
+                ),
+              ),
+            ),
+            content: const Text(
+              'สุ่มสำเร็จ',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 16,
+              ),
+            ),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context); // ปิด Dialog
+                  onRefresh(); // เรียกฟังก์ชันรีเฟรช
+                },
+                child: const Text('ตกลง'),
+              ),
+            ],
+          ),
+        );
+      } else {
+        // การตอบสนองไม่สำเร็จ
+        Navigator.pop(context); // ปิด Dialog
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (context) => AlertDialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20.0),
+            ),
+            titlePadding: EdgeInsets.zero,
+            title: Container(
+              padding: const EdgeInsets.all(12.0),
+              decoration: const BoxDecoration(
+                color: Colors.red,
+                borderRadius: BorderRadius.vertical(top: Radius.circular(20.0)),
+              ),
+              child: const Text(
+                'ข้อผิดพลาด',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                  fontSize: 18,
+                ),
+              ),
+            ),
+            content: const Text(
+              'เเอดมินได้ทำการสุ่มไปแล้วหรือสลากขายออกไม่ครบ5ใบ',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 16,
+              ),
+            ),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context); // ปิด Dialog
+                },
+                child: const Text('ตกลง'),
+              ),
+            ],
+          ),
+        );
+      }
+    } catch (e) {
+      // การจัดการข้อผิดพลาด
+      Navigator.pop(context); // ปิด Dialog
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) => AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20.0),
+          ),
+          titlePadding: EdgeInsets.zero,
+          title: Container(
+            padding: const EdgeInsets.all(12.0),
+            decoration: const BoxDecoration(
+              color: Colors.red,
+              borderRadius: BorderRadius.vertical(top: Radius.circular(20.0)),
+            ),
+            child: const Text(
+              'ข้อผิดพลาด',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+                fontSize: 18,
+              ),
+            ),
+          ),
+          content: Text(
+            'กรุณาเลือกระหว่าง สุ่มทั้งหมด หรือ สุ่มจากสลากที่ซื้อ',
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+              fontSize: 16,
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context); // ปิด Dialog
+              },
+              child: const Text('ตกลง'),
+            ),
+          ],
+        ),
+      );
+    }
   }
 }
 
@@ -440,7 +660,7 @@ class ResetButtonn extends StatelessWidget {
                   ),
                   const SizedBox(height: 20),
                   const Text(
-                    'การรีเซ็ตระบบใหม่จะทำให้ข้อมูล\nลูกค้าและสลากหายทั้งหมด\nคุณแน่ใจหรือไม่?',
+                    'การรีเซ็ตระบบใหม่จะทำให้ข้อมูล\nลูกค้าและส  ลากหายทั้งหมด\nคุณแน่ใจหรือไม่?',
                     textAlign: TextAlign.center,
                     style: TextStyle(color: Colors.red, fontSize: 14),
                   ),
@@ -451,9 +671,11 @@ class ResetButtonn extends StatelessWidget {
                     children: [
                       _buildActionButtonn(
                           Icons.close, const Color(0xFFE74C3C), onClose),
-                      _buildActionButtonn(Icons.check, const Color(0xFF2ECC71), () {
-                        // reset(context);
+                      _buildActionButtonn(Icons.check, const Color(0xFF2ECC71),
+                          () {
+                        reset(context);
                         // เพิ่มการกระทำเมื่อกดปุ่มยืนยันที่นี่
+                        Navigator.pop(context); // ปิด Dialog
                       }),
                     ],
                   ),
@@ -467,6 +689,247 @@ class ResetButtonn extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void reset(BuildContext context) async {
+    String amountString = _controller.text;
+    int? amount = int.tryParse(amountString);
+
+    if (amount == null) {
+      Navigator.pop(context); // ปิด Dialog
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) => AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20.0),
+          ),
+          titlePadding: EdgeInsets.zero,
+          title: Container(
+            padding: const EdgeInsets.all(12.0),
+            decoration: const BoxDecoration(
+              color: Colors.red,
+              borderRadius: BorderRadius.vertical(top: Radius.circular(20.0)),
+            ),
+            child: const Text(
+              'ข้อผิดพลาด',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+                fontSize: 18,
+              ),
+            ),
+          ),
+          content: const Text(
+            'กรุณากรอกจำนวนที่ถูกต้อง',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 16,
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context); // ปิด Dialog
+              },
+              child: const Text('ตกลง'),
+            ),
+          ],
+        ),
+      );
+      return;
+    }
+
+    if (amount < 100) {
+      Navigator.pop(context); // ปิด Dialog
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) => AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20.0),
+          ),
+          titlePadding: EdgeInsets.zero,
+          title: Container(
+            padding: const EdgeInsets.all(12.0),
+            decoration: const BoxDecoration(
+              color: Colors.red,
+              borderRadius: BorderRadius.vertical(top: Radius.circular(20.0)),
+            ),
+            child: const Text(
+              'ข้อผิดพลาด',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+                fontSize: 18,
+              ),
+            ),
+          ),
+          content: const Text(
+            'กรุณาใส่จำนวนที่มากว่า 100',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 16,
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context); // ปิด Dialog
+              },
+              child: const Text('ตกลง'),
+            ),
+          ],
+        ),
+      );
+      return;
+    } else {
+      try {
+        var value = await Configuration.getConfig();
+        String url = value['apiEndPoint'];
+        var response =
+            await http.get(Uri.parse('$url/admin/randomlottory/$amount'));
+        log('จำนวนสลาก $amount ใบ');
+        if (response.statusCode == 200 || response.statusCode == 201) {
+          // สุ่มสำเร็จ
+          Navigator.pop(context); // ปิด Dialog
+          showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (context) => AlertDialog(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20.0),
+              ),
+              titlePadding: EdgeInsets.zero,
+              title: Container(
+                padding: const EdgeInsets.all(12.0),
+                decoration: const BoxDecoration(
+                  color: Colors.green,
+                  borderRadius:
+                      BorderRadius.vertical(top: Radius.circular(20.0)),
+                ),
+                child: const Text(
+                  'สำเร็จ',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                    fontSize: 18,
+                  ),
+                ),
+              ),
+              content: const Text(
+                'ทำการรีเซ็ตระบบสำเร็จ',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 16,
+                ),
+              ),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context); // ปิด Dialog
+                    onRefresh(); // เรียกฟังก์ชันรีเฟรช
+                  },
+                  child: const Text('ตกลง'),
+                ),
+              ],
+            ),
+          );
+        } else {
+          // การตอบสนองไม่สำเร็จ
+          Navigator.pop(context); // ปิด Dialog
+          showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (context) => AlertDialog(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20.0),
+              ),
+              titlePadding: EdgeInsets.zero,
+              title: Container(
+                padding: const EdgeInsets.all(12.0),
+                decoration: const BoxDecoration(
+                  color: Colors.red,
+                  borderRadius:
+                      BorderRadius.vertical(top: Radius.circular(20.0)),
+                ),
+                child: const Text(
+                  'ข้อผิดพลาด',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                    fontSize: 18,
+                  ),
+                ),
+              ),
+              content: const Text(
+                'Admin ได้ทำการรีระบบไปแล้วรอออกรางวัลก่อนจึงจะรีระบบได้',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 16,
+                ),
+              ),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context); // ปิด Dialog
+                  },
+                  child: const Text('ตกลง'),
+                ),
+              ],
+            ),
+          );
+        }
+      } catch (e) {
+        // การจัดการข้อผิดพลาด
+        Navigator.pop(context); // ปิด Dialog
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (context) => AlertDialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20.0),
+            ),
+            titlePadding: EdgeInsets.zero,
+            title: Container(
+              padding: const EdgeInsets.all(12.0),
+              decoration: const BoxDecoration(
+                color: Colors.red,
+                borderRadius: BorderRadius.vertical(top: Radius.circular(20.0)),
+              ),
+              child: const Text(
+                'ข้อผิดพลาด',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                  fontSize: 18,
+                ),
+              ),
+            ),
+            content: Text(
+              'ERROR DATABASE',
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                fontSize: 16,
+              ),
+            ),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context); // ปิด Dialog
+                },
+                child: const Text('ตกลง'),
+              ),
+            ],
+          ),
+        );
+      }
+    }
   }
 
   Widget _buildActionButtonn(
