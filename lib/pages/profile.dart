@@ -25,62 +25,62 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          title: Container(
-            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-            decoration: BoxDecoration(
-              color: Colors.white, // สีพื้นหลัง
-              borderRadius: BorderRadius.circular(10), // มุมโค้ง
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.2), // เงา
-                  spreadRadius: 2,
-                  blurRadius: 4,
-                  offset: Offset(0, 2), // เงา
-                ),
-              ],
-            ),
-            child: FutureBuilder<Map<String, dynamic>>(
-              future: fetchUserProfile(),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Text(
-                    'Loading...',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w900,
-                      fontSize: 20,
-                    ),
-                  );
-                } else if (snapshot.hasError) {
-                  return const Text(
-                    'Error',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w900,
-                      fontSize: 20,
-                    ),
-                  );
-                } else if (snapshot.hasData) {
-                  final user = snapshot.data!;
-                  return Text(
-                    'Balance: ${user['balance'] ?? 'Unknown'} Baht',
-                    style: const TextStyle(
-                      fontWeight: FontWeight.w900,
-                      fontSize: 20,
-                    ),
-                  );
-                } else {
-                  return const Text(
-                    'No data',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w900,
-                      fontSize: 20,
-                    ),
-                  );
-                }
-              },
-            ),
+        title: Container(
+          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+          decoration: BoxDecoration(
+            color: Colors.white, // สีพื้นหลัง
+            borderRadius: BorderRadius.circular(10), // มุมโค้ง
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.2), // เงา
+                spreadRadius: 2,
+                blurRadius: 4,
+                offset: Offset(0, 2), // เงา
+              ),
+            ],
           ),
-          backgroundColor: const Color(0xFF453BC9),
+          child: FutureBuilder<Map<String, dynamic>>(
+            future: fetchUserProfile(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Text(
+                  'Loading...',
+                  style: TextStyle(
+                    fontWeight: FontWeight.w900,
+                    fontSize: 20,
+                  ),
+                );
+              } else if (snapshot.hasError) {
+                return const Text(
+                  'Error',
+                  style: TextStyle(
+                    fontWeight: FontWeight.w900,
+                    fontSize: 20,
+                  ),
+                );
+              } else if (snapshot.hasData) {
+                final user = snapshot.data!;
+                return Text(
+                  'Balance: ${user['balance'] ?? 'Unknown'} Baht',
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w900,
+                    fontSize: 20,
+                  ),
+                );
+              } else {
+                return const Text(
+                  'No data',
+                  style: TextStyle(
+                    fontWeight: FontWeight.w900,
+                    fontSize: 20,
+                  ),
+                );
+              }
+            },
+          ),
         ),
+        backgroundColor: const Color(0xFF453BC9),
+      ),
       body: FutureBuilder<Map<String, dynamic>>(
         future: fetchUserProfile(),
         builder: (context, snapshot) {
@@ -136,7 +136,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                     Text(
                                       user['email'] ?? 'Unknown',
                                       style: const TextStyle(
-                                        color: Color.fromARGB(255, 133, 133, 133),
+                                        color:
+                                            Color.fromARGB(255, 133, 133, 133),
                                         fontSize: 16,
                                       ),
                                     ),
@@ -179,7 +180,9 @@ class _ProfilePageState extends State<ProfilePage> {
                                             Navigator.push(
                                               context,
                                               MaterialPageRoute(
-                                                builder: (context) => EditProfilePage(uid: widget.uid),
+                                                builder: (context) =>
+                                                    EditProfilePage(
+                                                        uid: widget.uid),
                                               ),
                                             );
                                           },
@@ -251,6 +254,32 @@ class _ProfilePageState extends State<ProfilePage> {
                                         ),
                                       ],
                                     ),
+                                    const SizedBox(height: 20),
+                                    Row(
+                                      children: [
+                                        const Text(
+                                          'Password:',
+                                          style: TextStyle(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.w900,
+                                          ),
+                                        ),
+                                        const Spacer(),
+                                        Text(
+                                          user['password'] != null &&
+                                                  user['password'].isNotEmpty
+                                              ? user['password']
+                                                      .substring(0, 1) +
+                                                  '*' *
+                                                      (user['password'].length -
+                                                          1)
+                                              : 'Unknown',
+                                          style: const TextStyle(
+                                            fontSize: 20,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ],
                                 ),
                               ),
@@ -267,7 +296,8 @@ class _ProfilePageState extends State<ProfilePage> {
                       children: [
                         ElevatedButton(
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color.fromARGB(255, 252, 26, 26),
+                            backgroundColor:
+                                const Color.fromARGB(255, 252, 26, 26),
                             minimumSize: const Size(double.infinity, 50),
                           ),
                           onPressed: () {
@@ -297,7 +327,8 @@ class _ProfilePageState extends State<ProfilePage> {
       ),
     );
   }
-   Future<Map<String, dynamic>> fetchUserProfile() async {
+
+  Future<Map<String, dynamic>> fetchUserProfile() async {
     final response = await http.get(
       Uri.parse('https://nodejs-wfjd.onrender.com/users/${widget.uid}'),
     );
