@@ -6,6 +6,7 @@ import 'package:lotto_app/models/response/lottoGetRes.dart';
 import 'package:lotto_app/pages/mylotto.dart';
 import 'package:lotto_app/pages/profile.dart';
 import 'package:http/http.dart' as http;
+import 'package:pinput/pinput.dart';
 
 class HomePage extends StatefulWidget {
   int uid = 0;
@@ -17,9 +18,11 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePage extends State<HomePage> {
+  final TextEditingController _searchController = TextEditingController();
   String url = '';
   late Future<List<LottoGetRes>> loadData;
   late Future<Map<String, dynamic>> _userProfile;
+  Future<List<LottoGetRes>>? _searchResults;
 
   @override
   void initState() {
@@ -132,47 +135,49 @@ class _HomePage extends State<HomePage> {
               padding: const EdgeInsets.all(20.0),
               child: Column(
                 children: [
-                  TextField(
-                    decoration: InputDecoration(
-                      hintText: 'Search...',
-                      suffixIcon: const Icon(Icons.search),
-                      filled: true,
-                      fillColor: const Color.fromARGB(255, 230, 230, 230),
-                      border: InputBorder.none,
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(50.0),
-                        borderSide: BorderSide.none,
+                  Pinput(
+                    controller: _searchController,
+                    defaultPinTheme: PinTheme(
+                      height: 40,
+                      width: 40,
+                      textStyle: const TextStyle(fontSize: 20, color: Colors.black),
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.black, width: 1.5),
+                        borderRadius: BorderRadius.circular(10),
+                        color: const Color.fromARGB(255, 230, 230, 230), // Background color
+                      ),
+                    ),
+                    length: 6, // Adjust based on your needs
+                    showCursor: true,
+                  ),
+                  const SizedBox(height: 10),
+                  ElevatedButton(
+                    onPressed: _searchLotto,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF453BC9),
+                      padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 6.0),
+                      minimumSize: const Size.fromHeight(40),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                    ),
+                    child: const Text(
+                      'Search',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
                       ),
                     ),
                   ),
-                  const Align(
-                    alignment: Alignment.centerLeft,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'Lucky Number',
-                          style: TextStyle(
-                            fontWeight: FontWeight.w900,
-                            color: Color(0xFF453BC9),
-                            fontSize: 20,
-                          ),
-                        ),
-                     
-                      ],
-                    ),
-                  ),
+                  const SizedBox(height: 20),
                   FutureBuilder<List<LottoGetRes>>(
                     future: loadData,
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
-                        // ขณะกำลังดึงข้อมูล
                         return const Center(child: CircularProgressIndicator());
                       } else if (snapshot.hasError) {
-                        // หากมีข้อผิดพลาด
                         return Center(child: Text('Error: ${snapshot.error}'));
                       } else if (snapshot.hasData) {
-                        // เมื่อดึงข้อมูลเสร็จสิ้น
                         var lottoList = snapshot.data!;
                         return SizedBox(
                           // กำหนดความสูงของ ListView
@@ -410,7 +415,7 @@ class _HomePage extends State<HomePage> {
       ),
     );
   }
-Future<void> _buyLotto(int lotteryId) async {
+  Future<void> _buyLotto(int lotteryId) async {
   final url = 'https://nodejs-wfjd.onrender.com/lotto/userbuylotto';
   final response = await http.put(
     Uri.parse(url),
@@ -427,33 +432,49 @@ Future<void> _buyLotto(int lotteryId) async {
   print('Response body: ${response.body}');
 
   if (response.statusCode == 200) {
-    final data = json.decode(response.body);
-    final message = data['message'];
-    final newBalance = data['newBalance'];
+    try {
+      // final data = json.decode(response.body);
+      // final message = data['message'];
+      // final newBalance = data['newBalance'];
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Purchase successful! New balance: $newBalance Baht')),
-    );
+      // ScaffoldMessenger.of(context).showSnackBar(
+      //   SnackBar(content: Text('Purchase successful! New balance: $newBalance Baht')),
+      // );
 
-    setState(() {
-      loadData = loadDataAsync(); // Refresh the lottery data
-      _userProfile = fetchUserProfile(); // Refresh the user profile data
-    });
+      setState(() {
+        loadData = loadDataAsync(); // Refresh the lottery data
+        _userProfile = fetchUserProfile(); // Refresh the user profile data
+      });
+    } catch (e) {
+      // Handle JSON decoding errors
+      // ScaffoldMessenger.of(context).showSnackBar(
+      //   SnackBar(content: Text('Failed to parse response: $e')),
+      // );
+      log('Error occurred: $e');
+    }
   } else {
-    // Extract and log the error message from the response body
-    final errorData = json.decode(response.body);
-    final errorMessage = errorData['message'] ?? 'An unknown error occurred';
+    try {
+      final errorData = json.decode(response.body);
+      final errorMessage = errorData['message'] ?? 'An unknown error occurred';
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Failed to purchase lottery ticket: $errorMessage')),
-    );
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to purchase lottery ticket: $errorMessage')),
+      );
+    } catch (e) {
+      // Handle errors in the error response
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error parsing error response: ${response.body}')),
+      );
+    }
   }
 }
+
+
   Future<List<LottoGetRes>> loadDataAsync() async {
     var value = await Configuration.getConfig();
     String url = value['apiEndPoint'];
 
-    var response = await http.get(Uri.parse('$url/lotto'));
+    var response = await http.get(Uri.parse('https://nodejs-wfjd.onrender.com/lotto/'));
     if (response.statusCode == 200) {
       return lottoGetResFromJson(response.body);
     } else {
@@ -478,6 +499,39 @@ Future<void> _buyLotto(int lotteryId) async {
       throw Exception('Failed to load user profile');
     }
   }
+  Future<void> _searchLotto() async {
+  final response = await http.post(
+    Uri.parse('https://nodejs-wfjd.onrender.com/lotto/searchlotto'),
+    headers: {'Content-Type': 'application/json'},
+    body: jsonEncode({'number_lotto': _searchController.text}),
+  );
+
+  if (response.statusCode == 200) {
+    try {
+      final List<dynamic> data = jsonDecode(response.body);
+      setState(() {
+        _searchResults = Future.value(data.map((item) => LottoGetRes.fromJson(item)).toList());
+      });
+    } catch (e) {
+      // Handle JSON parsing errors
+      setState(() {
+        _searchResults = Future.error('Unexpected response format.');
+      });
+    }
+  } else if (response.statusCode == 400) {
+    // Handle specific client-side error
+    setState(() {
+      _searchResults = Future.error('Bad request: ${response.body}');
+    });
+  } else {
+    // Handle other errors
+    setState(() {
+      _searchResults = Future.error('Error: ${response.statusCode} - ${response.body}');
+    });
+  }
+}
+
+
   void _showConfirmationDialog(int lotteryId) {
   showDialog(
     context: context,
