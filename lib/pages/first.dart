@@ -64,25 +64,6 @@ class FirstPage extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 30), // Space between buttons
-
-              // Guest button
-              ElevatedButton(
-                onPressed: () {
-                  // Handle guest action
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color.fromARGB(255, 83, 83, 83),
-                  fixedSize: Size(250, 50), // Set button width and height
-                ),
-                child: const Text(
-                  'Guest',
-                  style: TextStyle(
-                    fontWeight: FontWeight.w800, // Set font weight to extra bold
-                    fontSize: 24, // Set the font size
-                    color: Colors.white,
-                  ),
-                ),
-              ),
             ],
           ),
         ),
