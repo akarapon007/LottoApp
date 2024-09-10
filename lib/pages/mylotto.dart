@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:lotto_app/config/config.dart';
 import 'package:lotto_app/models/response/lottoGetRes.dart';
 import 'package:lotto_app/models/response/user_idx_res.dart';
+import 'package:lotto_app/pages/profile.dart';
 
 class Mylotto extends StatefulWidget {
   final int uid;
@@ -29,21 +30,104 @@ class _MylottoState extends State<Mylotto> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color(0xFF453BC9),
-        title: const Text(
-          'My Lotto',
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+          title: Container(
+            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+            decoration: BoxDecoration(
+              color: Colors.white, // สีพื้นหลัง
+              borderRadius: BorderRadius.circular(10), // มุมโค้ง
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.2), // เงา
+                  spreadRadius: 2,
+                  blurRadius: 4,
+                  offset: Offset(0, 2), // เงา
+                ),
+              ],
+            ),
+            child: FutureBuilder<Map<String, dynamic>>(
+            future: fetchUserProfile(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(
+                  child: Text(
+                    'Loading...',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w900,
+                      fontSize: 22, // Increased font size for better visibility
+                      color: Color.fromARGB(255, 0, 0, 0), // Changed text color to blue
+                      letterSpacing:
+                          1.2, // Added letter spacing for a cleaner look
+                      shadows: [
+                        Shadow(
+                          offset: Offset(1, 1), // Shadow offset
+                          // color: Colors.black.withOpacity(0.5), // Shadow color
+                          blurRadius: 2, // Shadow blur radius
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              } else if (snapshot.hasError) {
+                return const Center(
+                  child: Text(
+                    'Error',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w900,
+                      fontSize: 22, // Increased font size for better visibility
+                      color: Color.fromARGB(255, 0, 0, 0), // Changed text color to blue
+                      letterSpacing:
+                          1.2, // Added letter spacing for a cleaner look
+                      shadows: [
+                        Shadow(
+                          offset: Offset(1, 1), // Shadow offset
+                          // color: Colors.black.withOpacity(0.5), // Shadow color
+                          blurRadius: 2, // Shadow blur radius
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              } else if (snapshot.hasData) {
+                final user = snapshot.data!;
+                return Center(
+                  child: Text(
+                    'Balance : ${user['balance'] ?? 'Unknown'} ฿',
+                    style: const TextStyle(
+                      fontWeight: FontWeight.w900,
+                      fontSize: 22, // Increased font size for better visibility
+                      color: Color.fromARGB(
+                          255, 47, 188, 64), // Changed text color to blue
+                      letterSpacing:
+                          1.2, // Added letter spacing for a cleaner look
+                      shadows: [
+                        Shadow(
+                          offset: Offset(1, 1), // Shadow offset
+                          // color: Colors.black.withOpacity(0.5), // Shadow color
+                          blurRadius: 2, // Shadow blur radius
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              } else {
+                return const Center(
+                  child: Text(
+                    'No data',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w900,
+                      fontSize: 20,
+                    ),
+                  ),
+                );
+              }
+            },
+          ),
+          ),
+          backgroundColor: const Color(0xFF453BC9),
+          automaticallyImplyLeading: false,
         ),
-        centerTitle: true,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-        toolbarHeight: 120.0,
-      ),
       body: isLoading
+      
           ? const Center(child: CircularProgressIndicator())
           : lottoGetResUser.isEmpty
               ? const Center(
@@ -57,6 +141,49 @@ class _MylottoState extends State<Mylotto> {
                   ),
                 )
               : buildLottoList(),
+              bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'Profile',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.shopping_bag),
+            label: 'My Lotto',
+          ),
+        ],
+        selectedItemColor: const Color(0xFF453BC9),
+        unselectedItemColor: Colors.grey,
+        backgroundColor: Colors.white,
+        onTap: (int index) {
+          if (index == 1) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ProfilePage(
+                  uid: widget.uid,
+                ),
+              ),
+            );
+          } else if (index == 2) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => Mylotto(
+                  uid: widget.uid,
+                ),
+              ),
+            );
+          } else {
+            print("Selected tab: $index");
+          }
+        },
+      ),
     );
   }
 
@@ -243,6 +370,7 @@ class _MylottoState extends State<Mylotto> {
         );
       },
     );
+    
   }
 
   Future<void> fetchLottoData() async {
@@ -273,6 +401,24 @@ class _MylottoState extends State<Mylotto> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Error fetching lotto data: $e')),
       );
+    }
+  }
+  Future<Map<String, dynamic>> fetchUserProfile() async {
+    final response = await http.get(
+      Uri.parse('https://nodejs-wfjd.onrender.com/users/${widget.uid}'),
+    );
+
+    if (response.statusCode == 200) {
+      final List<dynamic> userList = json.decode(response.body);
+      if (userList.isNotEmpty) {
+        return userList[0];
+      } else {
+        throw Exception('User not found');
+      }
+    } else {
+      print('Failed to load profile, status code: ${response.statusCode}');
+      print('Response body: ${response.body}');
+      throw Exception('Failed to load user profile');
     }
   }
 }
