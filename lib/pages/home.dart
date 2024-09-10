@@ -51,44 +51,83 @@ class _HomePage extends State<HomePage> {
               ],
             ),
             child: FutureBuilder<Map<String, dynamic>>(
-              future: fetchUserProfile(),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Text(
+            future: fetchUserProfile(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(
+                  child: Text(
                     'Loading...',
                     style: TextStyle(
                       fontWeight: FontWeight.w900,
-                      fontSize: 20,
+                      fontSize: 22, // Increased font size for better visibility
+                      color: Color.fromARGB(255, 0, 0, 0), // Changed text color to blue
+                      letterSpacing:
+                          1.2, // Added letter spacing for a cleaner look
+                      shadows: [
+                        Shadow(
+                          offset: Offset(1, 1), // Shadow offset
+                          // color: Colors.black.withOpacity(0.5), // Shadow color
+                          blurRadius: 2, // Shadow blur radius
+                        ),
+                      ],
                     ),
-                  );
-                } else if (snapshot.hasError) {
-                  return const Text(
+                  ),
+                );
+              } else if (snapshot.hasError) {
+                return const Center(
+                  child: Text(
                     'Error',
                     style: TextStyle(
                       fontWeight: FontWeight.w900,
-                      fontSize: 20,
+                      fontSize: 22, // Increased font size for better visibility
+                      color: Color.fromARGB(255, 0, 0, 0), // Changed text color to blue
+                      letterSpacing:
+                          1.2, // Added letter spacing for a cleaner look
+                      shadows: [
+                        Shadow(
+                          offset: Offset(1, 1), // Shadow offset
+                          // color: Colors.black.withOpacity(0.5), // Shadow color
+                          blurRadius: 2, // Shadow blur radius
+                        ),
+                      ],
                     ),
-                  );
-                } else if (snapshot.hasData) {
-                  final user = snapshot.data!;
-                  return Text(
-                    'Balance: ${user['balance'] ?? 'Unknown'} Baht',
+                  ),
+                );
+              } else if (snapshot.hasData) {
+                final user = snapshot.data!;
+                return Center(
+                  child: Text(
+                    'Balance : ${user['balance'] ?? 'Unknown'} ฿',
                     style: const TextStyle(
                       fontWeight: FontWeight.w900,
-                      fontSize: 20,
+                      fontSize: 22, // Increased font size for better visibility
+                      color: Color.fromARGB(
+                          255, 47, 188, 64), // Changed text color to blue
+                      letterSpacing:
+                          1.2, // Added letter spacing for a cleaner look
+                      shadows: [
+                        Shadow(
+                          offset: Offset(1, 1), // Shadow offset
+                          // color: Colors.black.withOpacity(0.5), // Shadow color
+                          blurRadius: 2, // Shadow blur radius
+                        ),
+                      ],
                     ),
-                  );
-                } else {
-                  return const Text(
+                  ),
+                );
+              } else {
+                return const Center(
+                  child: Text(
                     'No data',
                     style: TextStyle(
                       fontWeight: FontWeight.w900,
                       fontSize: 20,
                     ),
-                  );
-                }
-              },
-            ),
+                  ),
+                );
+              }
+            },
+          ),
           ),
           backgroundColor: const Color(0xFF453BC9),
           automaticallyImplyLeading: false,

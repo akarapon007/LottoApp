@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:lotto_app/pages/first.dart';
 import 'package:lotto_app/pages/editprofile.dart';
+import 'package:lotto_app/pages/home.dart';
+import 'package:lotto_app/pages/mylotto.dart';
 
 class ProfilePage extends StatefulWidget {
   int uid = 0;
@@ -43,42 +45,82 @@ class _ProfilePageState extends State<ProfilePage> {
             future: fetchUserProfile(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Text(
-                  'Loading...',
-                  style: TextStyle(
-                    fontWeight: FontWeight.w900,
-                    fontSize: 20,
+                return const Center(
+                  child: Text(
+                    'Loading...',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w900,
+                      fontSize: 22, // Increased font size for better visibility
+                      color: Color.fromARGB(255, 0, 0, 0), // Changed text color to blue
+                      letterSpacing:
+                          1.2, // Added letter spacing for a cleaner look
+                      shadows: [
+                        Shadow(
+                          offset: Offset(1, 1), // Shadow offset
+                          // color: Colors.black.withOpacity(0.5), // Shadow color
+                          blurRadius: 2, // Shadow blur radius
+                        ),
+                      ],
+                    ),
                   ),
                 );
               } else if (snapshot.hasError) {
-                return const Text(
-                  'Error',
-                  style: TextStyle(
-                    fontWeight: FontWeight.w900,
-                    fontSize: 20,
+                return const Center(
+                  child: Text(
+                    'Error',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w900,
+                      fontSize: 22, // Increased font size for better visibility
+                      color: Color.fromARGB(255, 0, 0, 0), // Changed text color to blue
+                      letterSpacing:
+                          1.2, // Added letter spacing for a cleaner look
+                      shadows: [
+                        Shadow(
+                          offset: Offset(1, 1), // Shadow offset
+                          // color: Colors.black.withOpacity(0.5), // Shadow color
+                          blurRadius: 2, // Shadow blur radius
+                        ),
+                      ],
+                    ),
                   ),
                 );
               } else if (snapshot.hasData) {
                 final user = snapshot.data!;
-                return Text(
-                  'Balance: ${user['balance'] ?? 'Unknown'} Baht',
-                  style: const TextStyle(
-                    fontWeight: FontWeight.w900,
-                    fontSize: 20,
+                return Center(
+                  child: Text(
+                    'Balance : ${user['balance'] ?? 'Unknown'} ฿',
+                    style: const TextStyle(
+                      fontWeight: FontWeight.w900,
+                      fontSize: 22, // Increased font size for better visibility
+                      color: Color.fromARGB(
+                          255, 47, 188, 64), // Changed text color to blue
+                      letterSpacing:
+                          1.2, // Added letter spacing for a cleaner look
+                      shadows: [
+                        Shadow(
+                          offset: Offset(1, 1), // Shadow offset
+                          // color: Colors.black.withOpacity(0.5), // Shadow color
+                          blurRadius: 2, // Shadow blur radius
+                        ),
+                      ],
+                    ),
                   ),
                 );
               } else {
-                return const Text(
-                  'No data',
-                  style: TextStyle(
-                    fontWeight: FontWeight.w900,
-                    fontSize: 20,
+                return const Center(
+                  child: Text(
+                    'No data',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w900,
+                      fontSize: 20,
+                    ),
                   ),
                 );
               }
             },
           ),
         ),
+        automaticallyImplyLeading: false,
         backgroundColor: const Color(0xFF453BC9),
       ),
       body: FutureBuilder<Map<String, dynamic>>(
@@ -323,6 +365,49 @@ class _ProfilePageState extends State<ProfilePage> {
                 ],
               ),
             );
+          }
+        },
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'Profile',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.shopping_bag),
+            label: 'My Lotto',
+          ),
+        ],
+        selectedItemColor: const Color(0xFF453BC9),
+        unselectedItemColor: Colors.grey,
+        backgroundColor: Colors.white,
+        onTap: (int index) {
+          if (index == 0) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => HomePage(
+                  uid: widget.uid,
+                ),
+              ),
+            );
+          } else if (index == 2) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => Mylotto(
+                  uid: widget.uid,
+                ),
+              ),
+            );
+          } else {
+            print("Selected tab: $index");
           }
         },
       ),
