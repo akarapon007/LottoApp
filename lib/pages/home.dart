@@ -417,60 +417,45 @@ class _HomePage extends State<HomePage> {
     );
   }
   Future<void> _buyLotto(int lotteryId) async {
-  final url = 'https://nodejs-wfjd.onrender.com/lotto/userbuylotto';
-  final response = await http.put(
-    Uri.parse(url),
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: json.encode({
-      'uid': widget.uid,
-      'lottery_id': lotteryId,
-    }),
-  );
+    final url = 'https://nodejs-wfjd.onrender.com/lotto/userbuylotto';
+    final response = await http.put(
+      Uri.parse(url),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: json.encode({
+        'uid': widget.uid,
+        'lottery_id': lotteryId,
+      }),
+    );
 
-  print('Response status: ${response.statusCode}');
-  print('Response body: ${response.body}');
+    print('Response status: ${response.statusCode}');
+    print('Response body: ${response.body}');
 
-  if (response.statusCode == 200) {
-    try {
-      // final data = json.decode(response.body);
-      // final message = data['message'];
-      // final newBalance = data['newBalance'];
+    if (response.statusCode == 200) {
+      try {
+        setState(() {
+          _searchResults = loadDataAsync();
+          _userProfile = fetchUserProfile(); 
+        });
+      } catch (e) {
+        log('Error occurred: $e');
+      }
+    } else {
+      try {
+        final errorData = json.decode(response.body);
+        final errorMessage = errorData['message'] ?? 'An unknown error occurred';
 
-      // ScaffoldMessenger.of(context).showSnackBar(
-      //   SnackBar(content: Text('Purchase successful! New balance: $newBalance Baht')),
-      // );
-
-      setState(() {
-        loadData = loadDataAsync(); // Refresh the lottery data
-        _userProfile = fetchUserProfile(); // Refresh the user profile data
-      });
-    } catch (e) {
-      // Handle JSON decoding errors
-      // ScaffoldMessenger.of(context).showSnackBar(
-      //   SnackBar(content: Text('Failed to parse response: $e')),
-      // );
-      log('Error occurred: $e');
-    }
-  } else {
-    try {
-      final errorData = json.decode(response.body);
-      final errorMessage = errorData['message'] ?? 'An unknown error occurred';
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to purchase lottery ticket: $errorMessage')),
-      );
-    } catch (e) {
-      // Handle errors in the error response
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error parsing error response: ${response.body}')),
-      );
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Failed to purchase lottery ticket: $errorMessage')),
+        );
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error parsing error response: ${response.body}')),
+        );
+      }
     }
   }
-}
-
-
   Future<List<LottoGetRes>> loadDataAsync() async {
     var value = await Configuration.getConfig();
     String url = value['apiEndPoint'];
