@@ -334,7 +334,7 @@ class _HomePage extends State<HomePage> {
                                           right: 10,
                                           child: ElevatedButton(
                                             onPressed: () {
-                                              _showConfirmationDialog(lotto.lottery_id);
+                                              _showConfirmationDialog(lotto.lottery_id, lotto.number);
                                             },
                                             style: ElevatedButton.styleFrom(
                                               backgroundColor: const Color.fromARGB(255, 3, 209, 72),
@@ -583,26 +583,55 @@ Future<void> _searchLotto() async {
 }
 
 
-  void _showConfirmationDialog(int lotteryId) {
+  void _showConfirmationDialog(int lotteryId, String lotteryNumber) {
   showDialog(
     context: context,
     builder: (BuildContext context) {
       return AlertDialog(
-        title: const Text('Confirm Purchase'),
-        content: const Text('Do you want to buy this lottery ticket?'),
+        title: const Text(
+          'Confirm Purchase',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: Colors.black87,
+          ),
+        ),
+        content: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Text(
+            'Do you want to buy the lottery ticket with number $lotteryNumber?',
+            style: const TextStyle(
+              fontSize: 16.0,
+              color: Colors.black54,
+            ),
+          ),
+        ),
+        backgroundColor: Colors.white,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15.0),
+        ),
         actions: [
           TextButton(
             onPressed: () {
               Navigator.of(context).pop(); // Close the dialog
             },
-            child: const Text('Cancel'),
+            child: const Text(
+              'Cancel',
+              style: TextStyle(
+                color: Colors.red,
+              ),
+            ),
           ),
           TextButton(
             onPressed: () {
               Navigator.of(context).pop(); // Close the dialog
               _buyLotto(lotteryId); // Proceed with the purchase and refresh the page
             },
-            child: const Text('Buy'),
+            child: const Text(
+              'Buy',
+              style: TextStyle(
+                color: Colors.green,
+              ),
+            ),
           ),
         ],
       );
