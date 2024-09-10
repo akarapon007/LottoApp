@@ -171,7 +171,8 @@ class _HomePage extends State<HomePage> {
                   ),
                   const SizedBox(height: 20),
                   FutureBuilder<List<LottoGetRes>>(
-                    future: loadData,
+                    // future: loadData,
+                    future: _searchResults,
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return const Center(child: CircularProgressIndicator());
@@ -499,35 +500,100 @@ class _HomePage extends State<HomePage> {
       throw Exception('Failed to load user profile');
     }
   }
-  Future<void> _searchLotto() async {
-  final response = await http.post(
-    Uri.parse('https://nodejs-wfjd.onrender.com/lotto/searchlotto'),
-    headers: {'Content-Type': 'application/json'},
-    body: jsonEncode({'number_lotto': _searchController.text}),
-  );
+//   Future<void> _searchLotto() async {
+//   final response = await http.post(
+//     Uri.parse('https://nodejs-wfjd.onrender.com/lotto/searchlotto'),
+//     headers: {'Content-Type': 'application/json'},
+//     body: jsonEncode({'number_lotto': _searchController.text}),
+//   );
 
-  if (response.statusCode == 200) {
-    try {
-      final List<dynamic> data = jsonDecode(response.body);
+//   if (response.statusCode == 200) {
+//     try {
+//       final List<dynamic> data = jsonDecode(response.body);
+//       setState(() {
+//         _searchResults = Future.value(data.map((item) => LottoGetRes.fromJson(item)).toList());
+//       });
+//     } catch (e) {
+//       // Handle JSON parsing errors
+//       setState(() {
+//         _searchResults = Future.error('Unexpected response format.');
+//       });
+//     }
+//   } else if (response.statusCode == 400) {
+//     // Handle specific client-side error
+//     setState(() {
+//       _searchResults = Future.error('Bad request: ${response.body}');
+//     });
+//   } else {
+//     // Handle other errors
+//     setState(() {
+//       _searchResults = Future.error('Error: ${response.statusCode} - ${response.body}');
+//     });
+//   }
+// }
+Future<void> _searchLotto() async {
+  // Check if the search field is empty
+  if (_searchController.text.isEmpty) {
+    // If empty, fetch all lotto items with uid being null
+    final response = await http.get(
+      Uri.parse('https://nodejs-wfjd.onrender.com/lotto/'),
+      headers: {'Content-Type': 'application/json'},
+    );
+
+    if (response.statusCode == 200) {
+      try {
+        final List<dynamic> data = jsonDecode(response.body);
+        setState(() {
+          _searchResults = Future.value(data.map((item) => LottoGetRes.fromJson(item)).toList());
+        });
+      } catch (e) {
+        // Handle JSON parsing errors
+        setState(() {
+          _searchResults = Future.error('Unexpected response format.');
+        });
+      }
+    } else if (response.statusCode == 400) {
+      // Handle specific client-side error
       setState(() {
-        _searchResults = Future.value(data.map((item) => LottoGetRes.fromJson(item)).toList());
+        _searchResults = Future.error('Bad request: ${response.body}');
       });
-    } catch (e) {
-      // Handle JSON parsing errors
+    } else {
+      // Handle other errors
       setState(() {
-        _searchResults = Future.error('Unexpected response format.');
+        _searchResults = Future.error('Error: ${response.statusCode} - ${response.body}');
       });
     }
-  } else if (response.statusCode == 400) {
-    // Handle specific client-side error
-    setState(() {
-      _searchResults = Future.error('Bad request: ${response.body}');
-    });
   } else {
-    // Handle other errors
-    setState(() {
-      _searchResults = Future.error('Error: ${response.statusCode} - ${response.body}');
-    });
+    // Perform search with the entered number
+    final response = await http.post(
+      Uri.parse('https://nodejs-wfjd.onrender.com/lotto/searchlotto'),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({'number_lotto': _searchController.text}),
+    );
+
+    if (response.statusCode == 200) {
+      try {
+        final List<dynamic> data = jsonDecode(response.body);
+        setState(() {
+          _searchResults = Future.value(data.map((item) => LottoGetRes.fromJson(item)).toList());
+        });
+      } catch (e) {
+        // Handle JSON parsing errors
+        setState(() {
+          _searchResults = Future.error('Unexpected response format.');
+        });
+      }
+    } else if (response.statusCode == 400) {
+      // Handle specific client-side error
+      setState(() {
+        _searchResults = Future.error('Bad request: ${response.body}');
+      });
+    } else {
+      // Handle other errors
+      setState(() {
+        _searchResults = Future.error('Error: ${response.statusCode} - ${response.body}');
+      });
+    }
   }
 }
 
