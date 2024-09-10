@@ -256,31 +256,31 @@ class _ProfilePageState extends State<ProfilePage> {
                                       ],
                                     ),
                                     const SizedBox(height: 20),
-                                    Row(
-                                      children: [
-                                        const Text(
-                                          'Password:',
-                                          style: TextStyle(
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.w900,
-                                          ),
-                                        ),
-                                        const Spacer(),
-                                        Text(
-                                          user['password'] != null &&
-                                                  user['password'].isNotEmpty
-                                              ? user['password']
-                                                      .substring(0, 1) +
-                                                  '*' *
-                                                      (user['password'].length -
-                                                          1)
-                                              : 'Unknown',
-                                          style: const TextStyle(
-                                            fontSize: 20,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
+                                    // Row(
+                                    //   children: [
+                                    //     const Text(
+                                    //       'Password:',
+                                    //       style: TextStyle(
+                                    //         fontSize: 20,
+                                    //         fontWeight: FontWeight.w900,
+                                    //       ),
+                                    //     ),
+                                    //     const Spacer(),
+                                    //     Text(
+                                    //       user['password'] != null &&
+                                    //               user['password'].isNotEmpty
+                                    //           ? user['password']
+                                    //                   .substring(0, 1) +
+                                    //               '*' *
+                                    //                   (user['password'].length -
+                                    //                       1)
+                                    //           : 'Unknown',
+                                    //       style: const TextStyle(
+                                    //         fontSize: 20,
+                                    //       ),
+                                    //     ),
+                                    //   ],
+                                    // ),
                                   ],
                                 ),
                               ),
