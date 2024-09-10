@@ -675,7 +675,6 @@ class ResetButtonn extends StatelessWidget {
                           () {
                         reset(context);
                         // เพิ่มการกระทำเมื่อกดปุ่มยืนยันที่นี่
-                        Navigator.pop(context); // ปิด Dialog
                       }),
                     ],
                   ),
@@ -695,7 +694,7 @@ class ResetButtonn extends StatelessWidget {
     String amountString = _controller.text;
     int? amount = int.tryParse(amountString);
 
-    if (amount == null) {
+    if (amount == null || amount < 100) {
       Navigator.pop(context); // ปิด Dialog
       showDialog(
         context: context,
@@ -721,10 +720,12 @@ class ResetButtonn extends StatelessWidget {
               ),
             ),
           ),
-          content: const Text(
-            'กรุณากรอกจำนวนที่ถูกต้อง',
+          content: Text(
+            amount == null
+                ? 'กรุณากรอกจำนวนที่ถูกต้อง'
+                : 'กรุณาใส่จำนวนที่มากว่า 100',
             textAlign: TextAlign.center,
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 16,
             ),
           ),
@@ -741,152 +742,75 @@ class ResetButtonn extends StatelessWidget {
       return;
     }
 
-    if (amount < 100) {
-      Navigator.pop(context); // ปิด Dialog
-      showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (context) => AlertDialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20.0),
-          ),
-          titlePadding: EdgeInsets.zero,
-          title: Container(
-            padding: const EdgeInsets.all(12.0),
-            decoration: const BoxDecoration(
-              color: Colors.red,
-              borderRadius: BorderRadius.vertical(top: Radius.circular(20.0)),
-            ),
-            child: const Text(
-              'ข้อผิดพลาด',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-                fontSize: 18,
-              ),
-            ),
-          ),
-          content: const Text(
-            'กรุณาใส่จำนวนที่มากว่า 100',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 16,
-            ),
-          ),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context); // ปิด Dialog
-              },
-              child: const Text('ตกลง'),
-            ),
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => AlertDialog(
+        content: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: const <Widget>[
+            CircularProgressIndicator(),
+            SizedBox(width: 20),
+            Text("กำลังรีเซ็ตระบบ...")
           ],
         ),
-      );
-      return;
-    } else {
-      try {
-        var value = await Configuration.getConfig();
-        String url = value['apiEndPoint'];
-        var response =
-            await http.get(Uri.parse('$url/admin/randomlottory/$amount'));
-        log('จำนวนสลาก $amount ใบ');
-        if (response.statusCode == 200 || response.statusCode == 201) {
-          // สุ่มสำเร็จ
-          Navigator.pop(context); // ปิด Dialog
-          showDialog(
-            context: context,
-            barrierDismissible: false,
-            builder: (context) => AlertDialog(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20.0),
+      ),
+    );
+
+    try {
+      var value = await Configuration.getConfig();
+      String url = value['apiEndPoint'];
+      var response =
+          await http.get(Uri.parse('$url/admin/randomlottory/$amount'));
+      log('จำนวนสลาก $amount ใบ');
+      Navigator.pop(context); // ปิด Dialog
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        // สุ่มสำเร็จ
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (context) => AlertDialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20.0),
+            ),
+            titlePadding: EdgeInsets.zero,
+            title: Container(
+              padding: const EdgeInsets.all(12.0),
+              decoration: const BoxDecoration(
+                color: Colors.green,
+                borderRadius: BorderRadius.vertical(top: Radius.circular(20.0)),
               ),
-              titlePadding: EdgeInsets.zero,
-              title: Container(
-                padding: const EdgeInsets.all(12.0),
-                decoration: const BoxDecoration(
-                  color: Colors.green,
-                  borderRadius:
-                      BorderRadius.vertical(top: Radius.circular(20.0)),
-                ),
-                child: const Text(
-                  'สำเร็จ',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                    fontSize: 18,
-                  ),
-                ),
-              ),
-              content: const Text(
-                'ทำการรีเซ็ตระบบสำเร็จ',
+              child: const Text(
+                'สำเร็จ',
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                  fontSize: 18,
                 ),
               ),
-              actions: <Widget>[
-                TextButton(
-                  onPressed: () {
-                    Navigator.pop(context); // ปิด Dialog
-                    onRefresh(); // เรียกฟังก์ชันรีเฟรช
-                  },
-                  child: const Text('ตกลง'),
-                ),
-              ],
             ),
-          );
-        } else {
-          // การตอบสนองไม่สำเร็จ
-          Navigator.pop(context); // ปิด Dialog
-          showDialog(
-            context: context,
-            barrierDismissible: false,
-            builder: (context) => AlertDialog(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20.0),
+            content: const Text(
+              'ทำการรีเซ็ตระบบสำเร็จ',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 16,
               ),
-              titlePadding: EdgeInsets.zero,
-              title: Container(
-                padding: const EdgeInsets.all(12.0),
-                decoration: const BoxDecoration(
-                  color: Colors.red,
-                  borderRadius:
-                      BorderRadius.vertical(top: Radius.circular(20.0)),
-                ),
-                child: const Text(
-                  'ข้อผิดพลาด',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                    fontSize: 18,
-                  ),
-                ),
-              ),
-              content: const Text(
-                'Admin ได้ทำการรีระบบไปแล้วรอออกรางวัลก่อนจึงจะรีระบบได้',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 16,
-                ),
-              ),
-              actions: <Widget>[
-                TextButton(
-                  onPressed: () {
-                    Navigator.pop(context); // ปิด Dialog
-                  },
-                  child: const Text('ตกลง'),
-                ),
-              ],
             ),
-          );
-        }
-      } catch (e) {
-        // การจัดการข้อผิดพลาด
-        Navigator.pop(context); // ปิด Dialog
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context); // ปิด Dialog
+                  onRefresh(); // เรียกฟังก์ชันรีเฟรช
+                },
+                child: const Text('ตกลง'),
+              ),
+            ],
+          ),
+        );
+      } else {
+        // การตอบสนองไม่สำเร็จ
         showDialog(
           context: context,
           barrierDismissible: false,
@@ -911,10 +835,10 @@ class ResetButtonn extends StatelessWidget {
                 ),
               ),
             ),
-            content: Text(
-              'ERROR DATABASE',
+            content: const Text(
+              'Admin ได้ทำการรีระบบไปแล้วรอออกรางวัลก่อนจึงจะรีระบบได้',
               textAlign: TextAlign.center,
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 16,
               ),
             ),
@@ -929,6 +853,50 @@ class ResetButtonn extends StatelessWidget {
           ),
         );
       }
+    } catch (e) {
+      // การจัดการข้อผิดพลาด
+      Navigator.pop(context); // ปิด Dialog
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) => AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20.0),
+          ),
+          titlePadding: EdgeInsets.zero,
+          title: Container(
+            padding: const EdgeInsets.all(12.0),
+            decoration: const BoxDecoration(
+              color: Colors.red,
+              borderRadius: BorderRadius.vertical(top: Radius.circular(20.0)),
+            ),
+            child: const Text(
+              'ข้อผิดพลาด',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+                fontSize: 18,
+              ),
+            ),
+          ),
+          content: Text(
+            'ERROR DATABASE',
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+              fontSize: 16,
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context); // ปิด Dialog
+              },
+              child: const Text('ตกลง'),
+            ),
+          ],
+        ),
+      );
     }
   }
 
