@@ -6,6 +6,7 @@ import 'package:lotto_app/config/config.dart';
 import 'package:lotto_app/models/response/lottoGetRes.dart';
 import 'package:lotto_app/models/response/user_idx_res.dart';
 import 'package:lotto_app/pages/profile.dart';
+import 'package:lotto_app/pages/home.dart';
 
 class Mylotto extends StatefulWidget {
   final int uid;
@@ -170,11 +171,11 @@ class _MylottoState extends State<Mylotto> {
                 ),
               ),
             );
-          } else if (index == 2) {
+          } else if (index == 0) {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => Mylotto(
+                builder: (context) => HomePage(
                   uid: widget.uid,
                 ),
               ),
