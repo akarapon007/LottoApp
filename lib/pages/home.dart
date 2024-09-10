@@ -30,6 +30,7 @@ class _HomePage extends State<HomePage> {
     log(widget.uid.toString()); // Log uid
     loadData = loadDataAsync();
     _userProfile = fetchUserProfile();
+    _searchLotto();
   }
 
   @override

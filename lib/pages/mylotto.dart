@@ -1,11 +1,13 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
-import 'package:lotto_app/config/config.dart';
 import 'package:http/http.dart' as http;
+import 'package:lotto_app/config/config.dart';
 import 'package:lotto_app/models/response/lottoGetRes.dart';
 import 'package:lotto_app/models/response/user_idx_res.dart';
 
 class Mylotto extends StatefulWidget {
-  int uid = 0;
+  final int uid;
   Mylotto({super.key, required this.uid});
 
   @override
@@ -106,7 +108,7 @@ class _MylottoState extends State<Mylotto> {
                                 ),
                                 const SizedBox(width: 6),
                                 const Text(
-                                  'lotto',
+                                  'Lotto',
                                   style: TextStyle(
                                     color: Colors.white,
                                     fontSize: 14,
@@ -182,17 +184,39 @@ class _MylottoState extends State<Mylotto> {
                   right: 10,
                   child: ElevatedButton(
                     onPressed: () async {
-                      // เรียก API เพื่อตรวจสอบผลลอตเตอรี่ที่นี่
-                      var response = await http.get(Uri.parse(
-                          'API_URL_FOR_CHECK_LOTTO/${lotto.lottery_id}'));
-                      if (response.statusCode == 200) {
-                        // ประมวลผลข้อมูลที่ได้รับและแสดงผลลัพธ์ให้ผู้ใช้
-                        print(
-                            'Lotto checked successfully for ID: ${lotto.lottery_id}');
-                      } else {
-                        // แสดงข้อผิดพลาด
-                        print(
-                            'Failed to check lotto for ID: ${lotto.lottery_id}');
+                      try {
+                        var response = await http.put(
+                          Uri.parse('https://nodejs-wfjd.onrender.com/lotto/prize'),
+                          headers: <String, String>{
+                            'Content-Type': 'application/json; charset=UTF-8',
+                          },
+                          body: jsonEncode(<String, dynamic>{
+                            'lid': lotto.lottery_id,
+                            'uid': widget.uid,
+                            'money': lotto.prize, // Assuming `lotto.prize` is the prize amount
+                          }),
+                        );
+
+                        if (response.statusCode == 200) {
+                          print('Lotto checked successfully for ID: ${lotto.lottery_id}');
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Lotto checked successfully!'),
+                            ),
+                          );
+                        } else {
+                          print('Failed to check lotto for ID: ${lotto.lottery_id}');
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Failed to check lotto.'),
+                            ),
+                          );
+                        }
+                      } catch (e) {
+                        print('Error: $e');
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text('Error: $e')),
+                        );
                       }
                     },
                     style: ElevatedButton.styleFrom(
@@ -227,7 +251,6 @@ class _MylottoState extends State<Mylotto> {
     });
 
     try {
-      var config = await Configuration.getConfig();
       var jsonlotto = await http.get(Uri.parse(
           'https://nodejs-wfjd.onrender.com/lotto/lottouser/${widget.uid}'));
 
