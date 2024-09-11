@@ -10,6 +10,7 @@ import 'package:lotto_app/pages/home.dart';
 
 class Mylotto extends StatefulWidget {
   final int uid;
+
   Mylotto({super.key, required this.uid});
 
   @override
@@ -20,32 +21,33 @@ class _MylottoState extends State<Mylotto> {
   List<UserIdxRes> usergetRes = [];
   List<LottoGetRes> lottoGetResUser = [];
   bool isLoading = true;
-
+  bool resultsAnnounced = false;
   @override
   void initState() {
     super.initState();
     fetchLottoData();
+    _checkResultsStatus();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          title: Container(
-            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-            decoration: BoxDecoration(
-              color: Colors.white, // สีพื้นหลัง
-              borderRadius: BorderRadius.circular(10), // มุมโค้ง
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.2), // เงา
-                  spreadRadius: 2,
-                  blurRadius: 4,
-                  offset: Offset(0, 2), // เงา
-                ),
-              ],
-            ),
-            child: FutureBuilder<Map<String, dynamic>>(
+        title: Container(
+          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+          decoration: BoxDecoration(
+            color: Colors.white, // สีพื้นหลัง
+            borderRadius: BorderRadius.circular(10), // มุมโค้ง
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.2), // เงา
+                spreadRadius: 2,
+                blurRadius: 4,
+                offset: Offset(0, 2), // เงา
+              ),
+            ],
+          ),
+          child: FutureBuilder<Map<String, dynamic>>(
             future: fetchUserProfile(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
@@ -55,7 +57,8 @@ class _MylottoState extends State<Mylotto> {
                     style: TextStyle(
                       fontWeight: FontWeight.w900,
                       fontSize: 22, // Increased font size for better visibility
-                      color: Color.fromARGB(255, 0, 0, 0), // Changed text color to blue
+                      color: Color.fromARGB(
+                          255, 0, 0, 0), // Changed text color to blue
                       letterSpacing:
                           1.2, // Added letter spacing for a cleaner look
                       shadows: [
@@ -75,7 +78,8 @@ class _MylottoState extends State<Mylotto> {
                     style: TextStyle(
                       fontWeight: FontWeight.w900,
                       fontSize: 22, // Increased font size for better visibility
-                      color: Color.fromARGB(255, 0, 0, 0), // Changed text color to blue
+                      color: Color.fromARGB(
+                          255, 0, 0, 0), // Changed text color to blue
                       letterSpacing:
                           1.2, // Added letter spacing for a cleaner look
                       shadows: [
@@ -123,12 +127,11 @@ class _MylottoState extends State<Mylotto> {
               }
             },
           ),
-          ),
-          backgroundColor: const Color(0xFF453BC9),
-          automaticallyImplyLeading: false,
         ),
+        backgroundColor: const Color(0xFF453BC9),
+        automaticallyImplyLeading: false,
+      ),
       body: isLoading
-      
           ? const Center(child: CircularProgressIndicator())
           : lottoGetResUser.isEmpty
               ? const Center(
@@ -141,8 +144,8 @@ class _MylottoState extends State<Mylotto> {
                     ),
                   ),
                 )
-              : buildLottoList(),
-              bottomNavigationBar: BottomNavigationBar(
+              : buildLottoList(context),
+      bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
@@ -188,7 +191,7 @@ class _MylottoState extends State<Mylotto> {
     );
   }
 
-  Widget buildLottoList() {
+  Widget buildLottoList(BuildContext context) {
     return ListView.builder(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       itemCount: lottoGetResUser.length,
@@ -308,59 +311,72 @@ class _MylottoState extends State<Mylotto> {
                 Positioned(
                   bottom: 28,
                   right: 10,
-                  child: ElevatedButton(
-                    onPressed: () async {
-                      try {
-                        var response = await http.put(
-                          Uri.parse('https://nodejs-wfjd.onrender.com/lotto/prize'),
-                          headers: <String, String>{
-                            'Content-Type': 'application/json; charset=UTF-8',
+                  child: resultsAnnounced
+                      ? ElevatedButton(
+                          onPressed: () async {
+                            try {
+                              var response = await http.put(
+                                Uri.parse(
+                                    'https://nodejs-wfjd.onrender.com/lotto/prize'),
+                                headers: <String, String>{
+                                  'Content-Type':
+                                      'application/json; charset=UTF-8',
+                                },
+                                body: jsonEncode(<String, dynamic>{
+                                  'lid': lotto.lottery_id,
+                                  'uid': widget.uid,
+                                  'money': lotto.prize,
+                                }),
+                              );
+                              if (response.statusCode == 200) {
+                                print(
+                                    'Lotto checked successfully for ID: ${lotto.lottery_id}');
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content:
+                                        Text('Lotto checked successfully!'),
+                                  ),
+                                );
+                              } else {
+                                print(
+                                    'Failed to check lotto for ID: ${lotto.lottery_id}');
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text('Failed to check lotto.'),
+                                  ),
+                                );
+                              }
+                            } catch (e) {
+                              print('Error: $e');
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(content: Text('Error: $e')),
+                              );
+                            }
                           },
-                          body: jsonEncode(<String, dynamic>{
-                            'lid': lotto.lottery_id,
-                            'uid': widget.uid,
-                            'money': lotto.prize,
-                          }),
-                        );
-                        if (response.statusCode == 200) {
-                          print('Lotto checked successfully for ID: ${lotto.lottery_id}');
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('Lotto checked successfully!'),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xFF453BC9),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 12.0, vertical: 6.0),
+                            minimumSize: const Size(69, 30),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8.0),
                             ),
-                          );
-                        } else {
-                          print('Failed to check lotto for ID: ${lotto.lottery_id}');
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('Failed to check lotto.'),
+                          ),
+                          child: const Text(
+                            'Check',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 14,
                             ),
-                          );
-                        }
-                      } catch (e) {
-                        print('Error: $e');
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('Error: $e')),
-                        );
-                      }
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF453BC9),
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 12.0, vertical: 6.0),
-                      minimumSize: const Size(69, 30),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8.0),
-                      ),
-                    ),
-                    child: const Text(
-                      'Check',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 14,
-                      ),
-                    ),
-                  ),
+                          ),
+                        )
+                      : const Text(
+                          'รอประกาศผล',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 14,
+                          ),
+                        ),
                 ),
               ],
             ),
@@ -369,6 +385,26 @@ class _MylottoState extends State<Mylotto> {
       },
     );
   }
+
+  Future<void> _checkResultsStatus() async {
+    // Replace with your API call to check if results are announced
+    try {
+      var response = await http.get(
+        Uri.parse(
+            'https://nodejs-wfjd.onrender.com/lotto/lottouser/${widget.uid}'),
+      );
+      if (response.statusCode == 200) {
+        setState(() {
+          resultsAnnounced = jsonDecode(response.body)['resultsAnnounced'];
+        });
+      } else {
+        print('Failed to fetch results status');
+      }
+    } catch (e) {
+      print('Error: $e');
+    }
+  }
+
   Future<void> fetchLottoData() async {
     setState(() {
       isLoading = true;
@@ -397,6 +433,7 @@ class _MylottoState extends State<Mylotto> {
       );
     }
   }
+
   Future<Map<String, dynamic>> fetchUserProfile() async {
     final response = await http.get(
       Uri.parse('https://nodejs-wfjd.onrender.com/users/${widget.uid}'),
