@@ -190,7 +190,7 @@ class _MylottoState extends State<Mylotto> {
 
   Widget buildLottoList() {
     return ListView.builder(
-      padding: const EdgeInsets.symmetric(vertical: 10.0),
+      padding: const EdgeInsets.symmetric(horizontal: 16.0),
       itemCount: lottoGetResUser.length,
       itemBuilder: (context, index) {
         var lotto = lottoGetResUser[index];
@@ -287,7 +287,6 @@ class _MylottoState extends State<Mylotto> {
                     ],
                   ),
                 ),
-                // "Price" text at the top right
                 Positioned(
                   bottom: 80,
                   right: 10,
@@ -297,7 +296,7 @@ class _MylottoState extends State<Mylotto> {
                       color: Colors.transparent,
                     ),
                     child: Text(
-                      '${lotto.price} Baht', // Price information
+                      '${lotto.price} Baht',
                       style: const TextStyle(
                         color: Colors.black,
                         fontSize: 16,
@@ -306,7 +305,6 @@ class _MylottoState extends State<Mylotto> {
                     ),
                   ),
                 ),
-                // "Check" button
                 Positioned(
                   bottom: 28,
                   right: 10,
@@ -321,10 +319,9 @@ class _MylottoState extends State<Mylotto> {
                           body: jsonEncode(<String, dynamic>{
                             'lid': lotto.lottery_id,
                             'uid': widget.uid,
-                            'money': lotto.prize, // Assuming `lotto.prize` is the prize amount
+                            'money': lotto.prize,
                           }),
                         );
-
                         if (response.statusCode == 200) {
                           print('Lotto checked successfully for ID: ${lotto.lottery_id}');
                           ScaffoldMessenger.of(context).showSnackBar(
@@ -371,18 +368,14 @@ class _MylottoState extends State<Mylotto> {
         );
       },
     );
-    
   }
-
   Future<void> fetchLottoData() async {
     setState(() {
       isLoading = true;
     });
-
     try {
       var jsonlotto = await http.get(Uri.parse(
           'https://nodejs-wfjd.onrender.com/lotto/lottouser/${widget.uid}'));
-
       if (jsonlotto.statusCode == 200 || jsonlotto.statusCode == 201) {
         var lottoData = lottoGetResFromJson(jsonlotto.body);
         setState(() {
