@@ -387,6 +387,7 @@ class RandomButton extends StatefulWidget {
 
 class _RandomButtonState extends State<RandomButton> {
   int _selectedCheckbox = -1;
+
   @override
   Widget build(BuildContext context) {
     return Dialog(
@@ -410,107 +411,13 @@ class _RandomButtonState extends State<RandomButton> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Container(
-              width: 300,
-              padding: const EdgeInsets.all(16.0),
-              decoration: const BoxDecoration(
-                color: Color(0xFF453BC9),
-                borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-              ),
-              child: const Text(
-                'สุ่มออกรางวัล',
-                textAlign: TextAlign.center,
-                style: TextStyle(color: Colors.white, fontSize: 18),
-              ),
-            ),
+            _buildDialogHeader(),
             const SizedBox(height: 20),
-            Padding(
-              padding: const EdgeInsets.only(left: 10, right: 10),
-              child: Row(
-                children: [
-                  Transform.scale(
-                    scale: 1.5,
-                    child: Checkbox(
-                      value: _selectedCheckbox == 0,
-                      onChanged: (bool? newValue) {
-                        setState(() {
-                          _selectedCheckbox = 0;
-                        });
-                      },
-                      fillColor: MaterialStateProperty.resolveWith((states) {
-                        if (states.contains(MaterialState.selected)) {
-                          return const Color.fromRGBO(70, 189, 108, 1);
-                        }
-                        return const Color(0xFF453BC9);
-                      }),
-                    ),
-                  ),
-                  const Text('สุ่มจากสลากทั้งหมด'),
-                ],
-              ),
-            ),
+            _buildCheckbox(0, 'สุ่มจากสลากทั้งหมด'),
             const SizedBox(height: 10),
-            Padding(
-              padding: const EdgeInsets.only(left: 10, right: 10),
-              child: Row(
-                children: [
-                  Transform.scale(
-                    scale: 1.5,
-                    child: Checkbox(
-                      value: _selectedCheckbox == 1,
-                      onChanged: (bool? newValue) {
-                        setState(() {
-                          _selectedCheckbox = 1;
-                        });
-                      },
-                      fillColor: MaterialStateProperty.resolveWith((states) {
-                        if (states.contains(MaterialState.selected)) {
-                          return const Color.fromRGBO(70, 189, 108, 1);
-                        }
-                        return const Color(0xFF453BC9);
-                      }),
-                    ),
-                  ),
-                  const Text('สุ่มจากสลากที่ลูกค้าซื้อ'),
-                ],
-              ),
-            ),
+            _buildCheckbox(1, 'สุ่มจากสลากที่ลูกค้าซื้อ'),
             const SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    color: Colors.red[400],
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  width: 75,
-                  child: IconButton(
-                    icon:
-                        const Icon(Icons.close, color: Colors.white, size: 30),
-                    onPressed: widget.onClose,
-                  ),
-                ),
-                Container(
-                  decoration: BoxDecoration(
-                    color: Colors.green[400],
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  width: 75,
-                  child: IconButton(
-                    icon:
-                        const Icon(Icons.check, color: Colors.white, size: 30),
-                    onPressed: () {
-                      // You might want to add a check function here
-                      // check(context, _selectedCheckbox, widget.onRefresh);
-
-                      check(context, _selectedCheckbox, widget.onRefresh);
-                      Navigator.of(context).pop();
-                    },
-                  ),
-                ),
-              ],
-            ),
+            _buildActionButtons(context),
             const SizedBox(height: 10),
           ],
         ),
@@ -518,198 +425,257 @@ class _RandomButtonState extends State<RandomButton> {
     );
   }
 
+  // Header for the dialog
+  Widget _buildDialogHeader() {
+    return Container(
+      width: 300,
+      padding: const EdgeInsets.all(16.0),
+      decoration: const BoxDecoration(
+        color: Color(0xFF453BC9),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      child: const Text(
+        'สุ่มออกรางวัล',
+        textAlign: TextAlign.center,
+        style: TextStyle(color: Colors.white, fontSize: 18),
+      ),
+    );
+  }
+
+  // Build checkboxes
+  Widget _buildCheckbox(int value, String label) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 10, right: 10),
+      child: Row(
+        children: [
+          Transform.scale(
+            scale: 1.5,
+            child: Checkbox(
+              value: _selectedCheckbox == value,
+              onChanged: (bool? newValue) {
+                setState(() {
+                  _selectedCheckbox = value;
+                });
+              },
+              fillColor: MaterialStateProperty.resolveWith((states) {
+                if (states.contains(MaterialState.selected)) {
+                  return const Color.fromRGBO(70, 189, 108, 1);
+                }
+                return const Color(0xFF453BC9);
+              }),
+            ),
+          ),
+          Text(label),
+        ],
+      ),
+    );
+  }
+
+  // Build action buttons
+  Widget _buildActionButtons(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        // Close button
+        _buildIconButton(
+          icon: Icons.close,
+          color: Colors.red[400]!,
+          onPressed: () {
+            Navigator.of(context).pop(); // Handle Close
+          },
+        ),
+        // Check button
+        _buildIconButton(
+          icon: Icons.check,
+          color: Colors.green[400]!,
+          onPressed: () {
+            if (_selectedCheckbox != -1) {
+              Navigator.of(context).pop(); // Close the dialog first
+              // Schedule the check operation after the dialog is closed
+              Future.delayed(Duration(milliseconds: 100), () {
+                check(context, _selectedCheckbox,
+                    widget.onRefresh); // Perform check
+              });
+            } else {
+              _showErrorDialog(
+                  context, 'กรุณาเลือกตัวเลือก'); // Show error dialog
+            }
+          },
+        ),
+      ],
+    );
+  }
+
+// Generic function to build action buttons
+  Widget _buildIconButton({
+    required IconData icon,
+    required Color color,
+    required VoidCallback onPressed,
+  }) {
+    return Container(
+      decoration: BoxDecoration(
+        color: color,
+        borderRadius: BorderRadius.circular(20),
+      ),
+      width: 75,
+      child: IconButton(
+        icon: Icon(icon, color: Colors.white, size: 30),
+        onPressed: onPressed,
+      ),
+    );
+  }
+
+  // Generic function to build action buttons
+
+  // Function to check the selected checkbox and send a request to the API
   void check(BuildContext context, int se, VoidCallback onRefresh) async {
-    // แสดง Dialog ขณะกำลังดำเนินการ
-    log(se.toString());
+    final navigatorContext = Navigator.of(context);
+
+    // Show loading dialog while the process is running
+    _showLoadingDialog(context);
+
+    try {
+      // Get Configuration
+      var value = await Configuration.getConfig();
+      String url = value['apiEndPoint'];
+
+      // Select endpoint based on checkbox value
+      String endpoint = _getEndpoint(se);
+
+      // Send request to the API
+      var response = await http.get(Uri.parse('$url$endpoint'));
+      log('Response status: ${response.statusCode}');
+      log('Response body: ${response.body}');
+
+      // Close the loading dialog
+      navigatorContext.pop();
+
+      // Handle response based on status code
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        // Refresh the page
+        onRefresh(); // Call the refresh function
+
+        // Show success dialog after refreshing
+        Future.delayed(Duration.zero, () {
+          _showSuccessDialog(context, onRefresh);
+        });
+      } else if (response.statusCode == 400) {
+        // Handle bad request
+        _showErrorDialog(context,
+            'แอดมินได้ทำการสุ่มไปแล้วหรือสลากขายออกไม่ครบ 5 ใบ'); // Show error dialog for bad request
+      } else {
+        // Handle other unsuccessful responses
+        _showErrorDialog(context,
+            'เกิดข้อผิดพลาด: ${response.statusCode}'); // Show error dialog with status code
+      }
+    } catch (e) {
+      // Close the loading dialog in case of an error
+      // navigatorContext.pop();
+
+      // Handle error
+      _showErrorDialog(context, 'เกิดข้อผิดพลาด: $e'); // Show error dialog
+    }
+  }
+
+// Function to show loading dialog
+  void _showLoadingDialog(BuildContext context) {
     showDialog(
       context: context,
       barrierDismissible: false,
       builder: (context) => AlertDialog(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20.0),
-        ),
+        shape:
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
         titlePadding: EdgeInsets.zero,
-        title: Container(
-          padding: const EdgeInsets.all(12.0),
-          decoration: const BoxDecoration(
-            color: Colors.purple,
-            borderRadius: BorderRadius.vertical(top: Radius.circular(20.0)),
-          ),
-          child: const Text(
-            'กำลังดำเนินการ',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
-              fontSize: 18,
-            ),
-          ),
-        ),
-        content: const Text(
-          'กรุณารอสักครู่...',
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            fontSize: 16,
-          ),
+        title: _buildDialogTitle('กำลังดำเนินการ', Colors.purple),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: const [
+            Text('กรุณารอสักครู่...',
+                textAlign: TextAlign.center, style: TextStyle(fontSize: 16)),
+            SizedBox(height: 20),
+            CircularProgressIndicator(),
+          ],
         ),
       ),
     );
+  }
 
-    try {
-      // รับค่า Configuration
-      var value = await Configuration.getConfig();
-      String url = value['apiEndPoint'];
+// Function to show success dialog
+  void _showSuccessDialog(BuildContext context, VoidCallback onRefresh) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => AlertDialog(
+        shape:
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+        titlePadding: EdgeInsets.zero,
+        title: _buildDialogTitle('สำเร็จ', Colors.green),
+        content: const Text('สุ่มสำเร็จ',
+            textAlign: TextAlign.center, style: TextStyle(fontSize: 16)),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context); // Close success dialog
+              onRefresh(); // Refresh the page
+            },
+            child: const Text('ตกลง'),
+          ),
+        ],
+      ),
+    );
+  }
 
-      // เลือกเส้นที่เหมาะสมตามค่า se
-      String endpoint;
-      if (se == 1) {
-        endpoint = '/admin/ranprizeuser'; // เส้นที่ 1
-      } else if (se == 0) {
-        endpoint = '/admin/ranprizeall'; // เส้นที่ 2
-      } else {
-        throw Exception('Invalid value for se: $se');
-      }
+// Function to show error dialog
+  void _showErrorDialog(BuildContext context, String errorMessage) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => AlertDialog(
+        shape:
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+        titlePadding: EdgeInsets.zero,
+        title: _buildDialogTitle('ข้อผิดพลาด', Colors.red),
+        content: Text(errorMessage,
+            textAlign: TextAlign.center, style: const TextStyle(fontSize: 16)),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () => Navigator.pop(context), // Close error dialog
+            child: const Text('ตกลง'),
+          ),
+        ],
+      ),
+    );
+  }
 
-      // ส่งคำขอไปยัง API
-      var response = await http.get(Uri.parse('$url$endpoint'));
-      log('Response status: ${response.statusCode}');
-      log('Response body: ${response.body}');
-      // ตรวจสอบสถานะการตอบสนอง
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        // สุ่มสำเร็จ
-        Navigator.pop(context); // ปิด Dialog
-        showDialog(
-          context: context,
-          barrierDismissible: false,
-          builder: (context) => AlertDialog(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20.0),
-            ),
-            titlePadding: EdgeInsets.zero,
-            title: Container(
-              padding: const EdgeInsets.all(12.0),
-              decoration: const BoxDecoration(
-                color: Colors.green,
-                borderRadius: BorderRadius.vertical(top: Radius.circular(20.0)),
-              ),
-              child: const Text(
-                'สำเร็จ',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                  fontSize: 18,
-                ),
-              ),
-            ),
-            content: const Text(
-              'สุ่มสำเร็จ',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 16,
-              ),
-            ),
-            actions: <Widget>[
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context); // ปิด Dialog
-                  onRefresh(); // เรียกฟังก์ชันรีเฟรช
-                },
-                child: const Text('ตกลง'),
-              ),
-            ],
-          ),
-        );
-      } else {
-        // การตอบสนองไม่สำเร็จ
-        Navigator.pop(context); // ปิด Dialog
-        showDialog(
-          context: context,
-          barrierDismissible: false,
-          builder: (context) => AlertDialog(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20.0),
-            ),
-            titlePadding: EdgeInsets.zero,
-            title: Container(
-              padding: const EdgeInsets.all(12.0),
-              decoration: const BoxDecoration(
-                color: Colors.red,
-                borderRadius: BorderRadius.vertical(top: Radius.circular(20.0)),
-              ),
-              child: const Text(
-                'ข้อผิดพลาด',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                  fontSize: 18,
-                ),
-              ),
-            ),
-            content: const Text(
-              'เเอดมินได้ทำการสุ่มไปแล้วหรือสลากขายออกไม่ครบ5ใบ',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 16,
-              ),
-            ),
-            actions: <Widget>[
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context); // ปิด Dialog
-                },
-                child: const Text('ตกลง'),
-              ),
-            ],
-          ),
-        );
-      }
-    } catch (e) {
-      // การจัดการข้อผิดพลาด
-      Navigator.pop(context); // ปิด Dialog
-      showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (context) => AlertDialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20.0),
-          ),
-          titlePadding: EdgeInsets.zero,
-          title: Container(
-            padding: const EdgeInsets.all(12.0),
-            decoration: const BoxDecoration(
-              color: Colors.red,
-              borderRadius: BorderRadius.vertical(top: Radius.circular(20.0)),
-            ),
-            child: const Text(
-              'ข้อผิดพลาด',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-                fontSize: 18,
-              ),
-            ),
-          ),
-          content: const Text(
-            'กรุณาเลือกระหว่าง สุ่มทั้งหมด หรือ สุ่มจากสลากที่ซื้อ',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 16,
-            ),
-          ),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context); // ปิด Dialog
-              },
-              child: const Text('ตกลง'),
-            ),
-          ],
-        ),
-      );
+// Helper function to get the API endpoint based on selection
+  String _getEndpoint(int selectedOption) {
+    if (selectedOption == 0) {
+      return '/admin/ranprizeall';
+    } else if (selectedOption == 1) {
+      return '/admin/ranprizeuser';
+    } else {
+      throw Exception('Invalid selection');
     }
+  }
+
+// Helper function to build dialog titles with specific styles
+  Widget _buildDialogTitle(String title, Color backgroundColor) {
+    return Container(
+      padding: const EdgeInsets.all(12.0),
+      decoration: BoxDecoration(
+        color: backgroundColor,
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(20.0)),
+      ),
+      child: Text(
+        title,
+        textAlign: TextAlign.center,
+        style: const TextStyle(
+          fontWeight: FontWeight.bold,
+          color: Colors.white,
+          fontSize: 18,
+        ),
+      ),
+    );
   }
 }
 
@@ -867,7 +833,7 @@ class ResetButtonn extends StatelessWidget {
       return;
     }
 
-    if (amount < 100) {
+    if (amount < 5) {
       await _showErrorDialog(context, 'กรุณาใส่จำนวนที่มากกว่า 100');
       return;
     }
