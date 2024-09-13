@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:developer';
-import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -78,6 +77,47 @@ class _AdminpageState extends State<Adminpage> {
                         const SizedBox(height: 20),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                          child: Column(
+                            children: [
+                              // FutureBuilder สำหรับการโหลดข้อมูล
+                              FutureBuilder(
+                                future: loadData, // การโหลดข้อมูลแบบ Future
+                                builder: (context, snapshot) {
+                                  if (snapshot.connectionState !=
+                                      ConnectionState.done) {
+                                    return const Center(
+                                      child:
+                                          CircularProgressIndicator(), // แสดง spinner ระหว่างการโหลด
+                                    );
+                                  }
+
+                                  // เมื่อข้อมูลโหลดสำเร็จ
+                                  return Row(
+                                    children: [
+                                      Expanded(
+                                        child: _buildStatBox(
+                                          'สลากถูกซื้อไปแล้ว',
+                                          ':\t${lenlotto.lenuser.toString()}', // แสดงผลจำนวนสลากที่ถูกซื้อ
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                          width: 10), // เว้นระยะระหว่างกล่อง
+                                      Expanded(
+                                        child: _buildStatBox(
+                                          'สลากทั้งหมด',
+                                          ':\t${lenlotto.lenall.toString()}', // แสดงผลจำนวนสลากทั้งหมด
+                                        ),
+                                      ),
+                                    ],
+                                  );
+                                },
+                              ),
+                              const SizedBox(height: 20),
+                            ],
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 20.0),
                           child: ElevatedButton(
                             onPressed: () {
                               showDialog(
@@ -120,72 +160,6 @@ class _AdminpageState extends State<Adminpage> {
                         const SizedBox(height: 10),
 
                         // การแสดงผลกล่องข้อมูลสถิติผ่าน FutureBuilder
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                          child: Column(
-                            children: [
-                              // FutureBuilder สำหรับการโหลดข้อมูล
-                              FutureBuilder(
-                                future: loadData, // การโหลดข้อมูลแบบ Future
-                                builder: (context, snapshot) {
-                                  if (snapshot.connectionState !=
-                                      ConnectionState.done) {
-                                    return const Center(
-                                      child:
-                                          CircularProgressIndicator(), // แสดง spinner ระหว่างการโหลด
-                                    );
-                                  }
-
-                                  // เมื่อข้อมูลโหลดสำเร็จ
-                                  return Row(
-                                    children: [
-                                      Expanded(
-                                        child: _buildStatBox(
-                                          'สลากถูกซื้อไปแล้ว',
-                                          ':\t${lenlotto.lenuser.toString()}', // แสดงผลจำนวนสลากที่ถูกซื้อ
-                                        ),
-                                      ),
-                                      const SizedBox(
-                                          width: 10), // เว้นระยะระหว่างกล่อง
-                                      Expanded(
-                                        child: _buildStatBox(
-                                          'สลากทั้งหมด',
-                                          ':\t${lenlotto.lenall.toString()}', // แสดงผลจำนวนสลากทั้งหมด
-                                        ),
-                                      ),
-                                    ],
-                                  );
-                                },
-                              ),
-                              const SizedBox(height: 20),
-                              ElevatedButton(
-                                onPressed: () {
-                                  setState(() {
-                                    loadData =
-                                        loadDataAsync(); // เรียกใช้ Future ใหม่เมื่อรีเฟรช
-                                  });
-                                },
-                                style: ElevatedButton.styleFrom(
-                                  foregroundColor: Colors.white,
-                                  backgroundColor:
-                                      const Color.fromARGB(255, 153, 153, 153),
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 20, vertical: 15),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(20),
-                                  ),
-                                ),
-                                child: const Text(
-                                  'Refresh Data', // ข้อความบนปุ่ม
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 16,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
 
                         const SizedBox(height: 20),
                       ],
@@ -200,7 +174,7 @@ class _AdminpageState extends State<Adminpage> {
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   // ขณะกำลังดึงข้อมูล
-                  return Center(child: CircularProgressIndicator());
+                  return const Center(child: CircularProgressIndicator());
                 } else if (snapshot.hasError) {
                   // หากมีข้อผิดพลาด
                   return Center(child: Text('Error: ${snapshot.error}'));
@@ -284,7 +258,7 @@ class _AdminpageState extends State<Adminpage> {
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(8),
                                   ),
-                                  visualDensity: VisualDensity(
+                                  visualDensity: const VisualDensity(
                                       vertical: -4), // Adjust item spacing
                                 );
                               },
@@ -295,7 +269,7 @@ class _AdminpageState extends State<Adminpage> {
                     ),
                   );
                 } else {
-                  return Center(child: Text('No data available'));
+                  return const Center(child: Text('No data available'));
                 }
               },
             ),
@@ -718,10 +692,10 @@ class _RandomButtonState extends State<RandomButton> {
               ),
             ),
           ),
-          content: Text(
+          content: const Text(
             'กรุณาเลือกระหว่าง สุ่มทั้งหมด หรือ สุ่มจากสลากที่ซื้อ',
             textAlign: TextAlign.center,
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 16,
             ),
           ),
@@ -826,13 +800,49 @@ class ResetButtonn extends StatelessWidget {
                           () {
                         Navigator.pop(context); // Close the dialog
 
-                        // Show loading spinner
-                        // _showLoadingDialog(context);
+                        // Save a reference to the BuildContext
+                        final navigatorContext = Navigator.of(context);
+
+// Show loading spinner with create new popup
+                        showDialog(
+                          context: navigatorContext.context,
+                          barrierDismissible: false,
+                          builder: (context) => AlertDialog(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20.0),
+                            ),
+                            titlePadding: EdgeInsets.zero,
+                            title: Container(
+                              padding: const EdgeInsets.all(12.0),
+                              decoration: const BoxDecoration(
+                                color: Colors.green,
+                                borderRadius: BorderRadius.vertical(
+                                    top: Radius.circular(20.0)),
+                              ),
+                              child: const Text(
+                                'กำลังดำเนินการ',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                  fontSize: 18,
+                                ),
+                              ),
+                            ),
+                            content: const Text(
+                              'กรุณารอสักครู่...',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 16,
+                              ),
+                            ),
+                          ),
+                        );
 
                         // Call the reset function and then close the spinner
-                        _reset(context).then((_) {
-                          Navigator.pop(context); // Close the loading spinner
-                          // Refresh data after reset
+                        _reset(navigatorContext.context).then((_) {
+                          Navigator.pop(navigatorContext
+                              .context); // Close the loading spinner using the saved context                          // Refresh data after reset
                           onRefresh();
                         });
                       }),
@@ -853,12 +863,12 @@ class ResetButtonn extends StatelessWidget {
     int? amount = int.tryParse(amountString);
 
     if (amount == null) {
-      _showErrorDialog(context, 'กรุณากรอกจำนวนที่ถูกต้อง');
+      await _showErrorDialog(context, 'กรุณากรอกจำนวนที่ถูกต้อง');
       return;
     }
 
     if (amount < 100) {
-      _showErrorDialog(context, 'กรุณาใส่จำนวนที่มากกว่า 100');
+      await _showErrorDialog(context, 'กรุณาใส่จำนวนที่มากกว่า 100');
       return;
     }
 
@@ -878,35 +888,32 @@ class ResetButtonn extends StatelessWidget {
         if (json.statusCode == 201) {
           var lenlotto = adminGetLottoResFromJson(json.body);
           log("lenlotto");
-          Navigator.pop(context);
 
           // Call onRefresh to update the UI or perform any additional actions
           onRefresh();
 
           // Show success dialog
-          _showSuccessDialog(context, 'ทำการรีเซ็ตระบบสำเร็จ');
+          await _showSuccessDialog(context, 'ทำการรีเซ็ตระบบสำเร็จ');
         } else {
           // Handle unexpected response while fetching updated lottery data
-          _showErrorDialog(context, 'ไม่สามารถดึงข้อมูลสลากได้');
+          await _showErrorDialog(context, 'ไม่สามารถดึงข้อมูลสลากได้');
         }
       } else {
         // Handle cases where the reset operation was not successful
-        _showErrorDialog(
+        await _showErrorDialog(
             context, 'Admin ได้ทำการรีระบบไปแล้วรอออกรางวัลก่อนจึงจะรีระบบได้');
       }
     } catch (e) {
       // Handle any unexpected exceptions
-      _showErrorDialog(context, 'เกิดข้อผิดพลาด: ${e.toString()}');
+      await _showErrorDialog(context, 'เกิดข้อผิดพลาด: ${e.toString()}');
     } finally {
-      // Close the loading dialog if it's still active
-      if (ModalRoute.of(context)?.isCurrent != true) {
-        Navigator.pop(context);
-      }
+      // Close the loading spinner if it's still showing
+      // Navigator.pop(context);
     }
   }
 
-  void _showErrorDialog(BuildContext context, String message) {
-    showDialog(
+  Future<void> _showErrorDialog(BuildContext context, String message) async {
+    await showDialog(
       context: context,
       barrierDismissible: false,
       builder: (context) => AlertDialog(
@@ -949,32 +956,8 @@ class ResetButtonn extends StatelessWidget {
     );
   }
 
-  void _showLoadingDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return Dialog(
-          backgroundColor: Colors.transparent,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: const [
-              CircularProgressIndicator(),
-              SizedBox(height: 10),
-              Text(
-                "กำลังโหลด...",
-                style: TextStyle(color: Colors.white),
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
-
-  void _showSuccessDialog(BuildContext context, String message) {
-    showDialog(
+  Future<void> _showSuccessDialog(BuildContext context, String message) async {
+    await showDialog(
       context: context,
       barrierDismissible: false,
       builder: (context) => AlertDialog(
